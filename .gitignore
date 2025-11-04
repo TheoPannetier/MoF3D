@@ -3,3 +3,6 @@ ForestModel/Results/*
 ForestModel/Pictures/*
 TreeModel/Results/*
 TreeModel/Pictures/*
+
+# Ignore currently opened project files
+*~
