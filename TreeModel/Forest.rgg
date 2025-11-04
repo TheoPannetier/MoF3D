@@ -1,0 +1,2741 @@
+/**
+* This project simulates 3D forests or trees.
+* See main method run() for simulation procedures.
+*
+* @author Petter, Gunnar and Ong, Yongzhi
+*/
+
+/**************************************************************************************************************************************************/
+/**Essential packages*/
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.Arrays;
+import de.grogra.xl.util.ObjectList;
+import de.grogra.imp3d.*;
+import de.grogra.imp3d.ray2.Raytracer;
+import de.grogra.imp.IMP;
+import java.io.File;
+/**************************************************************************************************************************************************/
+
+/**************************************************************************************************************************************************/
+/**Set model folder*/
+static String folderMain = "C:\\Users\\theop\\github\\MoF3D\\TreeModel";
+static String namePictureFile = "TreeModel"; //name of model
+static String folderParam = folderMain + "\\Model"; //folder in which the main model script and the pass/global files are located
+static String folderReport = folderMain + "\\Results"; //folder in which the model results are saved
+static String folderPictures = folderMain + "\\Pictures\\"; //folder in which images are saved
+/**************************************************************************************************************************************************/
+
+/**************************************************************************************************************************************************/
+/**Initialization of global variables*/
+/* Parameter objects */
+public static PG pg;	//global parameters loaded from file
+public static PP pp[];	//pass parameters loaded from files
+
+/* Spatial division - 3d voxel array, 2d forest top height */
+static VoxBase vox[][][];
+
+/* Pass */
+static int currPass = 0; //current running simulation pass
+
+/* Step */
+static int currStep = 1; //current running simulation step
+
+/* Tree counter */
+static int treeCount = 0;
+static int treeIndex = 0;
+
+/* Branch counter */
+static int branchIndex = 0;
+
+/* Seed counter*/
+static int seedsGenerated;
+
+/*Critical length*/
+static float LDRatioCrit = 4.39f;
+
+/* Tree mortality cache */
+ObjectList treesKilled = new ObjectList();
+ObjectList treesKilledCause = new ObjectList();
+
+/* Tree objects map */
+Hashtable treeTable = new Hashtable();
+
+/* Internode list (newly created in a step) */
+ObjectList internodesNew = new ObjectList();
+
+/* Species pool */
+static SpeciesPool speciesPool = new SpeciesPool();
+
+/* Counting voxels related to a branch */
+Hashtable branchNewVoxCount = new Hashtable();
+Hashtable branchNewVoxCount2 = new Hashtable();
+ObjectList branchNew = new ObjectList();
+ObjectList branchesToDrop = new ObjectList();
+
+/* forest variables to aggregate for reports */
+static float basalarea = 0;
+static float trunkAGB = 0;
+static float totalAGB = 0;
+static float totalleafarea = 0;
+static float totalleafbiomass = 0;
+static float branchlossrate = 0;
+static int germinationDeath = 0;
+static float trunkAGBPrev = 0;
+static float totalAGBPrev = 0;
+static float totalleafareaPrev = 0;
+static float totalleafbiomassPrev = 0;
+static float basalareaPrev = 0;
+static float LeafBiomassLoss = 0;
+static int numbranches = 0;
+static float ScalingToHectare= 0;
+
+//Inititalize variables used in structural model 
+static float[] InternodeLengthVec = new float[100];
+static int NumberInternodesFirstOrder = 0;
+static float BranchInternodeLengthFirstOrder = 0;
+static float BranchLengthTotal = 0;
+static float AsegBranchFirst = 0;
+static float AsegBranchSecond = 0;
+static float DiameterSegSecond = 0;
+static float LengthSegSecond = 0;
+static float BranchLengthIncrease = 0;
+static float BranchLengthLastInternode = 0;
+static int NumberBranchesSecondOrder = 0;
+static float TrunkLengthIncrease = 0;
+static float TrunkLengthLastInternode = 0;
+static float TrunkInternodeLength= 0;
+static int NumberBranchesFirstOrder = 0;
+static int NBranchesSecond= 0;
+static float branchLastLateralPosFirst= 0;
+static float DiameterSegFirst = 0;
+static float LengthSegFirst = 0;
+static float LengthInternodeFirst =  0;
+static int NSegFirst = 0;
+static float AsegTrunk = 0;
+
+//variables to save time consumption of different model parts
+static float startTime=0;
+static float timeLight=0;
+static float timeDispersal=0;
+static float timeGrowth=0;
+static float timeMortality=0;
+static float timeVisualization=0;
+static float timeVisualizationUno=0;
+static float timeReport=0;
+static float timeLightTotal=0;
+static float timeDispersalTotal=0;
+static float timeGrowthTotal=0;
+static float timeMortalityTotal=0;
+static float timeVisualizationTotal=0;
+static float timeVisualizationUnoTotal=0;
+static float timeReportTotal=0;
+
+//variable use in stochastic growth model
+static float BranchingAngleRandom=0;
+
+//Time consumption of different parts of reports
+static float startTimeReportComplete=0;
+static float timeReportComplete=0;
+static float timeReportCompleteTotal=0;
+static float startTimeReportLight=0;
+static float timeReportLight=0;
+static float timeReportLightTotal=0;
+static float startTimeReportTime=0;
+static float timeReportTime=0;
+static float timeReportTimeTotal=0;
+static float startTimeReportForest=0;
+static float timeReportForest=0;
+static float timeReportForestTotal=0;
+static float startTimeReportMortality=0;
+static float timeReportMortality=0;
+static float timeReportMortalityTotal=0;
+static float startTimeReportShoots=0;
+static float timeReportShoots=0;
+static float timeReportShootsTotal=0;
+static float startTimeReportTrees=0;
+static float timeReportTrees=0;
+static float timeReportTreesTotal=0;
+static float startTimeReportVoxel=0;
+static float timeReportVoxel=0;
+static float timeReportVoxelTotal=0;
+static float timeColoring=0;
+static float timeColoringTotal=0;
+static float ALMaxVoxel=0;
+/**************************************************************************************************************************************************/
+
+/**************************************************************************************************************************************************/
+/**Visualization leaf and bark modules*/
+
+/* Default colors */
+RGBAShader colorDefault =  new RGBAShader(0f,0f,0f);
+RGBAShader colorDefaultBud =  new RGBAShader(0.0f,1.0f,0.0f);
+
+/* Default shaders */
+const Shader blattTextur = shader("leaf2");
+const Shader barkTextur = shader("bark2");
+
+/* Graph modules */
+module STrunk(super.treeId, super.branchId, super.length, super.diameter, super.order) extends STrunkBase
+		==>{float midDia = diameter/2.0 * 0.45; float midDia2 = diameter/2.0 * 0.2;} 
+		if(pg.getInt(PG.ShaderVisualization)==0)
+			(	Frustum(0.3 * length, 2*diameter/2.0, 2*midDia).(setShader(new RGBAShader(0.55f,0.27f,0.075f)))
+				Frustum(0.4 * length, 2*midDia, 2*midDia2).(setShader(new RGBAShader(0.55f,0.27f,0.075f)))
+				Frustum(0.3 * length, 2*midDia2, 0.00001).(setShader(new RGBAShader(0.55f,0.27f,0.075f)))
+				)
+		if(pg.getInt(PG.ShaderVisualization)==1)
+			(	Frustum(0.3 * length, 2*diameter/2.0, 2*midDia).(setShader(barkTextur))
+				Frustum(0.4 * length, 2*midDia, 2*midDia2).(setShader(barkTextur))
+				Frustum(0.3 * length, 2*midDia2, 0.00001).(setShader(barkTextur))	
+			);
+
+module SInternodeTex (super.treeId, super.branchId, super.length, super.diameter, super.order) extends SInternode
+==> if(order==2)(for(0:(int)(length/0.9)) (for(int i:(1:1))([instTwigRoot]) instTwigRootNoLeaves M(0.9)) setShader(barkTextur))
+		else (setShader(barkTextur));			
+
+module Leaf extends Parallelogram(0.2,0.15)
+{
+	{setShader(blattTextur);}
+}
+
+module Twig(super.length, super.diameter) extends F
+{
+	{setShader(barkTextur);}
+}
+module TwigRoot;
+module TwigBud(int order, boolean hasLeaves);
+
+static TwigRoot instTwigRoot;
+static TwigRoot instTwigRootNoLeaves;
+static Leaf instLeaf;
+
+module LeafNode ==> instLeaf;
+
+private void generateTwig()
+[
+	TwigBud(order, hasLeaves), (order<2) ==> Twig(0.2, 0.01) RH(137) if(hasLeaves)([RU(50) LeafNode]) [RU(40) TwigBud(order+1,hasLeaves)] TwigBud(order,hasLeaves);
+	
+]
+/**************************************************************************************************************************************************/
+
+/**************************************************************************************************************************************************/
+/**Visualization leaf and bark modules*/
+/* Initialization method for creating initial (graph) model.
+** This method is also called each time the script is saved.*/
+protected void init ()
+{	
+	/*************************************************/
+	/* Init Leaf and Branch textures for visualization */
+	
+	instLeaf = new Leaf(); //create instance of leaf for reusing in all a twig instance
+	instTwigRoot = new TwigRoot();
+	instTwigRootNoLeaves = new TwigRoot();
+	
+	[==>> ^ [/> instTwigRoot TwigBud(0,true)]
+			[/> instTwigRootNoLeaves TwigBud(0,false)]
+	;]
+	
+	//put root of twig in graph with initial bud for generating twig branches
+	derive();
+	 
+	//generate twig branches 
+	for(apply(5)){generateTwig();}
+	
+	/*************************************************/
+
+	/* read parameters from files and initialize them */
+	if(currPass==0)
+	    initParameters();
+	
+	/* init counters  */
+	seedsGenerated = 0;
+	
+	/* init array of voxels and forest top height */
+	if(currPass==0)
+	    initVoxels();
+	
+	/* init model graph */
+	[
+		Axiom ==> 
+		;
+	]
+	
+	/* initialize species pool */
+	speciesPool.clear();
+	speciesPool.setPP(pp[currPass]);
+	speciesPool.generate();
+}
+/**************************************************************************************************************************************************/
+
+
+/* This method reads parameter values from parameters files */
+private void initParameters()
+{	
+	try{
+	    //create parameter global object
+	    pg = new PG();
+	    //read global parameters from file
+	    P.readGlobalParameters(pg, folderParam);
+	
+	    //create parameter pass objects
+	    pp = PP.getParameterPassArray(pg.getInt(PG.Replicates));
+	    //read pass parameters from file
+	    P.readPassParameters(pp, folderParam);
+				
+		//pre-compute parameters in global
+		pg.precompute();
+		
+		//pre-compute some parameters for each pass
+		for(int i=0; i<pg.getInt(PG.Replicates); ++i)
+		{
+			pp[i].precompute(
+				pg.get(PG.GridSize)
+				);
+		}
+	}
+	catch(Exception e)
+	{
+	    println("Error reading parameters from files");	
+		println(e.getMessage());
+	}
+	
+	ScalingToHectare=(10000/(pg.get(PG.MaxX)*pg.get(PG.MaxY)));
+	ALMaxVoxel=pp[currPass].get(PP.ALMax)*Math.pow(pg.get(PG.GridSize),3);
+}
+
+/* This method initializes the voxel at the beginning of each run */
+private void initVoxels()
+{
+	int gridSize = pg.getInt(PG.GridSize);
+	
+	vox = VoxBase.getVoxArray((pg.getInt(PG.MaxX)+(2*pg.getInt(PG.Corridor)))/gridSize,
+	    (pg.getInt(PG.MaxY)+(2*pg.getInt(PG.Corridor)))/gridSize,
+	    pg.getInt(PG.MaxZ)/gridSize);		
+}
+
+
+/*******************************************************************************************************************************************/
+/* Simulation main method (single step) */
+private void step()
+{
+	println("Timestep: "+currStep);
+		
+	//reset report aggregate values
+	trunkAGBPrev			=trunkAGB;
+	totalAGBPrev			=totalAGB;
+	totalleafareaPrev		=totalleafarea;
+	totalleafbiomassPrev	=totalleafbiomass;
+	basalareaPrev = basalarea;
+	basalarea			=0;
+	trunkAGB			=0;
+	totalAGB			=0;
+	totalleafarea		=0;
+	totalleafbiomass	=0;
+	branchlossrate		=0;
+	germinationDeath    =0;
+	LeafBiomassLoss     =0;
+	numbranches =0;
+
+	//light conditions
+	startTime = System.nanoTime();
+	light();
+	timeLight = (double) (System.nanoTime() - startTime) / 1000000000.0;
+	timeLightTotal+=timeLight;
+	
+	//dispersal
+	startTime = System.nanoTime();
+	dispersal();
+	derive();
+	timeDispersal = (double) (System.nanoTime() - startTime) / 1000000000.0;
+	timeDispersalTotal+=timeDispersal;
+	
+	//growth
+	startTime = System.nanoTime();
+	growth();
+	derive();
+	timeGrowth = (double) (System.nanoTime() - startTime) / 1000000000.0;
+	timeGrowthTotal+=timeGrowth;
+	
+	//mortality
+	startTime = System.nanoTime();
+	mortality();
+	derive();
+	timeMortality = (double) (System.nanoTime() - startTime) / 1000000000.0;
+	timeMortalityTotal+=timeMortality;
+	
+	//reports
+	startTimeReportComplete = System.nanoTime();
+	report();
+
+	//Coloring
+	startTime = System.nanoTime();
+	coloring();
+	timeColoring= (double) (System.nanoTime() - startTime) / 1000000000.0;
+	timeColoringTotal+=timeColoring;
+	
+	visualization();
+	snapshot();
+
+	//clear cache of trees killed
+	treesKilled.clear();
+	treesKilledCause.clear();
+
+	//increase step counter
+	currStep++;
+}
+
+
+/* Simulation run (multiple steps)
+** See method step() for simulation procedures in each simulation step */
+public void run()
+{
+	if(currPass<pg.getInt(PG.Replicates))
+	{
+		if(currStep<=pg.getInt(PG.Timesteps) && basalarea<pp[currPass].get(PP.StopCriterionBasalArea))
+		{
+			step();
+		}
+		else 
+		{
+			currStep=pg.getInt(PG.Timesteps)+1;
+		}
+			
+		if(currStep==pg.getInt(PG.Timesteps)+1)
+		{
+			currStep=1;
+			currPass++;
+			reset();
+			resetPass();
+			println("--------- Replicates " + currPass + " END ------------");
+		}
+	}
+	else
+	{
+		println("End of simulations");
+		stop();
+	}
+}
+
+/* Resets some variables before running next simulation pass */
+protected void resetPass()
+{
+	VoxBase.resetVoxels(vox);
+	treeCount=0;
+	currStep = 1;
+	
+	//reset report aggregate values
+	trunkAGBPrev			=0;
+	totalAGBPrev			=0;
+	totalleafareaPrev		=0;
+	totalleafbiomassPrev	=0;
+	basalareaPrev 			=0;
+	basalarea				=0;
+	trunkAGB				=0;
+	totalAGB				=0;
+	totalleafarea			=0;
+	totalleafbiomass		=0;
+	branchlossrate			=0;
+	germinationDeath    	=0;
+	LeafBiomassLoss     	=0;
+	numbranches 			=0;
+}
+
+/* Compute light conditions for each column of voxels
+** Light info stored at bottom voxel */
+private void light()
+{
+	MLight.computeVoxelLightParallel(vox,pg,pp[currPass]);
+}
+
+/* Method for dispersal and germination model*/
+private void dispersal()
+{ 	
+	/* Forest version*/
+	if (pg.getInt(PG.SimulateForest)==1)
+	{
+		int seedCount = (int)(pp[currPass].getSeedlingsPerHa() * (pg.areaTotal/10000.0f));
+		
+		//reset counters
+		seedsGenerated=0;
+		
+		float corridor = pg.get(PG.Corridor);
+		float maxX = pg.get(PG.MaxX);
+		float maxY = pg.get(PG.MaxY);
+		int gridSize = pg.getInt(PG.GridSize);
+	
+		for(int i=0; i<seedCount; ++i)
+		{
+			//generate random locations for seeds
+			float seedX = random(corridor, maxX+corridor);
+			float seedY = random(corridor, maxY+corridor);
+			
+			//get random species
+			int randomSpeciesIndex = (int)(random(0,pp[currPass].get(PP.SpeciesNum)-1));
+			
+			//calculate initial height of the choosen species based on initial diameter and species-specific parameters
+			Species sNew = speciesPool.getSpecies(randomSpeciesIndex);
+			float initialHeight=MGro.htFromDiaTrunk(pp[currPass].get(PP.InitialDiamter),0,0,sNew.LDRatioTrunk,0);
+	
+			//assign seed to voxel
+			int voxIndexX = (int)(seedX/gridSize);
+			int voxIndexY = (int)(seedY/gridSize);
+			
+			//create tree - class MGer contains methods that assign parameters based on energy in voxel
+			SRoot r = createRoot(seedX, seedY, voxIndexX, voxIndexY, randomSpeciesIndex,initialHeight);
+			STrunk tru = createTrunk(r.treeId,0,initialHeight);
+			
+			//associated trunk with initial foliage voxel
+			relateBranchToVox(tru,voxIndexX,voxIndexY,0,1);
+			
+			//add tree to graph
+			addTreeToGraph(r,tru);
+			
+			//increment seed count
+			seedsGenerated++;
+		}
+	}	
+
+	/* Tree version*/
+	if (pg.getInt(PG.SimulateForest)==0)
+	{
+
+		int numberOfTrees = 1+(int)pp[currPass].get(PP.TreeCompetionNum); 
+		float xPositionOfTreeTwo = 2; 
+		
+		float DistanceCompetingTrees=pp[currPass].get(PP.TreeCompetionDist);
+		float[] xPositionTrees={0,DistanceCompetingTrees,-DistanceCompetingTrees,0,0,DistanceCompetingTrees/Math.sqrt(2),
+								DistanceCompetingTrees/Math.sqrt(2),-DistanceCompetingTrees/Math.sqrt(2),-DistanceCompetingTrees/Math.sqrt(2)};
+		float[] yPositionTrees={0,0,0,DistanceCompetingTrees,-DistanceCompetingTrees,DistanceCompetingTrees/Math.sqrt(2),
+								-DistanceCompetingTrees/Math.sqrt(2),DistanceCompetingTrees/Math.sqrt(2),-DistanceCompetingTrees/Math.sqrt(2)};
+		
+		int seedCount = (currStep==1) ?numberOfTrees : 0;
+		
+		//reset counters
+		seedsGenerated=0;
+		
+		float corridor = pg.get(PG.Corridor);
+		float maxX = pg.get(PG.MaxX);
+		float maxY = pg.get(PG.MaxY);
+		int gridSize = pg.getInt(PG.GridSize);
+	
+		//Central position
+		float seedX= corridor+(maxX/2);
+		float seedY= corridor+(maxY/2);
+		
+		for(int i=0; i<seedCount; ++i)
+		{
+			//Position of tree
+			float TreePosX = seedX + xPositionTrees[i];
+			float TreePosY = seedY + yPositionTrees[i];
+		
+			//get random species
+			int randomSpeciesIndex = (int)(random(0,pp[currPass].get(PP.SpeciesNum)-1));
+			
+			//Calculate maximum height and initial height of the choosen species based on initial diameter and species-specific parameters
+			Species sNew = speciesPool.getSpecies(randomSpeciesIndex);
+			println("MaxHeight: " + sNew.maxPipeLength);
+			float initialHeight=MGro.htFromDiaTrunk(pp[currPass].get(PP.InitialDiamter),0,0,sNew.LDRatioTrunk,0);
+			
+			//get voxel the seed is growing
+			int voxIndexX = (int)(TreePosX/gridSize);
+			int voxIndexY = (int)(TreePosY/gridSize);
+			
+			//create tree - class MGer contains methods that assign parameters based on energy in voxel
+			SRoot r = createRoot(TreePosX, TreePosY, voxIndexX, voxIndexY, randomSpeciesIndex,initialHeight);
+			STrunk tru = createTrunk(r.treeId,0,initialHeight);
+			
+			//associated trunk with initial foliage voxel
+			relateBranchToVox(tru,voxIndexX,voxIndexY,0,1);
+			
+			//add tree to graph
+			addTreeToGraph(r,tru);
+			
+			//increment seed count
+			seedsGenerated++;
+		
+		}
+	}
+}
+
+
+/* Methods called in dispersal method */
+private SRoot createRoot(float seedX, float seedY, int voxIndexX, int voxIndexY, int speciesId, float initialHeight)
+{
+	SRoot r = new SRoot(treeIndex,
+			initialHeight,	
+			pp[currPass].get(PP.InitialDiamter),
+			seedX, seedY, 0,
+			voxIndexX,
+			voxIndexY,
+			speciesId
+		);
+		
+	//add tree reference to voxel
+	vox[voxIndexX][voxIndexY][0].addTree(r);
+	
+	//add reference of tree to hashtable
+	treeTable.put(treeIndex,r);
+	
+	//increment tree counter
+	treeCount++;
+	treeIndex++; 
+	
+	return r;
+}
+
+private STrunk createTrunk(int treeId, int order, float initialHeight)
+{
+	return new STrunk(treeId, branchIndex++, initialHeight, pp[currPass].get(PP.InitialDiamter),order);
+}
+
+/* Assigns foliage (represented by voxels) to a branch */
+private void relateBranchToVox(SBranch b, int voxX, int voxY, int voxZ, int newVoxCount)
+{
+	SRoot r = (SRoot)(treeTable.get(b.treeId));
+	Species s = speciesPool.getSpecies(r.speciesId);
+	
+	if(pg.isValidVox(voxX,voxY,voxZ))
+	{
+		float dia = 0;
+		//elongation of existing 2nd order branches
+		if(b.length != b.lengthPrev)
+		{
+			float segmentAreaInc = MGro.segmentAreaInc(b.diameter, b.length, b.lengthPrev,0);
+			dia = Math.sqrt((segmentAreaInc / (float)newVoxCount) / Math.PI) * 2.0f;
+		}
+		else//newly branched 2nd order branch
+			dia = b.diameter;
+		
+		if(!vox[voxX][voxY][voxZ].isRelated(b)) //although a new internode may have entered the voxel
+		{
+			vox[voxX][voxY][voxZ].addBranch(b,MGro.getNewLeafArea(pp[currPass].get(PP.LPratio),dia)/(float)newVoxCount);
+			b.addVox(voxX,voxY,voxZ);
+			b.leafBiomass+=(MGro.getNewLeafArea(pp[currPass].get(PP.LPratio),dia)/(float)newVoxCount/s.SLA);
+			
+			[
+				tr:SRoot, (tr.treeId==b.treeId) ::> 
+				{
+					tr.leafBiomass+=(MGro.getNewLeafArea(pp[currPass].get(PP.LPratio),dia)/(float)newVoxCount/s.SLA);
+					tr.leafBiomassProduction+=(MGro.getNewLeafArea(pp[currPass].get(PP.LPratio),dia)/(float)newVoxCount/s.SLA);
+				}
+			]
+		}
+	}
+}
+
+private void addTreeToGraph(SRoot r, STrunk t)
+[
+	==>> ^ [r [t]];
+]
+
+/* Method for growth model */
+private void growth()
+[
+	{
+		//pre-compute parameters required
+		float rw = pp[currPass].get(PP.Rw);
+		float cbl_ratio = pp[currPass].get(PP.CBLratio);
+		float lp_ratio_inv = 1.0/pp[currPass].get(PP.LPratio);
+		float cbw_ratio = pp[currPass].get(PP.CBWratio);
+		float carbon_overhead = pp[currPass].get(PP.C0);
+		
+		internodesNew.clear(); //clear cache of newly created internodes
+		branchNewVoxCount.clear(); //clear cache for new num of voxels for each branch
+		branchNew.clear(); //clear list of branches related to newly created internodes
+		precomputeApicalControl();
+		
+		float oldBProdTot=0;
+	}
+
+	r:SRoot ::>
+	{
+		r.leafBiomassProduction=0;
+		r.leafBiomassLoss=0;
+	}
+	
+	//Photosynthesis in each leaf compartment
+	b:SBranch ::> 
+	{ 
+		SRoot r = (SRoot)(treeTable.get(b.treeId));
+		Species s = speciesPool.getSpecies(r.speciesId);
+		
+		//Initialisation
+		b.leafBiomass= 0;
+		b.leafBiomassProduction= 0;
+		b.leafBiomassLoss= 0; 
+		
+		//for each voxel related to the branch
+		for(int i=0; i<b.voxCount();)
+		{
+			int[] vid = b.getVox(i);
+			VoxBase v = vox[vid[0]][vid[1]][vid[2]];
+			
+			/**get pipelength (two differen methods possible)*/		
+			float gridSize = pg.get(PG.GridSize);
+			float lengthPipe = getPipeLength(r,vid[0]*gridSize,vid[1]*gridSize,vid[2]*gridSize,(int)pp[currPass].get(PP.PipeLengthMethod));
+			
+			/* Add pipe length based on apical control to each voxel */
+			lengthPipe += (b.dLBPot + r.dLTPot); 
+			
+			/**Calculate photosynthsis of each leaf compartment*/
+			float Cgross = MGro.getCgross(s.Gmax, s.k, pp[currPass].get(PP.SiteIndex),v.light); //light-dependent photosyn rate (g(C) g^-1(leaf) day^-1)
+			float Rwtot = MGro.getRwtot( pp[currPass].get(PP.Rw), lengthPipe, lp_ratio_inv, s.rhoW, s.SLA);//maintenance costs per leaf mass(g(C) g^-1(leaf) day^-1)
+			float Cnet = MGro.getCnet(Cgross, s.RL, Rwtot);//net carbon production rate (g(C) g^-1(leaf) day^-1)
+			float Cb = MGro.getCb(pp[currPass].get(PP.CBLratio), lengthPipe, lp_ratio_inv, pp[currPass].get(PP.CBWratio), s.rhoW, s.SLA, pp[currPass].get(PP.C0),s.PipeReuseFactor); //leaf biomass increment per unit Carbon (g(leaf) g^-1(C))
+		
+			//get leaf biomass (initial conditions)
+			float leafBiomassInitial = v.getLeafAreaAxis(b.branchId)/s.SLA;
+			float GR=MGro.GR(v.GR,Cb,Cnet,s.LL);
+			float BIPot=MGro.BIPot(GR,leafBiomassInitial,s.LL,pp[currPass].get(PP.tyear));
+			
+			Object oldBProdTotObj = v.getBProdTot(b);
+			oldBProdTot=0;
+			if(oldBProdTotObj != null)
+				oldBProdTot = ((Float)oldBProdTotObj).floatValue();
+			
+			float ALProdMax=s.ALProdMax;
+			float leafBiomassProduction=Math.min(BIPot,((ALProdMax/s.SLA)-oldBProdTot));		
+			
+			float tp=MGro.tp(leafBiomassInitial,GR,s.LL,leafBiomassProduction);
+			float leafBiomass=Math.max(0,MGro.LeafBiomassNew(leafBiomassInitial,GR,s.LL,pp[currPass].get(PP.tyear),tp));
+			float leafArea=leafBiomass * s.SLA;
+
+			//remove leaf compartments from branch if they are empty (we use a small lower threshold MinLeafBiomass because
+			//the exponential function only converges to zero.
+			if( (leafBiomass*s.SLA) < pp[currPass].get(PP.MinLeafArea))
+			{
+				v.removeBranch(b); //voxel removes relationship with branch
+				b.removeVox(vid[0],vid[1],vid[2]);
+
+			}
+			else
+			{
+				v.setLeafAreaAxis(b.branchId, leafArea);
+				float bb = v.getLeafAreaAxis(b.branchId)/s.SLA;
+
+				v.setBProdTot(b,oldBProdTot+Math.max(leafBiomassProduction,0));
+				b.leafBiomass += leafBiomass;
+				
+				b.leafBiomassProduction +=  Math.max(leafBiomassProduction,0) ;
+				b.leafBiomassLoss += leafBiomassInitial + Math.max(leafBiomassProduction,0) - leafBiomass ;
+				
+				r.leafBiomassProduction +=  Math.max(leafBiomassProduction,0);
+				r.leafBiomassLoss += Math.max(leafBiomassProduction,0) - leafBiomass;
+				
+				//Important to increase it here!!!
+				++i;
+			}
+		}
+	}
+
+	//axis scale topological traversal for accumulation of biomass increment
+	r:SRoot [tr:STrunk] ::> 
+	{
+		Species s = speciesPool.getSpecies(r.speciesId);
+				
+		r.leafBiomass  = 0; 
+		r.leafBiomassProduction  = 0; 
+		r.leafBiomassLoss  = 0; 
+		
+		r.leafBiomass += tr.leafBiomass;
+		r.leafBiomassProduction += tr.leafBiomassProduction;
+		r.leafBiomassLoss += tr.leafBiomassLoss;
+		
+		r.trunkBiomassProduction =0;
+		r.branchBiomass1stOrderProduction =0;
+		r.branchBiomass2ndOrderProduction =0;
+		
+		r.trunkBiomassLoss =0;
+		r.branchBiomass1stOrderLoss =0;
+		r.branchBiomass2ndOrderLoss =0;
+		
+		/* The following methods calculates the length and diameter increase of all branches */
+		traverseAxes(r);
+		
+		r.diameterPrev = r.diameter;
+		r.diameter = MGro.getDiameterNew(r.diameterPrev ,lp_ratio_inv , s.SLA ,r.leafBiomassProduction,s.PipeReuseFactor); 
+		r.heightPrev = r.length;
+		
+		/**check if new height exceed the theoretical maximum or if the critical length is exceeded*/
+		r.length=Math.min(s.maxPipeLength,Math.min(MGro.htFromDiaTrunk(r.diameter, r.diameterPrev, r.length, s.LDRatioTrunk, r.LInc),
+		MGro.htFromDiaTrunkCritical(r.diameter, LDRatioCrit)));
+		
+		r.trunkBiomass = Math.PI*Math.pow((r.diameter/2),2)*r.length*pp[currPass].get(PP.FormFactorWood)*s.rhoW*1000; //in kg
+		r.trunkBiomassProduction = (Math.PI*Math.pow((r.diameter/2),2)*r.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000)-(Math.PI*Math.pow((r.diameterPrev/2),2)*r.heightPrev*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000);
+		
+		tr.diameterPrev = r.diameterPrev;
+		tr[diameter] = r.diameter;
+		tr.lengthPrev = r.heightPrev;
+		tr[length] = r.length;
+	}
+	
+	/*structural developments*/
+	{
+		growthStruc();
+	}
+	
+	/*increment tree age*/
+	r:SRootBase ::> {r.age++;}
+	
+	//branch mortality
+	b:SBranch  ::> 
+	{ 
+		
+		SRoot r = (SRoot)(treeTable.get(b.treeId));
+		Species s = speciesPool.getSpecies(r.speciesId);
+		
+		//branch removal if leaf biomass on 1st order branch is low
+		if(b.order==1 && (((b.leafBiomass*s.SLA)/10000)/(b.diameter*b.diameter*Math.PI))>0 &&
+			(((b.leafBiomass*s.SLA)/10000)/(b.diameter*b.diameter*Math.PI))<pp[currPass].get(PP.MinLeafAreaRatio))
+		{
+				branchDroppingLow(b);
+		}
+		
+		//random branch mortality
+		if(pp[currPass].get(PP.BranchMortMethod)==1)
+		{
+			if (probability(pp[currPass].get(PP.BranchMortRandomRate)))
+			{
+				//for each voxel related to the branch
+				for(int i=0; i<b.voxCount(); ++i)
+				{
+					int[] vid = b.getVox(i);
+					VoxBase v = vox[vid[0]][vid[1]][vid[2]];
+					v.removeBranch(b); //voxel removes relationship with branch
+					b.removeVox(vid[0],vid[1],vid[2]);
+				}
+			}
+		}
+		//branch mortality due to branch biomass (metabolic theory)
+		if(pp[currPass].get(PP.BranchMortMethod)==2)
+		{
+			float probSurviveBranch = MMor.mortalityBiomass(b.diameter, b.length,  pp[currPass].get(PP.BranchMortMassRate),s.rhoW,pp[currPass].get(PP.BranchMortMassScalingExponent));
+			if(probability(probSurviveBranch))
+			{   
+				//for each voxel related to the branch
+				for(int i=0; i<b.voxCount(); ++i)
+				{
+					int[] vid = b.getVox(i);
+					VoxBase v = vox[vid[0]][vid[1]][vid[2]];
+					v.removeBranch(b); //voxel removes relationship with branch
+					b.removeVox(vid[0],vid[1],vid[2]);
+				}                                           
+			}
+		}
+	}
+	
+	/*branch dropping*/
+	{
+		branchDroppingForReport();
+		branchDropping(); 
+		derive();
+		branchDroppingFirstOrder(); 
+		derive();
+		branchesToDrop.clear(); 
+	}
+]
+
+/**
+*Methods called in growth method
+*/
+private SInternode createInternode(int treeId, int branchId, float len, float dia, int order)
+{
+	SInternode i;
+	if(pg.getInt(PG.ShaderVisualization)==0){
+		i = new SInternode(treeId, branchId, len, dia, order);
+		}
+		else{
+		i = new SInternodeTex(treeId, branchId, len, dia, order);
+		}
+		
+	if(order==2)
+	{
+		internodesNew.add(i);
+	}
+	return i;
+}
+
+private SBranch createBranch(int treeId, int order, float diameter, float length)
+{
+	return new SBranch(treeId, branchIndex++,length, diameter,order);
+}
+
+private void branchDroppingForReport()
+{
+	[
+		s:SBranch, ((s.order == 2)&&(s.voxCount()==0)) ::>
+	{
+		SRoot r = (SRoot)(treeTable.get(s.treeId));
+		Species sp = speciesPool.getSpecies(r.speciesId);
+		r.branchBiomass2ndOrder-=(Math.PI*Math.pow((s.diameter/2),2)*s.length*(pp[currPass].get(PP.FormFactorWood))*sp.rhoW*1000);
+		r.branchBiomass2ndOrderLoss+=(Math.PI*Math.pow((s.diameter/2),2)*s.length*(pp[currPass].get(PP.FormFactorWood))*sp.rhoW*1000);
+	}
+	]
+}
+
+private void branchDropping()
+[
+	s1:SBranch +> s:SBranch --> Node, ((s.order >= 2)&&(s.voxCount()==0)) ==>>
+	{
+		numbranches+=1;
+				
+		if(!branchesToDrop.contains(s1))
+		{
+			branchesToDrop.add(s1);
+		}
+		killBranch(s, first((* t:SRootBase, (t.treeId == s.treeId) *)));
+	}
+	s1;
+]
+
+private void branchDroppingLow(SBranch sl)
+[
+	sl +> s:SBranch --> Node, ((s.order == 2)) ==>>
+	{
+		numbranches+=1;
+				
+		if(!branchesToDrop.contains(sl))
+		{
+			branchesToDrop.add(sl);
+		}
+
+		for(int i=0; i<s.voxCount(); ++i)
+		{
+			int[] vid = s.getVox(i);
+			VoxBase v = vox[vid[0]][vid[1]][vid[2]];
+			
+			s.removeVox(vid[0],vid[1],vid[2]);
+			v.removeBranch(s); //voxel removes relationship with branch
+		}
+		
+	}
+	sl;
+]
+
+private void branchDroppingFirstOrder()
+{
+	for(int i=0 ; i<branchesToDrop.size(); ++i)
+	{
+		SBranch b = (SBranch)(branchesToDrop.get(i));
+		if(count((* b [SBranch] *))==0) 
+		{	
+			{killBranch(b,first((* t:SRootBase, (t.treeId == b.treeId) *)));}
+			[
+				b --> Node ==>> ;
+			]
+			
+			//for reporting branch loss rate
+			SRoot r = (SRoot)(treeTable.get(b.treeId));
+			Species sp = speciesPool.getSpecies(r.speciesId);
+			branchlossrate += ( (Math.PI/3.0f) * (b.diameter/2.0f) * (b.diameter/2.0f))*b.length*sp.rhoW; //in MG biomass
+			
+			r.branchBiomass1stOrder-=(Math.PI*Math.pow((b.diameter/2),2)*b.length*(pp[currPass].get(PP.FormFactorWood))*sp.rhoW*1000);
+			r.branchBiomass1stOrderLoss+=(Math.PI*Math.pow((b.diameter/2),2)*b.length*(pp[currPass].get(PP.FormFactorWood))*sp.rhoW*1000);
+		}
+	}
+}
+
+private void traverseAxes(SRoot r)
+[
+	{float lp_ratio_inv = 1.0/pp[currPass].get(PP.LPratio);}
+	r [M </ b:SBranch] ::> 
+	{
+		float[] BiomassVarN=recurBiomassInc(b, lp_ratio_inv);
+		
+		r.leafBiomass += BiomassVarN[0];
+		r.leafBiomassProduction += BiomassVarN[1];
+		r.leafBiomassLoss += BiomassVarN[2];
+	}
+]
+
+public float[] recurBiomassInc(SBranch b, float lp_ratio_inv)
+[
+	b --> sb:SBranch ::> {
+		
+		//accumulate biomass increment from child branches
+		float[] BiomassVar=recurBiomassInc(sb, lp_ratio_inv);
+
+		b.leafBiomass += BiomassVar[0];
+		b.leafBiomassProduction += BiomassVar[1];
+		b.leafBiomassLoss += BiomassVar[2];
+	}
+	
+	{
+		//set diameter and length of branches and trunk
+		SRoot r = (SRoot)(treeTable.get(b.treeId));
+		Species s = speciesPool.getSpecies(r.speciesId);
+		
+		//remember prev diameter and length
+		b.diameterPrev = b.diameter;
+		b.lengthPrev = b.length;
+		
+		//set new diameter and length
+		b[diameter] = MGro.getDiameterNew(b[diameterPrev], lp_ratio_inv, s.SLA, b.leafBiomassProduction,s.PipeReuseFactor);
+		
+		if(b.dLBPot==0)
+		{
+			b[length]=b.lengthPrev;
+		}
+		else
+		{
+			b[length] = MGro.htFromDiaBranch(b.diameter, s.LDRatioTrunk, s.ShorteningFactor,b.order, b.length, b.diameterPrev);
+		}
+
+		float BiomassOld=Math.PI*Math.pow((b.diameterPrev/2),2)*b.lengthPrev*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+		b.branchBiomass=Math.PI*Math.pow((b.diameter/2),2)*b.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+		
+		if(b.order==1)
+		{
+			r.branchBiomass1stOrder+=b.branchBiomass-BiomassOld;
+			r.branchBiomass1stOrderProduction+=b.branchBiomass-BiomassOld;
+		}
+		
+		if(b.order==2)
+			{
+				r.branchBiomass2ndOrder+=b.branchBiomass-BiomassOld;
+				r.branchBiomass2ndOrderProduction+=b.branchBiomass-BiomassOld;
+			}
+		
+		return new float[] {b.leafBiomass,b.leafBiomassProduction,b.leafBiomassLoss};
+	}
+]
+
+private void growthStrucStochastic()
+[
+	r:SRoot [tr:STrunk] ==>
+	{
+				Species s = speciesPool.getSpecies(r.speciesId);
+				
+				TrunkLengthIncrease = tr.length - tr.lengthPrev;
+				TrunkLengthLastInternode = tr.lengthPrev - tr.lastLateralPos;
+				TrunkInternodeLength= MGro.getInternodeLength(s.InternodeLengthTrunkMin, s.InternodeLengthTrunkMax, s.kInt, tr.lengthPrev, tr.length, TrunkLengthLastInternode);
+				NumberBranchesFirstOrder = MGro.getNumLateralBranches(TrunkInternodeLength, tr.lengthPrev, tr.length, TrunkLengthLastInternode);
+
+				r.xPositionBudMax=r.translateX;
+				r.xPositionBudMin=r.translateX;
+				r.yPositionBudMax=r.translateY;
+				r.yPositionBudMin=r.translateY;
+				
+				r.heightFirstBranching=tr.length;
+				
+				if (NumberBranchesFirstOrder>0)
+				{
+					/** Computations for new 1st order branches*/					
+					//compute the cross-sectional area of the new segment of the trunk
+					AsegTrunk = MGro.segmentAreaInc(tr.diameter, tr.length, tr.lengthPrev,0); //maybe ther zero has to be changed to LengthInternodeLast
+					
+					//compute diameter and length of newly established lateral 1st order branches
+					AsegBranchFirst = (AsegTrunk / (float) NumberBranchesFirstOrder); 
+					DiameterSegFirst = Math.sqrt(AsegBranchFirst / Math.PI) * 2.0f;
+					LengthSegFirst = MGro.htFromDiaBranchNewBranches(DiameterSegFirst, pp[currPass].get(PP.LDratioBranch), s.ShorteningFactor, 1);
+					
+					//compute the internode length of the new first order branch and the total number of 1st order segments 
+					LengthInternodeFirst =  MGro.getInternodeLength(s.InternodeLengthBranchMin, s.InternodeLengthBranchMax, s.kInt, 0, LengthSegFirst,0);
+					NSegFirst = (int) Math.ceil(LengthSegFirst/LengthInternodeFirst);
+										
+					/** Computations for new 2nd order branches*/
+					NBranchesSecond = Math.max(1,MGro.getNumLateralBranches(LengthInternodeFirst, 0, LengthSegFirst, 0)); //There will alway be at least on 2nd order branch
+					AsegBranchSecond = (AsegBranchFirst / (float) NBranchesSecond);
+					DiameterSegSecond = Math.sqrt(AsegBranchSecond / Math.PI) * 2.0f;
+					LengthSegSecond = MGro.htFromDiaBranchNewBranches(DiameterSegSecond, pp[currPass].get(PP.LDratioBranch), s.ShorteningFactor, 2);
+					
+					//Compute the position of the last inserted branch for the trunk and the first order branch
+					tr.lastLateralPos = tr.lastLateralPos + (NumberBranchesFirstOrder * TrunkInternodeLength);
+					branchLastLateralPosFirst = (NBranchesSecond * Math.min(LengthSegFirst,LengthInternodeFirst));
+					
+				}
+			}
+			r 
+	
+			for(int k:(1:NumberBranchesFirstOrder))
+			(
+				{
+					//increment phyllo angle
+					tr.phylloCurr += s.FirstOrderPhyllotaxis;
+					tr.phylloRound += 1;
+					
+					//to avoid direct shading of branches in subsequent rounds of phyllotaxy
+					if(tr.phylloRound %  s.FirstOrderPhyllotaxisNum == 1)
+						tr.phylloCurr += (s.FirstOrderPhyllotaxis/2.0f);
+					
+					//new first order branch
+					SBranch b = createBranch(r.treeId, 1, DiameterSegFirst, LengthSegFirst);
+					
+					//set branch biomass 
+					b.branchBiomass=Math.PI*Math.pow((b.diameter/2),2)*b.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+					r.branchBiomass1stOrder+=Math.PI*Math.pow((b.diameter/2),2)*b.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+					r.branchBiomass1stOrderProduction+=Math.PI*Math.pow((b.diameter/2),2)*b.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+					b.lastLateralPos = branchLastLateralPosFirst;
+					
+					r.xPositionBudMax=r.translateX+LengthSegFirst;
+					r.xPositionBudMin=r.translateX-LengthSegFirst;
+					r.yPositionBudMax=r.translateY+LengthSegFirst;
+					r.yPositionBudMin=r.translateY-LengthSegFirst;
+				}
+		
+				[
+					M(tr.lengthPrev  - TrunkLengthLastInternode + (k * TrunkInternodeLength)) [</ b]
+					//first order phyllotaxy
+					RH(tr.phylloCurr+random(-s.StochasticityPhyllo,s.StochasticityPhyllo)) [</ b] 
+					//first order branching angle
+					RU(random(s.FirstOrderAngleSide-s.StochasticityBranchingAngle,s.FirstOrderAngleSide+s.StochasticityBranchingAngle)) [</ b]
+					//adjusting to 'flatten' branching
+					RH(90)  [</ b]
+					
+					for(int j:(1:NSegFirst))
+					(
+						//new second order branch
+						{
+							SBranch brHigher = createBranch(r.treeId, 2,DiameterSegSecond,LengthSegSecond);
+							brHigher.branchBiomass+=Math.PI*Math.pow((brHigher.diameter/2),2)*brHigher.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+							r.branchBiomass2ndOrder+=Math.PI*Math.pow((brHigher.diameter/2),2)*brHigher.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+							r.branchBiomass2ndOrderProduction+=Math.PI*Math.pow((brHigher.diameter/2),2)*brHigher.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+
+						}
+						//first order tropism
+						RV(random(s.TropismStrength-(s.TropismStrength*s.StochasticityTropism),s.TropismStrength+(s.TropismStrength*s.StochasticityTropism))) [</ b]
+						//new first order internode
+						createInternode(b.treeId,b.branchId,
+						LengthInternodeFirst+(Math.min(LengthInternodeFirst*j,LengthSegFirst)-(j*LengthInternodeFirst)),
+						DiameterSegFirst,1) [</ b]
+						//twisting
+						RL(random(0,s.StochasticityTwisting)) [</ b]
+				
+						//second order phyllotaxy (constant at 180 degrees)
+						if(j!=NSegFirst || j==1)
+						(
+							{BranchingAngleRandom=random(-s.StochasticityAnglePlane,s.StochasticityAnglePlane);}
+							RH(180+BranchingAngleRandom) [</ b]
+							[
+								//second order branching angle
+								RU(random(s.HigherOrderAngle-s.StochasticityBranchingAngle,s.HigherOrderAngle+s.StochasticityBranchingAngle))  [</ brHigher [<+ b]]
+								//second order tropism
+								RV(random(s.TropismStrength-(s.TropismStrength*s.StochasticityTropism),s.TropismStrength+(s.TropismStrength*s.StochasticityTropism))) [</ brHigher]
+								createInternode(r.treeId,brHigher.branchId,LengthSegSecond,DiameterSegSecond,2)[</ brHigher]
+								//new second order bud
+								SBud(r.treeId, brHigher.branchId, 2) [</ brHigher]
+							]
+							RH(-BranchingAngleRandom) [</ b]
+						)
+					)
+					//new first order bud
+					SBud(r.treeId, b.branchId, 1) [</ b]
+				]
+			)
+			[tr];
+	
+	//Development of branches
+	b:SBud [</ br:SBranch] ==> 
+			{
+				SRoot r = (SRoot)(treeTable.get(b.treeId));
+				Species s = speciesPool.getSpecies(r.speciesId);
+				
+				r.heightFirstBranching=Math.min(r.heightFirstBranching,location(b).z);
+				
+				//Calculate internode length, number of second order branches etc. for all 1st order branches
+				if(b.order==1)
+				{
+					//Compute internode length of 1st order branches depending on total growth within timestep
+					BranchLengthIncrease = br.length - br.lengthPrev;
+					BranchLengthLastInternode = br.lengthPrev - br.lastLateralPos;
+					BranchLengthTotal = BranchLengthIncrease+BranchLengthLastInternode;
+					BranchInternodeLengthFirstOrder =  MGro.getInternodeLength(s.InternodeLengthBranchMin, s.InternodeLengthBranchMax, s.kInt, br.lengthPrev, br.length,BranchLengthLastInternode);
+					
+					//Compute number of 2nd order branches and internode lengths of first order segments
+					NumberBranchesSecondOrder = (int)Math.floor(BranchLengthTotal/BranchInternodeLengthFirstOrder);
+					NumberInternodesFirstOrder = NumberBranchesSecondOrder+1; 
+					
+					//First Case: Length growth of 1st order branch is not enough to create 2nd order branches
+					if (NumberBranchesSecondOrder==0)
+					{
+						if(BranchLengthIncrease==0)
+						{
+							NumberInternodesFirstOrder=0;
+						}
+						
+						if(BranchLengthIncrease>0)
+						{
+							NumberInternodesFirstOrder=1;
+							InternodeLengthVec[1]=BranchLengthIncrease;
+						}
+					}
+					
+					//Second Case: Length growth of 1st order branch is enough to create 2nd order branches
+					if(NumberBranchesSecondOrder>0)
+					{
+						// Computations for new 2nd order branches
+						AsegBranchFirst = MGro.segmentAreaInc(br.diameter, br.length, br.lengthPrev,BranchLengthLastInternode);
+						AsegBranchSecond = (AsegBranchFirst / (float) NumberBranchesSecondOrder);
+						DiameterSegSecond = Math.sqrt(AsegBranchSecond / Math.PI) * 2.0f;
+						LengthSegSecond = MGro.htFromDiaBranchNewBranches(DiameterSegSecond, pp[currPass].get(PP.LDratioBranch), s.ShorteningFactor, 2);
+						
+						if (NumberBranchesSecondOrder==1)
+						{
+							InternodeLengthVec[1]=BranchInternodeLengthFirstOrder-BranchLengthLastInternode;
+							InternodeLengthVec[2]=BranchLengthTotal-BranchInternodeLengthFirstOrder;
+						}
+						
+						if (NumberBranchesSecondOrder>1)
+						{
+							InternodeLengthVec[1]=BranchInternodeLengthFirstOrder-BranchLengthLastInternode;
+							InternodeLengthVec[1:(NumberInternodesFirstOrder-1)]=BranchInternodeLengthFirstOrder;
+							InternodeLengthVec[NumberInternodesFirstOrder]=BranchLengthTotal-(NumberBranchesSecondOrder*BranchInternodeLengthFirstOrder);
+						}
+					}
+				}
+			}
+			
+			//Development of 2nd order branches
+			if(b.order==2)
+			(
+				if((br.length - br.lengthPrev)!=0)
+				(
+					RV(random(s.TropismStrength-(s.TropismStrength*s.StochasticityTropism),s.TropismStrength+(s.TropismStrength*s.StochasticityTropism))) [</ br]
+					
+					//If branch would grow into ground, development is stopped
+					if( ( (location(b).z)+(direction(b).z*(br.length - br.lengthPrev)) )>1)
+					(
+						createInternode(b.treeId,br.branchId,br.length - br.lengthPrev,DiameterSegSecond,br.order) [</ br]
+						//twisting
+						RL(random(-s.StochasticityTwisting,s.StochasticityTwisting)) [</ br]
+						RU(random(-s.StochasticityTwisting,s.StochasticityTwisting))[</ br]
+					)
+				)
+				SBud(b.treeId, b.branchId, b.order) [</ br]
+				
+				{r.xPositionBudMax=Math.max(r.xPositionBudMax,location(b).x);
+				r.xPositionBudMin=Math.min(r.xPositionBudMin,location(b).x);
+				r.yPositionBudMax=Math.max(r.yPositionBudMax,location(b).y);
+				r.yPositionBudMin=Math.min(r.yPositionBudMin,location(b).y);}
+			)
+			
+			//Development of 1st order branches and initialisation of associated 2nd order brancehs
+			if(b.order==1)
+			(
+				for(int i:(1:NumberInternodesFirstOrder))
+				(
+					//If branch would grow into ground, development is stopped
+					if( ( (location(b).z)+(direction(b).z*BranchLengthTotal) )>0.5)
+				    (
+						//first order tropism
+						RV(random(s.TropismStrength-(s.TropismStrength*s.StochasticityTropism),s.TropismStrength+(s.TropismStrength*s.StochasticityTropism))) [</ br]
+						
+						//new first order internode
+						createInternode(b.treeId,br.branchId,InternodeLengthVec[i],DiameterSegFirst,br.order) [</ br]
+						
+						//twisting
+						RL(random(-s.StochasticityTwisting,s.StochasticityTwisting)) [</ br]
+						RU(random(-s.StochasticityTwisting,s.StochasticityTwisting))[</ br]
+						
+						//establish 2nd order branches
+						if( (i!=NumberInternodesFirstOrder) ||	(NumberInternodesFirstOrder==1 && BranchLengthTotal>=BranchInternodeLengthFirstOrder) ) 
+						(
+							//second order phyllotaxy (constant at 180 degrees)
+							{BranchingAngleRandom=random(-s.StochasticityAnglePlane,s.StochasticityAnglePlane);}
+							RH(180+BranchingAngleRandom) [</ br]
+							{
+								//new second order branch
+								SBranch brl = createBranch(r.treeId, br.order+1, DiameterSegSecond, LengthSegSecond);
+								
+								brl.branchBiomass=Math.PI*Math.pow((brl.diameter/2),2)*brl.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+								r.branchBiomass2ndOrder+=Math.PI*Math.pow((brl.diameter/2),2)*brl.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;	
+								r.branchBiomass2ndOrderProduction+=Math.PI*Math.pow((brl.diameter/2),2)*brl.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;	
+								br.lastLateralPos=br.lastLateralPos+BranchInternodeLengthFirstOrder;
+							}
+							[
+								//second order branching angle
+								RU(random(s.HigherOrderAngle+s.StochasticityBranchingAngle,s.HigherOrderAngle-s.StochasticityBranchingAngle))  [</ brl [<+ br]] 
+
+								//new second order internode
+								createInternode(r.treeId,brl.branchId,LengthSegSecond,DiameterSegSecond,br.order+1) [</ brl] 
+								SBud(r.treeId, brl.branchId, br.order+1) [</ brl]
+							]
+							RH(-BranchingAngleRandom) [</ br]
+						)
+					)
+				)
+				SBud(b.treeId, b.branchId, b.order) [</ br]
+				
+				//Save bud position for crown calculations
+				{r.xPositionBudMax=Math.max(r.xPositionBudMax,location(b).x);
+				r.xPositionBudMin=Math.min(r.xPositionBudMin,location(b).x);
+				r.yPositionBudMax=Math.max(r.yPositionBudMax,location(b).y);
+				r.yPositionBudMin=Math.min(r.yPositionBudMin,location(b).y);}
+				
+				);
+]
+
+private void growthStrucDeterministic()
+[
+	r:SRoot [tr:STrunk] ==>
+			{
+				Species s = speciesPool.getSpecies(r.speciesId);
+				
+				TrunkLengthIncrease = tr.length - tr.lengthPrev;
+				TrunkLengthLastInternode = tr.lengthPrev - tr.lastLateralPos;
+				TrunkInternodeLength= MGro.getInternodeLength(s.InternodeLengthTrunkMin, s.InternodeLengthTrunkMax, s.kInt, tr.lengthPrev, tr.length, TrunkLengthLastInternode);
+				NumberBranchesFirstOrder = MGro.getNumLateralBranches(TrunkInternodeLength, tr.lengthPrev, tr.length, TrunkLengthLastInternode);
+				
+				r.xPositionBudMax=r.translateX;
+				r.xPositionBudMin=r.translateX;
+				r.yPositionBudMax=r.translateY;
+				r.yPositionBudMin=r.translateY;
+				
+				r.heightFirstBranching=tr.length;
+				
+				if (NumberBranchesFirstOrder>0)
+				{
+					/** Computations for new 1st order branches*/					
+					//compute the cross-sectional area of the new segment of the trunk
+					AsegTrunk = MGro.segmentAreaInc(tr.diameter, tr.length, tr.lengthPrev,0); 
+					
+					//compute diameter and length of newly established lateral 1st order branches
+					AsegBranchFirst = (AsegTrunk / (float) NumberBranchesFirstOrder); 
+					DiameterSegFirst = Math.sqrt(AsegBranchFirst / Math.PI) * 2.0f;
+					LengthSegFirst = MGro.htFromDiaBranchNewBranches(DiameterSegFirst, pp[currPass].get(PP.LDratioBranch), s.ShorteningFactor, 1);
+					
+					//compute the internode length of the new first order branch and the total number of 1st order segments 
+					LengthInternodeFirst =  MGro.getInternodeLength(s.InternodeLengthBranchMin, s.InternodeLengthBranchMax, s.kInt, 0, LengthSegFirst,0);
+					NSegFirst = (int) Math.ceil(LengthSegFirst/LengthInternodeFirst);
+										
+					/** Computations for new 2nd order branches*/
+					NBranchesSecond = Math.max(1,MGro.getNumLateralBranches(LengthInternodeFirst, 0, LengthSegFirst, 0)); 
+					AsegBranchSecond = (AsegBranchFirst / (float) NBranchesSecond);
+					DiameterSegSecond = Math.sqrt(AsegBranchSecond / Math.PI) * 2.0f;
+					LengthSegSecond = MGro.htFromDiaBranchNewBranches(DiameterSegSecond, pp[currPass].get(PP.LDratioBranch), s.ShorteningFactor, 2);
+					
+					//Compute the position of the last inserted branch for the trunk and the first order branch
+					tr.lastLateralPos = tr.lastLateralPos + (NumberBranchesFirstOrder * TrunkInternodeLength);
+					branchLastLateralPosFirst = (NBranchesSecond * Math.min(LengthSegFirst,LengthInternodeFirst));
+	
+				}
+			}
+			r 
+		
+			for(int k:(1:NumberBranchesFirstOrder))
+			(
+				{
+					//increment phyllo angle
+					tr.phylloCurr += s.FirstOrderPhyllotaxis;
+					tr.phylloRound += 1;
+					
+					//to avoid direct shading of branches in subsequent rounds of phyllotaxy
+					if(tr.phylloRound %  s.FirstOrderPhyllotaxisNum == 1)
+						tr.phylloCurr += (s.FirstOrderPhyllotaxis/2.0f);
+					
+					//new first order branch
+					SBranch b = createBranch(r.treeId, 1, DiameterSegFirst, LengthSegFirst);
+					//set branch biomass 
+					b.branchBiomass=Math.PI*Math.pow((b.diameter/2),2)*b.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+								
+					r.branchBiomass1stOrder+=Math.PI*Math.pow((b.diameter/2),2)*b.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+					r.branchBiomass1stOrderProduction+=Math.PI*Math.pow((b.diameter/2),2)*b.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+					b.lastLateralPos = branchLastLateralPosFirst;
+					
+					//Save bud position for crown calculations
+					r.xPositionBudMax=r.translateX+LengthSegFirst;
+					r.xPositionBudMin=r.translateX-LengthSegFirst;
+					r.yPositionBudMax=r.translateY+LengthSegFirst;
+					r.yPositionBudMin=r.translateY-LengthSegFirst;
+				}
+				
+				[
+					M(tr.lengthPrev  - TrunkLengthLastInternode + (k * TrunkInternodeLength)) [</ b]
+					//first order phyllotaxy
+					RH(tr.phylloCurr) [</ b] 
+					//first order branching angle
+					RU(s.FirstOrderAngleSide) [</ b]
+					//adjusting to 'flatten' branching
+					RH(90)  [</ b]
+					
+					for(int j:(1:NSegFirst))
+					(
+						//new second order branch
+						{
+							SBranch brHigher = createBranch(r.treeId, 2,DiameterSegSecond,LengthSegSecond);
+							brHigher.branchBiomass+=Math.PI*Math.pow((brHigher.diameter/2),2)*brHigher.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+							
+							r.branchBiomass2ndOrder+=Math.PI*Math.pow((brHigher.diameter/2),2)*brHigher.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+							r.branchBiomass2ndOrderProduction+=Math.PI*Math.pow((brHigher.diameter/2),2)*brHigher.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+						}
+						//first order tropism
+						RV(s.TropismStrength) 
+						//new first order internode
+						createInternode(b.treeId,b.branchId,
+						LengthInternodeFirst+(Math.min(LengthInternodeFirst*j,LengthSegFirst)-(j*LengthInternodeFirst)),
+						DiameterSegFirst,1) [</ b]
+						
+						//second order phyllotaxy (constant at 180 degrees)
+						if(j!=NSegFirst || j==1)
+						(
+							RH(180) [</ b]
+							[
+								//second order branching angle
+								RU(s.HigherOrderAngle)  [</ brHigher [<+ b]]
+								//second order tropism
+								RV(s.TropismStrength) //[</ b]
+								createInternode(r.treeId,brHigher.branchId,LengthSegSecond,DiameterSegSecond,2)[</ brHigher]
+								//new second order bud
+								SBud(r.treeId, brHigher.branchId, 2) [</ brHigher]
+							]
+						)
+					)
+					//new first order bud
+					SBud(r.treeId, b.branchId, 1) [</ b]
+				]
+			)
+			[tr];
+			
+	
+	//Development of branches
+	b:SBud [</ br:SBranch] ==> 
+			{
+				SRoot r = (SRoot)(treeTable.get(b.treeId));
+				Species s = speciesPool.getSpecies(r.speciesId);
+				
+				r.heightFirstBranching=Math.min(r.heightFirstBranching,location(b).z);
+								
+				//Calculate internode length, number of second order branches etc. for all 1st order branches
+				if(b.order==1)
+				{
+					//Compute internode length of 1st order branches depending on total growth within timestep
+					BranchLengthIncrease = br.length - br.lengthPrev;
+					BranchLengthLastInternode = br.lengthPrev - br.lastLateralPos;
+					BranchLengthTotal = BranchLengthIncrease+BranchLengthLastInternode;
+					BranchInternodeLengthFirstOrder =  MGro.getInternodeLength(s.InternodeLengthBranchMin, s.InternodeLengthBranchMax, s.kInt, br.lengthPrev, br.length,BranchLengthLastInternode);
+					
+					//Compute number of 2nd order branches and internode lengths of first order segments
+					NumberBranchesSecondOrder = (int)Math.floor(BranchLengthTotal/BranchInternodeLengthFirstOrder);
+					NumberInternodesFirstOrder = NumberBranchesSecondOrder+1; 
+					
+					//First Case: Length growth of 1st order branch is not enough to create 2nd order branches
+					if (NumberBranchesSecondOrder==0)
+					{
+						if(BranchLengthIncrease==0)
+						{
+							NumberInternodesFirstOrder=0;
+						}
+						
+						if(BranchLengthIncrease>0)
+						{
+							NumberInternodesFirstOrder=1;
+							InternodeLengthVec[1]=BranchLengthIncrease;
+						}
+					}
+					
+					//Second Case: Length growth of 1st order branch is enough to create 2nd order branches
+					if(NumberBranchesSecondOrder>0)
+					{
+						// Computations for new 2nd order branches
+						AsegBranchFirst = MGro.segmentAreaInc(br.diameter, br.length, br.lengthPrev,BranchLengthLastInternode);
+						AsegBranchSecond = (AsegBranchFirst / (float) NumberBranchesSecondOrder);
+						DiameterSegSecond = Math.sqrt(AsegBranchSecond / Math.PI) * 2.0f;
+						LengthSegSecond = MGro.htFromDiaBranchNewBranches(DiameterSegSecond, pp[currPass].get(PP.LDratioBranch), s.ShorteningFactor, 2);
+
+						if (NumberBranchesSecondOrder==1)
+						{
+							InternodeLengthVec[1]=BranchInternodeLengthFirstOrder-BranchLengthLastInternode;
+							InternodeLengthVec[2]=BranchLengthTotal-BranchInternodeLengthFirstOrder;
+						}
+						
+						if (NumberBranchesSecondOrder>1)
+						{
+							InternodeLengthVec[1]=BranchInternodeLengthFirstOrder-BranchLengthLastInternode;
+							InternodeLengthVec[1:(NumberInternodesFirstOrder-1)]=BranchInternodeLengthFirstOrder;
+							InternodeLengthVec[NumberInternodesFirstOrder]=BranchLengthTotal-(NumberBranchesSecondOrder*BranchInternodeLengthFirstOrder);
+						}
+					}
+				}
+			}
+			
+			//Development of 2nd order branches
+			if(b.order==2)
+			(
+				if((br.length - br.lengthPrev)!=0)
+				(
+					RV(s.TropismStrength) [</ br]
+					
+					//If branch would grow into ground, development is stopped
+					if( ( (location(b).z)+(direction(b).z*(br.length - br.lengthPrev)) )>0.5)
+						(
+							createInternode(b.treeId,br.branchId,br.length - br.lengthPrev,DiameterSegSecond,br.order) [</ br]
+						)
+				)
+				SBud(b.treeId, b.branchId, b.order) [</ br]
+				
+				//Save bud position for crown calculations
+				{r.xPositionBudMax=Math.max(r.xPositionBudMax,location(b).x);
+				r.xPositionBudMin=Math.min(r.xPositionBudMin,location(b).x);
+				r.yPositionBudMax=Math.max(r.yPositionBudMax,location(b).y);
+				r.yPositionBudMin=Math.min(r.yPositionBudMin,location(b).y);}
+			)
+			
+			//Development of 1st order branches and initialisation of associated 2nd order branches
+			if(b.order==1)
+			(
+				for(int i:(1:NumberInternodesFirstOrder))
+				(
+					//If branch would grow into ground, development is stopped
+					if( ( (location(b).z)+(direction(b).z*BranchLengthTotal) )>0.5)
+				    (
+						//first order tropism
+						RV(s.TropismStrength) [</ br]
+						
+						//new first order internode
+						createInternode(b.treeId,br.branchId,InternodeLengthVec[i],DiameterSegFirst,br.order) [</ br]
+						
+						//establish 2nd order branches
+						if( (i!=NumberInternodesFirstOrder) ||	(NumberInternodesFirstOrder==1 && BranchLengthTotal>=BranchInternodeLengthFirstOrder) ) 
+						(
+							//second order phyllotaxy (constant at 180 degrees)
+							RH(180) [</ br]
+							{
+								//new second order branch
+								SBranch brl = createBranch(r.treeId, br.order+1, DiameterSegSecond, LengthSegSecond);
+								
+								brl.branchBiomass=Math.PI*Math.pow((brl.diameter/2),2)*brl.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;
+	
+								r.branchBiomass2ndOrder+=Math.PI*Math.pow((brl.diameter/2),2)*brl.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;	
+								r.branchBiomass2ndOrderProduction+=Math.PI*Math.pow((brl.diameter/2),2)*brl.length*(pp[currPass].get(PP.FormFactorWood))*s.rhoW*1000;	
+								br.lastLateralPos=br.lastLateralPos+BranchInternodeLengthFirstOrder;
+							}
+							[
+								//second order branching angle
+								RU(s.HigherOrderAngle)  [</ brl [<+ br]] 
+								//second order tropism
+								RV(s.TropismStrength)//tropism
+								//new second order internode
+								createInternode(r.treeId,brl.branchId,LengthSegSecond,DiameterSegSecond,br.order+1) [</ brl] 
+								SBud(r.treeId, brl.branchId, br.order+1) [</ brl]
+							]
+						)
+					)
+				)
+				SBud(b.treeId, b.branchId, b.order) [</ br]
+				
+				//Save bud position for crown calculations
+				{r.xPositionBudMax=Math.max(r.xPositionBudMax,location(b).x);
+				r.xPositionBudMin=Math.min(r.xPositionBudMin,location(b).x);
+				r.yPositionBudMax=Math.max(r.yPositionBudMax,location(b).y);
+				r.yPositionBudMin=Math.min(r.yPositionBudMin,location(b).y);}
+				
+				);
+]
+
+private void growthStruc()
+[
+	{
+		if(pp[currPass].get(PP.Stochasticity)==1)
+		{growthStrucStochastic();}	//stochastic growth rules}
+		else
+		{growthStrucDeterministic();} //deterministic growth rules
+	}
+	
+	{derive();}//update internal cache of scene graph - necessary to obtain positions of new internodes
+	
+	
+	b:SBranch /> i:SInternode ::>
+	{
+		SRoot r = (SRoot)(treeTable.get(b.treeId));
+		Species s = speciesPool.getSpecies(r.speciesId);
+			
+		float lp_ratio_inv = 1.0/pp[currPass].get(PP.LPratio);
+		
+		i[diameter]=MGro.getDiameterNew(i.diameter ,lp_ratio_inv , s.SLA ,b.leafBiomassProduction,s.PipeReuseFactor);
+	}
+
+	{
+		int gridSize = pg.getInt(PG.GridSize);
+				
+		//counting num of new voxels related to each branch
+		for(int i=0; i<internodesNew.size(); ++i)
+		{
+			SInternode internode = (SInternode)(internodesNew.get(i));
+			Point3d pos = endlocation(internode);
+
+			int voxX = (int)(pos.x/gridSize);
+			int voxY = (int)(pos.y/gridSize);
+			int voxZ = (int)(pos.z/gridSize);
+			
+			
+			if(voxZ < 0)
+				continue;
+			
+			internode.voxX = voxX;
+			internode.voxY = voxY;
+			internode.voxZ = voxZ;
+			
+			[
+				br:SBranch /> internode ::> {
+					ObjectList voxList = (ObjectList)(branchNewVoxCount.get(br.branchId));
+					if(voxList == null)
+						voxList = new ObjectList();
+					
+					//checking if voxel is already related to branch
+					boolean alreadyRelated = false;
+					
+					for(int n=0; n < voxList.size(); ++n)
+					{
+						ObjectList indicesList = (ObjectList)(voxList.get(n));
+						if(
+							(((Integer)(indicesList.get(0))).intValue()==voxX)&&
+							(((Integer)(indicesList.get(1))).intValue()==voxY)&&
+							(((Integer)(indicesList.get(2))).intValue()==voxZ)
+							)
+							alreadyRelated = true;
+					}
+					
+					//if voxel not already related to branch, add it to the hashtable
+					if(!alreadyRelated)
+					{
+						ObjectList voxIndices = new ObjectList();
+						voxIndices.add(new Integer(voxX));
+						voxIndices.add(new Integer(voxY));
+						voxIndices.add(new Integer(voxZ));
+						voxList.add(voxIndices);
+						branchNewVoxCount.remove(br.branchId);
+						branchNewVoxCount.put(br.branchId, voxList);
+						branchNew.add(br);
+					}
+				}
+			]
+		}
+			
+		//relating new internodes to voxels (leaf compartments)
+		branchNewVoxCount2.clear();
+		for(int i=0; i<branchNew.size(); ++i)
+		{
+			SBranch br = (SBranch)(branchNew.get(i));
+			ObjectList voxList = (ObjectList)(branchNewVoxCount.get(br.branchId));
+			
+			//count actual number of new voxels
+			int newVoxCount = 0;
+			for(int k=0; k<voxList.size(); ++k)
+			{
+				ObjectList voxIndices = (ObjectList)(voxList.get(k));
+				if(!vox[((Integer)voxIndices.get(0)).intValue()][((Integer)voxIndices.get(1)).intValue()][((Integer)voxIndices.get(2)).intValue()].isRelated(br))
+					newVoxCount++;
+			}
+			
+			branchNewVoxCount2.put(br.branchId, new Integer(newVoxCount));
+		}
+		
+		//relating new internodes to voxels (leaf compartments)
+		for(int i=0; i<branchNew.size(); ++i)
+		{
+			SBranch br = (SBranch)(branchNew.get(i));
+			ObjectList voxList = (ObjectList)(branchNewVoxCount.get(br.branchId));
+			
+			//relating voxels to branches
+			for(int j=0; j<voxList.size(); ++j)
+			{
+				ObjectList voxIndices = (ObjectList)(voxList.get(j));
+				relateBranchToVox(br,
+				((Integer)voxIndices.get(0)).intValue(),
+				((Integer)voxIndices.get(1)).intValue(),
+				((Integer)voxIndices.get(2)).intValue(),
+				((Integer)branchNewVoxCount2.get(br.branchId)).intValue()
+				);
+			}
+		}
+	}
+]
+
+
+private void coloring()
+[
+	{
+		//pre-compute parameters required
+		float rw = pp[currPass].get(PP.Rw);
+		float cbl_ratio = pp[currPass].get(PP.CBLratio);
+		float lp_ratio_inv = 1.0/pp[currPass].get(PP.LPratio);
+		float cbw_ratio = pp[currPass].get(PP.CBWratio);
+		float carbon_overhead = pp[currPass].get(PP.C0);
+		
+		internodesNew.clear(); //clear cache of newly created internodes
+		branchNewVoxCount.clear(); //clear cache for new num of voxels for each branch
+		branchNew.clear(); //clear list of branches related to newly created internodes
+		precomputeApicalControl();
+
+		float oldBProdTot=0;
+	}
+
+	b:SBranch ::> 
+	{ 
+		SRoot r = (SRoot)(treeTable.get(b.treeId));
+		Species s = speciesPool.getSpecies(r.speciesId);
+
+		for(int i=0; i<b.voxCount();)
+		{
+			int[] vid = b.getVox(i);
+			VoxBase v = vox[vid[0]][vid[1]][vid[2]];
+			float gridSize = pg.get(PG.GridSize);
+			float lengthPipe = getPipeLength(r,vid[0]*gridSize,vid[1]*gridSize,vid[2]*gridSize,(int)pp[currPass].get(PP.PipeLengthMethod));
+			lengthPipe += (b.dLBPot + r.dLTPot); 
+			float Cgross = MGro.getCgross(s.Gmax, s.k, pp[currPass].get(PP.SiteIndex),v.light); //light-dependent photosyn rate (g(C) g^-1(leaf) day^-1)
+			float Rwtot = MGro.getRwtot( pp[currPass].get(PP.Rw), lengthPipe, lp_ratio_inv, s.rhoW, s.SLA);//maintenance costs per leaf mass(g(C) g^-1(leaf) day^-1)
+			float Cnet = MGro.getCnet(Cgross, s.RL, Rwtot);//net carbon production rate (g(C) g^-1(leaf) day^-1)
+			float Cb = MGro.getCb(pp[currPass].get(PP.CBLratio), lengthPipe, lp_ratio_inv, pp[currPass].get(PP.CBWratio), s.rhoW, s.SLA, pp[currPass].get(PP.C0),s.PipeReuseFactor); //leaf biomass increment per unit Carbon (g(leaf) g^-1(C))
+								
+			++i;
+	
+			/**Coloring*/
+			
+			if(pg.getInt(PG.ShaderVisualization)==0)
+			{
+				float rangeMin = 0.005;
+				float range = 0;
+				float valColor = 0;
+							
+				if(pg.getInt(PG.COLOR_SET)==0)	//leaf area per voxel per branch
+				{
+					range = ALMaxVoxel;
+					try{valColor = v.getLeafAreaAxis(b.branchId);}
+					catch(Exception e)
+					{println("problem!");
+					}
+					
+				}
+				else if(pg.getInt(PG.COLOR_SET)==1)	//light intensity
+				{
+					range = pp[currPass].get(PP.Imax);
+					valColor = v.light;
+				}
+				else if(pg.getInt(PG.COLOR_SET)==2)	//CGross
+				{
+					range = speciesPool.CGrossMax;
+					valColor = Cgross;
+				}
+				else if(pg.getInt(PG.COLOR_SET)==3)	//Cnet
+				{
+					range = speciesPool.CnetMax;
+					valColor = Cnet;
+				}
+				else if(pg.getInt(PG.COLOR_SET)==4)	//Cnet*CB-1/LL
+				{
+					range = speciesPool.grMax;
+					valColor = Cnet*Cb-(1/s.LL);
+				}
+				
+				//clamping values
+				if(valColor < rangeMin)
+					valColor = rangeMin;
+				else if(valColor > rangeMin + range)
+					valColor = rangeMin + range;
+				
+				if(pg.getInt(PG.COLOR_SET)==0)	
+				{
+					//set color to internode segments of this branch inside this voxel
+					[b /> si:SInternode, ((si.voxX == vid[0])&&(si.voxY == vid[1])&&(si.voxZ == vid[2])) ::>
+					{si.setShader(Util.getColorBiomass(rangeMin,range,valColor));}]
+				}
+				
+				if(pg.getInt(PG.COLOR_SET)!=0)
+				{
+					//set color to internode segments of this branch inside this voxel
+					[b /> si:SInternode, ((si.voxX == vid[0])&&(si.voxY == vid[1])&&(si.voxZ == vid[2])) ::>
+					{si.setShader(Util.getColorRate(rangeMin,range,valColor));}]
+				}
+			}
+		}
+	}
+]
+
+/**
+* Gets the cached branch position. If not already computed, position is computed and stored.
+*/
+private float[] getBranchPos(SBranch b)
+{
+	float[] bPos = b.getPos();
+	if(bPos != null)
+	{
+		return bPos;
+	}
+	else{
+		Point3d iPos;
+		RU i = first((* b /> RU *));
+		if(i == null)//branch is not refined to any rotation node, therefore it must be the tree's trunk.
+		{iPos = location(b);}
+		else
+		{iPos = location(i);}
+		b.setPos(iPos.x, iPos.y, iPos.z);
+		return b.getPos();
+		}
+}
+
+private float getPipeLength(SRoot r, float x, float y, float z, int PipeMethod)
+{
+	float lengthPipe=0;
+	//use height as approximation of pipe length
+	if(PipeMethod==0)
+	{
+		lengthPipe = z;
+	}
+	
+	//use height and distance to stem as approximation of pipe length
+	if(PipeMethod==1)
+	{
+		float dx = x - r.translateX;
+		float dy = y - r.translateY;
+		lengthPipe =  z + Math.sqrt(dx*dx + dy*dy);;
+	}
+	
+	return lengthPipe+pg.gridSizeHalf;
+}
+
+/**
+* Method for computing apical control (potential growth)
+*/
+private void precomputeApicalControl()
+[
+	// Calculate the potential primary growth of the trunk considering apical dominance/control
+	r:SRoot [tr:STrunk] ::> {
+		
+		// Get light condition at apical meristem of trunk
+		int zindex = (int)(r.length/pg.get(PG.GridSize));
+		float light = vox[r.voxX][r.voxY][zindex].light;
+		
+		// Calculate LInc, which can be understood as a variable that regulates the apical dominance depending on the 
+		// light conditions at the apical meristem
+		Species s = speciesPool.getSpecies(r.speciesId);
+		r.LInc = MGro.LInc(s.ApicalDev, light, s.IApical, pp[currPass].get(PP.ApicalShape));
+		
+		// Calculate the potential height increase of the trunk dLTPot under consideration of LInc
+		float dltpot = MGro.dLTPot(light, r.diameter, r.diameterPrev, r.LInc, s.LDRatioTrunk);
+		
+		// Calculate the potential height increase of the trunk up to the critical height (dltpotCrit) and 
+		// up to the maximum height (dltpotMaxHeight)
+		float dltpotCrit = MGro.dLTPotCrit((2.0f*r.diameter-r.diameterPrev),LDRatioCrit,r.length);
+		float dltpotMaxHeight = s.maxPipeLength-r.length;
+		
+		// Check if the critical height or the maximum height would be exceeded and set dLTPot accordingly
+		float dltPotFinal=Math.min(Math.min(dltpot,dltpotCrit),dltpotMaxHeight);
+		
+		//Save dLTPot
+		r.dLTPot = dltPotFinal;
+	}
+	
+	// Calculate the potential primary growth of the branches considering apical dominance/control
+	
+	br:SBranch /> bu:SBud ::> {
+		// Test if the light conditions at the apical mersistem allow a postive photosyntic rate (GRpot>0)
+		// Get light condition at apical meristem of branches
+		Point3d loc = location(bu);
+		int voxx = (int)(loc.x/pg.get(PG.GridSize));
+		int voxy = (int)(loc.y/pg.get(PG.GridSize));
+		int voxz = (int)(loc.z/pg.get(PG.GridSize));
+		
+		float dLbpot=0;
+		
+		if(voxz >= 0) 
+		{
+			float light = vox[voxx][voxy][voxz].light;
+			
+			// Get pipe length of apical meristem
+			SRoot r = (SRoot)(treeTable.get(br.treeId));
+			float pipelength = getPipeLength(r,loc.x,loc.y,loc.z,(int)pp[currPass].get(PP.PipeLengthMethod));
+				
+			// Compute photosynthetic rate
+			Species s = speciesPool.getSpecies(r.speciesId);
+			float Cgross = MGro.getCgross(s.Gmax, s.k, pp[currPass].get(PP.SiteIndex),light);
+			float Rwtot = MGro.getRwtot( pp[currPass].get(PP.Rw), pipelength, 1.0/pp[currPass].get(PP.LPratio), s.rhoW, s.SLA);
+			float Cnet = MGro.getCnet(Cgross, s.RL, Rwtot);
+			float Cb = MGro.getCb(pp[currPass].get(PP.CBLratio), pipelength, 1.0/pp[currPass].get(PP.LPratio), pp[currPass].get(PP.CBWratio), s.rhoW, s.SLA, pp[currPass].get(PP.C0),s.PipeReuseFactor);
+			float PhotosynthesisRate = (Cb*Cnet) - (1/s.LL);
+			
+			// Compute dLbpot if photosynthetic rate is positive, else dLbpot remains zero
+			if(PhotosynthesisRate>0.0)
+				{
+					dLbpot = MGro.dLBPot(br.diameter, br.diameterPrev, br.length, pp[currPass].get(PP.LDratioBranch), s.ShorteningFactor, 1);
+				}
+			
+			
+			if(pp[currPass].get(PP.CollidingBranches)==1)
+			{
+				int TreeIDMax=0;
+				int TreeIDMin=0;
+				
+				//Get number of branches in voxel
+				int Numbranch=vox[voxx][voxy][voxz].getBranchCount();
+				
+				if (Numbranch>0)
+				{
+					int[] ListTreeIds = new int[Numbranch];
+						
+					for(int NumB=0; NumB<Numbranch;++NumB)
+					{
+						SBranch Testz = vox[voxx][voxy][voxz].getBranch(NumB);
+						ListTreeIds[NumB]=Testz.treeId ;
+					}
+									
+					Arrays.sort(ListTreeIds);
+					TreeIDMax=ListTreeIds[ListTreeIds.length-1];
+					TreeIDMin=ListTreeIds[0];
+					
+					//Colliding branches of different trees
+					if(TreeIDMax!=TreeIDMin)
+						{dLbpot=0;}
+				}
+			}
+		}
+		// assign dlbpot to branch
+		br.dLBPot=dLbpot;
+	}
+]
+
+
+/**
+* Method for mortality model
+*/
+private void mortality()
+[
+	//Tree mortality by carbon budget
+
+	//Carbon starvation 
+	{if(pp[currPass].get(PP.MortalityCarbonStarvation)==1)
+		{
+			[r:SRoot ==>
+			
+				if(r.leafBiomass>0)
+				( r )
+				else
+				({   
+					killTree(r,0);
+				});
+			]
+		}
+	}
+	
+	//Tree mortality depending on biomass (according to the Metabolic ecology theory)
+	{if(pp[currPass].get(PP.MortalityBiomass)==1)
+	{
+		[t:SRoot ==>
+		{
+			Species s = speciesPool.getSpecies(t.speciesId);
+			float probSurvive = 1-MMor.mortalityBiomass(t.diameter, t.length,  pp[currPass].get(PP.MortalityRateSize),s.rhoW,pp[currPass].get(PP.MortalityRateScalingExponent));
+		}
+		if(probability(probSurvive))
+			( t )
+		else
+		({   
+			killTree(t,1);
+		});]
+	}}
+
+	//Tree mortality due to neighbouring death
+	{if(pp[currPass].get(PP.MortalityFallingTrees)==1)
+		{
+			for(int i=0; i<treesKilled.size(); ++i)
+			mortalityNeighbour((SRootBase)(treesKilled.get(i)));
+		}
+	}
+]
+
+
+/**
+* A tree with height 'treeHeight' in voxel position (voxX,voxY) has fallen.
+* This method simulates the killing of neighbouring trees.
+*/
+private void mortalityNeighbour(SRootBase t)
+{
+	//trees smaller than specified threshold will not kill neighbouring trees
+	if(t.diameter < pp[currPass].get(PP.MortalityTreeFallMin))
+		return;
+	
+	float gridSize = pg.get(PG.GridSize);
+	int voxCount = (int)(t.crownRadius / gridSize);
+
+	//estimated percentage of trees in affected voxels that are killed
+	float deathPercent = pp[currPass].get(PP.MortalityTreeFallRate);
+	
+	//step through affected voxels
+	for(int i=-voxCount; i<=voxCount; ++i)
+	{
+		for(int j=-voxCount; j<=voxCount; ++j)
+		{
+			int indexX = t.voxX + i;
+			int indexY = t.voxY + j;
+			
+			//check that voxel is not out of bounds
+			if((indexX<0)||(indexY<0)||(indexX > pg.gridIndexXMax)||(indexY > pg.gridIndexYMax))
+				continue;
+			
+			//retrieve affected voxel
+			VoxBase voxAffected = vox[indexX][indexY][0];
+			
+			//number of trees in affected voxel
+			int treeCount = voxAffected.getTreeCount();
+			
+			//loop through trees in affected voxel, some die based on estimated percent
+			for(int k=treeCount-1; k>=0; --k)
+			{
+				if(probability(deathPercent)) //if tree in affected voxel is killed
+				{
+					SRootBase tn = voxAffected.getTree(k);
+					
+					//killBranches(t);
+	
+					if(tn.diameter < t.diameter)
+					{
+						killTree(tn, 3);
+						[
+							tn ==> ;	
+						]
+					}
+				}
+			}
+		}
+	}
+}
+
+public void killTree(SRootBase r, int cause)
+{
+	//remove all branches
+	killAllBranches(r);
+	
+	//remove tree from hashtable
+	treeTable.remove(r.treeId);
+	
+	//remove tree from voxel
+	vox[r.voxX][r.voxY][0].removeTree(r);
+	
+	//reduce global tree counter
+	treeCount--;
+	
+	//trace dead trees and death cause for report generation
+	//Codes for cause of tree mortality:
+	// 0: Carbon based mortality
+	// 1: Mass (Size) based mortality
+	// 2: Disturbance based mortality
+	// 3: Mortality due to death of neighbouring tree
+	treesKilled.add(r);
+	treesKilledCause.add(new Integer(cause));
+	
+	if(r.age == 0)
+		germinationDeath++;
+}
+
+private void killAllBranches(SRootBase t)
+[
+	//clear axis scale nodes
+	t [m:M </ b:SBranch] ==>> {killBranchFirstOrder(b,t);} t[m];
+	
+	//clear trunk
+	t [tru:SBranch] ::> {killBranch(tru, t);}
+	
+	//clear other nodes
+	t (-->)+ Node ==>> t;
+]
+
+private void killBranchFirstOrder(SBranch b, SRootBase t)
+[
+	//kill 2nd order branches related to this first order branch
+	b [b2:SBranch] ::> {killBranch(b2, t);}
+
+	//kill the first order branch itself
+	{killBranch(b, t);}
+]
+
+private void killBranch(SBranch b, SRootBase t)
+{
+	//remove reference to branch from voxels
+	for(int i=0;i<b.voxCount();++i)
+	{
+		int[] voxi = b.getVox(i);
+		vox[voxi[0]][voxi[1]][voxi[2]].removeBranch(b);
+		float dx = Math.abs(voxi[0]-t.voxX);
+		float dy = Math.abs(voxi[1]-t.voxY);
+		float cr = Math.sqrt(dx*dx + dy*dy);
+		if(cr > t.crownRadius)
+		{
+			t.crownRadius = cr;
+		}
+	}
+}
+
+/**
+* Main method call for all report generation
+*/
+private void report()
+{
+	// ReportTreeVariables, the tree report is always created
+	float startTimeReportTrees1 = System.nanoTime();
+	reportTrees();	
+	timeReportTrees = (double) (System.nanoTime() - startTimeReportTrees1) / 1000000000.0;
+	timeReportTreesTotal+=timeReportTrees;		
+
+	// Record time consumption
+	startTimeReportLight = System.nanoTime();
+	
+	if( (pg.getInt(PG.ReportLight)>0) &&
+		(currStep%pg.getInt(PG.ReportLight) == 0)
+	)
+	{
+		//report light conditions at forest floor
+		Report.reportLight(currPass, currStep, folderReport, vox, pg);
+	}
+	
+	timeReportLight = (double) (System.nanoTime() - startTimeReportLight) / 1000000000.0;
+	timeReportLightTotal+=timeReportLight;
+	
+	//	ReportShoots
+	startTimeReportShoots = System.nanoTime();
+	if( (pg.getInt(PG.ReportShoots)>0) &&
+		(currStep%pg.getInt(PG.ReportShoots) == 0)
+	)
+	{
+		try{
+			Locale lol = new Locale(Locale.ENGLISH);
+			DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(lol);
+			otherSymbols.setDecimalSeparator('.');
+			otherSymbols.setGroupingSeparator(','); 
+			DecimalFormat df = new DecimalFormat("0.0000000", otherSymbols);
+			Report.startReport(currPass,currStep,"shoots",folderReport,false,true);
+			Report.writeTime();
+			Report.writeLine("shootID" + "\t" + "branchID" + "\t"+ "treeID" + "\t"+ "speciesID" + "\t" 
+				+ "length" + "\t" 
+				+ "diameter" + "\t" 
+				+ "order" + "\t" 
+				+ "xbegin" + "\t" 
+				+ "ybegin" + "\t" 
+				+ "zbegin" + "\t" 
+				+ "xend" + "\t" 
+				+ "yend" + "\t" 
+				+ "zend" 
+				);
+			
+			//internodes
+			[
+				i:SInternode ::> 
+				{
+					SRoot r = (SRoot)(treeTable.get(i.treeId));
+					Point3d pstart = location(i);
+					Point3d pend = endlocation(i);
+					Report.writeLine(
+						i.getId() + "\t" +
+						i.branchId + "\t" +
+						i.treeId + "\t" +
+						r.speciesId + "\t" +
+						df.format(i.length) + "\t"+
+						df.format(i.diameter) + "\t"+
+						i.order + "\t"+
+						df.format(pstart.x) + "\t"+
+						df.format(pstart.y) + "\t"+
+						df.format(pstart.z) + "\t"+
+						df.format(pend.x) + "\t"+
+						df.format(pend.y) + "\t"+
+						df.format(pend.z) 
+					);
+					SRoot tr = (SRoot)(treeTable.get(i.treeId));
+					Species s = speciesPool.getSpecies(tr.speciesId);
+					totalAGB += Math.PI * (i.diameter/2.0f) * (i.diameter/2.0f)  * i.length * s.rhoW;
+				}
+			]
+				
+			Report.endReport();
+		}
+		catch(Exception ex)
+		{
+			Library.println("error" + ex.getMessage());
+		}
+
+	}
+	
+	timeReportShoots = (double) (System.nanoTime() - startTimeReportShoots) / 1000000000.0;
+	timeReportShootsTotal+=timeReportShoots;
+	
+	
+	//	ReportForestVariables
+	startTimeReportForest = System.nanoTime();
+	
+	totalAGB += trunkAGB;//this 2 values were aggregated in the shoot report. this line is important to sum the branch biomass and trunk biomass aggregates to get the total.
+	if( (pg.getInt(PG.ReportForestVariables)>0) &&
+		(currStep%pg.getInt(PG.ReportForestVariables) == 0)
+	)
+	{
+		reportForest();
+	}
+	timeReportForest = (double) (System.nanoTime() - startTimeReportForest) / 1000000000.0;
+	timeReportForestTotal+=timeReportForest;
+	
+	
+	//	ReportVoxel
+	startTimeReportVoxel = System.nanoTime();
+	if( (pg.getInt(PG.ReportVoxel)>0) &&
+		(currStep%pg.getInt(PG.ReportVoxel) == 0)
+	)
+	{
+		//report light conditions at each voxel, as well as leaf area
+		Report.reportVoxel(currPass, currStep, folderReport, vox, pg);
+	}
+	timeReportVoxel = (double) (System.nanoTime() - startTimeReportVoxel) / 1000000000.0;
+	timeReportVoxelTotal+=timeReportVoxel;
+	
+	
+	//	ReportMortality
+	startTimeReportMortality = System.nanoTime();
+	if( (pg.getInt(PG.ReportMortality)>0) &&
+		(currStep%pg.getInt(PG.ReportMortality) == 0)
+	)
+	{
+		reportMortalityStart();
+		Locale lol = new Locale(Locale.ENGLISH);
+		DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(lol);
+		otherSymbols.setDecimalSeparator('.');
+		otherSymbols.setGroupingSeparator(','); 
+		DecimalFormat df = new DecimalFormat("0.0000000", otherSymbols);
+		for(int i=0; i<treesKilled.size();++i)
+		{
+			SRoot t = (SRoot)(treesKilled.get(i));
+			float radius = t.diameter/2.0f;
+			int cause = ((Integer)(treesKilledCause.get(i))).intValue();
+			Report.writeLine(t.treeId + "\t" +
+			t.speciesId + "\t"+
+			df.format(t.length) + "\t"+
+			df.format(t.diameter) + "\t"+
+			df.format(Math.PI*radius*radius) + "\t"+
+			t.voxX + "\t"+
+			t.voxY + "\t"+
+			t.age + "\t"+
+			cause + "\t"
+			);
+		}
+		reportMortalityEnd();
+	}
+	timeReportMortality = (double) (System.nanoTime() - startTimeReportMortality) / 1000000000.0;
+	timeReportMortalityTotal+=timeReportMortality;
+	
+	
+	//Save species pool in first timestep
+	if(currStep==1)
+		{
+			Locale lol = new Locale(Locale.ENGLISH);
+			DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(lol);
+			otherSymbols.setDecimalSeparator('.');
+			otherSymbols.setGroupingSeparator(','); 
+			DecimalFormat df = new DecimalFormat("0.000000", otherSymbols);
+			
+			Report.startReport(currPass,currStep,"Species",folderReport,false,false);
+			Report.writeLine(
+					"SpeciesID" + "\t" +
+					"SLA" + "\t" +
+					"rhoW" + "\t" +
+					"LL" + "\t" +
+					"Nmass" + "\t" +
+					"RL" + "\t" +
+					"Gmax" + "\t" +
+					"k" + "\t" +
+					"FirstOrderPhyllotaxis" + "\t" +
+					"FirstOrderPhyllotaxisNum" + "\t" +
+					"FirstOrderAngleSide" + "\t" + 
+					"HigherOrderAngle" + "\t" + 
+					"InternodeLengthTrunkMin" + "\t" +
+					"InternodeLengthTrunkMax" + "\t" + 
+					"InternodeLengthBranchMin" + "\t" +
+					"InternodeLengthBranchMax" + "\t" +
+					"kInt" + "\t" +
+					"TropismStrength" + "\t" +
+					"LDRatioTrunk" + "\t" +
+					"ApicalDev" + "\t" + 
+					"IApical" + "\t" + 
+					"ShorteningFactor" + "\t" +
+					"maxPipeLength" + "\t" +
+					"StochasticityTwisting" + "\t" +
+					"StochasticityBranchingAngle" + "\t" +
+					"StochasticityTropism" + "\t" +
+					"StochasticityAnglePlane" + "\t" +
+					"StochasticityPhyllo" + "\t" +
+					"ALProdMax" + "\t" +
+					"PipeReuseFactor"
+					);
+
+			
+			for(int i=0; i<speciesPool.getSpeciesCount(); ++i)
+			{
+				Report.writeLine(
+					(int)speciesPool.getSpecies(i).ID + "\t" +
+					df.format(speciesPool.getSpecies(i).SLA) + "\t" +
+					df.format(speciesPool.getSpecies(i).rhoW) + "\t" +
+					df.format(speciesPool.getSpecies(i).LL) + "\t" +
+					df.format(speciesPool.getSpecies(i).Nmass) + "\t" +
+					df.format(speciesPool.getSpecies(i).RL) + "\t" +
+					df.format(speciesPool.getSpecies(i).Gmax) + "\t" +
+					df.format(speciesPool.getSpecies(i).k) + "\t" +
+					df.format(speciesPool.getSpecies(i).FirstOrderPhyllotaxis) + "\t" +
+					df.format(speciesPool.getSpecies(i).FirstOrderPhyllotaxisNum) + "\t" +
+					df.format(speciesPool.getSpecies(i).FirstOrderAngleSide) + "\t" + 
+					df.format(speciesPool.getSpecies(i).HigherOrderAngle) + "\t" + 
+					df.format(speciesPool.getSpecies(i).InternodeLengthTrunkMin) + "\t" +
+					df.format(speciesPool.getSpecies(i).InternodeLengthTrunkMax) + "\t" + 
+					df.format(speciesPool.getSpecies(i).InternodeLengthBranchMin) + "\t" +
+					df.format(speciesPool.getSpecies(i).InternodeLengthBranchMax) + "\t" +
+					df.format(speciesPool.getSpecies(i).kInt) + "\t" +
+					df.format(speciesPool.getSpecies(i).TropismStrength) + "\t" +
+					df.format(speciesPool.getSpecies(i).LDRatioTrunk) + "\t" +
+					df.format(speciesPool.getSpecies(i).ApicalDev) + "\t" + 
+					df.format(speciesPool.getSpecies(i).IApical) + "\t" + 
+					df.format(speciesPool.getSpecies(i).ShorteningFactor) + "\t" +
+					df.format(speciesPool.getSpecies(i).maxPipeLength) + "\t" +
+					df.format(speciesPool.getSpecies(i).StochasticityTwisting) + "\t" +
+					df.format(speciesPool.getSpecies(i).StochasticityBranchingAngle) + "\t" +
+					df.format(speciesPool.getSpecies(i).StochasticityTropism) + "\t" +
+					df.format(speciesPool.getSpecies(i).StochasticityAnglePlane) + "\t" +
+					df.format(speciesPool.getSpecies(i).StochasticityPhyllo) + "\t" +
+					df.format(speciesPool.getSpecies(i).ALProdMax) + "\t" +
+					df.format(speciesPool.getSpecies(i).PipeReuseFactor)
+					);
+			}
+			Report.endReport();
+		}
+		
+		
+	//Total report time has to be assed here	
+	timeReportComplete = (double) (System.nanoTime() - startTimeReportComplete) / 1000000000.0;
+	timeReportCompleteTotal+=timeReportComplete;
+		
+			
+	//ReportTimeConsumption
+	//Record time consumption
+	/*
+	startTimeReportTime = System.nanoTime();
+	
+	if( (pg.getInt(PG.ReportForestVariables)>0) &&
+		(currStep%pg.getInt(PG.ReportForestVariables) == 0)
+	)
+	{
+		reportTimeConsumption();
+	}
+	timeReportTime = (double) (System.nanoTime() - startTimeReportTime) / 1000000000.0;
+	timeReportTimeTotal+=timeReportTime;
+	*/
+}
+
+/**
+Method for reporting forest variables 
+*/
+private void reportForest()
+{
+	//Annual mortality rate	Annual germination rate	Net primary production (NPP)	Leaf biomass gain	leaf biomass loss	branch biomass gain	brach biomass loss	Basal area growth rate	
+	try
+	{
+		Locale lol = new Locale(Locale.ENGLISH);
+		DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(lol);
+		otherSymbols.setDecimalSeparator('.');
+		otherSymbols.setGroupingSeparator(','); 
+		DecimalFormat df = new DecimalFormat("0.0000000", otherSymbols);
+		
+		Report.startReport(currPass,currStep,"forestvariables",folderReport,true,false);
+		if(currStep==1){
+			Report.writeTime();
+			Report.writeGlobalParameters(pg);
+			Report.writeLine(					
+					"year" + "\t" +
+					"numberTrees" + "\t" +
+					"basalArea" + "\t" +
+					"maxHeight" + "\t" +
+					"meanHeight" + "\t" +
+					"maxDiameter" + "\t" +
+					"meanDiameter" + "\t" +
+					"woodyBiomass" + "\t" +
+					"trunkBiomass" + "\t" +
+					"branchBiomass1stOrder" + "\t" +
+					"branchBiomass2ndOrder" + "\t" +
+					"leafBiomass" + "\t" +
+					"trunkBiomassProduction" + "\t" +
+					"branchBiomass1stOrderProduction" + "\t" +
+					"branchBiomass2ndOrderProduction" + "\t" +
+					"leafBiomassProduction" + "\t" +
+					"branchBiomass1stOrderLoss" + "\t" +
+					"branchBiomass2ndOrderLoss" + "\t" +
+					"leafBiomassLoss");
+
+		}
+
+		Report.writeLine(
+			currStep + "\t"+ //year
+			count((* SRoot *))*ScalingToHectare + "\t"+  //numberTrees per ha
+			df.format(sum(Math.PI*Math.pow(((* SRoot *).diameter/2),2))*ScalingToHectare ) + "\t"+ //basalarea
+			df.format(max((* SRoot *).length)) + "\t"+ //maxHeight
+			df.format(mean((* SRoot *).length)) + "\t"+ //meanHeight
+			df.format(max((* SRoot *).diameter)) + "\t"+ //maxDiameter
+			df.format(mean((* SRoot *).diameter)) + "\t"+ //meanDiameter
+			df.format( (sum((* SRoot *).trunkBiomass)+sum((* SRoot *).branchBiomass1stOrder)+sum((* SRoot *).branchBiomass2ndOrder))/1000*ScalingToHectare ) + "\t"+  //woodyBiomass
+			df.format( (sum((* SRoot *).trunkBiomass))/1000*ScalingToHectare ) + "\t"+ //trunkBiomass
+			df.format( (sum((* SRoot *).branchBiomass1stOrder))/1000*ScalingToHectare ) + "\t"+ //branchBiomass1stOrder
+			df.format( (sum((* SRoot *).branchBiomass2ndOrder))/1000*ScalingToHectare ) + "\t"+ //branchBiomass2ndOrder
+			df.format( (sum((* SRoot *).leafBiomass))/1000000*ScalingToHectare ) + "\t"+ //leafBiomass
+			df.format( (sum((* SRoot *).trunkBiomassProduction))/1000*ScalingToHectare ) + "\t"+ //trunkBiomassProduction
+			df.format( (sum((* SRoot *).branchBiomass1stOrderProduction))/1000*ScalingToHectare ) + "\t"+ //branchBiomass1stOrderProduction
+			df.format( (sum((* SRoot *).branchBiomass2ndOrderProduction))/1000*ScalingToHectare ) + "\t"+ //branchBiomass2ndOrderProduction
+			df.format( (sum((* SRoot *).leafBiomassProduction))/1000000*ScalingToHectare ) + "\t"+ //leafBiomassProduction
+			df.format( (sum((* SRoot *).branchBiomass1stOrderLoss))/1000*ScalingToHectare ) + "\t"+ //branchBiomass1stOrderLoss
+			df.format( (sum((* SRoot *).branchBiomass2ndOrderLoss))/1000*ScalingToHectare ) + "\t"+ //branchBiomass2ndOrderLoss
+			df.format( (sum((* SRoot *).leafBiomassLoss))/1000000*ScalingToHectare )); //leafBiomassLoss
+				
+		Report.endReport();
+		
+		basalarea=sum(Math.PI*Math.pow(((* SRoot *).diameter/2),2))*ScalingToHectare;
+	}
+	catch(Exception ex)
+	{
+		println("error" + ex.getMessage());
+	}
+}
+
+/**
+Method for reporting time needed for the different model parts
+*/
+private void reportTimeConsumption()
+{
+	try
+	{
+		Locale lol = new Locale(Locale.ENGLISH);
+		DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(lol);
+		otherSymbols.setDecimalSeparator('.');
+		otherSymbols.setGroupingSeparator(','); 
+		DecimalFormat df = new DecimalFormat("0.00", otherSymbols);
+		
+		Report.startReport(currPass,currStep,"timeconsumption",folderReport,true,false);
+		if(currStep==1){
+			Report.writeTime();
+			Report.writeGlobalParameters(pg);
+			Report.writeLine("timestep" + "\t" +
+					"time_light" + "\t" +
+					"time_dispersal" + "\t" +
+					"time_growth" + "\t" +
+					"time_mortality" + "\t" +
+					"time_visualization" + "\t" +
+					"time_coloring" + "\t" +
+					"time_report_complete" + "\t" +
+					"time_report_time" + "\t" +
+					"time_report_forest" + "\t" +
+					"time_report_voxel" + "\t" +
+					"time_report_trees" + "\t" +
+					"time_report_mortality" + "\t" +
+					"time_report_light" + "\t" +
+					"time_report_shoots" + "\t" +
+					"time_light_total" + "\t" +
+					"time_dispersal_total" + "\t" +
+					"time_growth_total" + "\t" +
+					"time_mortality_total" + "\t" +
+					"time_visualization_total" + "\t" +
+					"time_coloring_total" + "\t" +
+					"time_report_complete_total" + "\t" +
+					"time_report_time_total" + "\t" +
+					"time_report_forest_total" + "\t" +
+					"time_report_voxel_total" + "\t" +
+					"time_report_trees_total" + "\t" +
+					"time_report_mortality_total" + "\t" +
+					"time_report_light_total" + "\t" +
+					"time_report_shoots_total"
+					);
+		}
+		
+		Report.writeLine(
+			currStep + "\t"+
+			df.format(timeLight) + "\t"+
+			df.format(timeDispersal) + "\t"+
+			df.format(timeGrowth) + "\t"+
+			df.format(timeMortality) + "\t"+
+			df.format(timeVisualization) + "\t"+
+			df.format(timeColoring) + "\t"+
+			df.format(timeReportComplete) + "\t"+
+			df.format(timeReportTime) + "\t"+
+			df.format(timeReportForest) + "\t"+
+			df.format(timeReportVoxel) + "\t"+
+			df.format(timeReportTrees) + "\t"+
+			df.format(timeReportMortality) + "\t"+
+			df.format(timeReportLight) + "\t"+
+			df.format(timeReportShoots) + "\t"+
+			df.format(timeLightTotal) + "\t"+
+			df.format(timeDispersalTotal) + "\t"+
+			df.format(timeGrowthTotal) + "\t"+
+			df.format(timeMortalityTotal) + "\t"+
+			df.format(timeVisualizationTotal) + "\t"+
+			df.format(timeColoringTotal) + "\t"+
+			df.format(timeReportCompleteTotal)  + "\t"+
+			df.format(timeReportTimeTotal) + "\t"+
+			df.format(timeReportForestTotal) + "\t"+
+			df.format(timeReportVoxelTotal) + "\t"+
+			df.format(timeReportTreesTotal) + "\t"+
+			df.format(timeReportMortalityTotal) + "\t"+
+			df.format(timeReportLightTotal) + "\t"+
+			df.format(timeReportShootsTotal)
+			);
+			
+		Report.endReport();
+	}
+	catch(Exception ex)
+	{
+		println("error" + ex.getMessage());
+	}
+}
+
+
+/**
+* Method call for report on individual trees
+*/
+private void reportTrees()
+{
+	try
+	{
+		Locale lol = new Locale(Locale.ENGLISH);
+		DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(lol);
+		otherSymbols.setDecimalSeparator('.');
+		otherSymbols.setGroupingSeparator(','); 
+		DecimalFormat df = new DecimalFormat("0.0000000", otherSymbols);
+		
+		Report.startReport(currPass,currStep,"trees",folderReport,false,true);
+		Report.writeTime();
+		Report.writeGlobalParameters(pg);
+		Report.writeLine(
+				"treeID" + "\t" +
+				"speciesID" + "\t" +
+				"height" + "\t" +
+				"diameter" + "\t" +
+				"basalArea" + "\t" +
+				"x" + "\t" +
+				"y" + "\t" +
+				"age" + "\t" +
+				"heightDelta" + "\t" +
+				"heightRGR" + "\t" +
+				"diameterDelta" + "\t" +
+				"diameterRGR" + "\t" +
+				"basalareaDelta" + "\t" +
+				"basalareaRGR" + "\t" +
+				"woodyBiomass" + "\t" +
+				"trunkBiomass" + "\t" +
+				"branchBiomass1stOrder" + "\t" +
+				"branchBiomass2ndOrder" + "\t" +
+				"leafBiomass" + "\t" +
+				"leafArea" + "\t" +
+				"trunkBiomassProduction" + "\t" +
+				"branchBiomass1stOrderProduction" + "\t" +
+				"branchBiomass2ndOrderProduction" + "\t" +
+				"leafBiomassProduction" + "\t" +
+				"branchBiomass1stOrderLoss" + "\t" +
+				"branchBiomass2ndOrderLoss" + "\t" +
+				"leafBiomassLoss" + "\t" +
+				"apicalLight" + "\t" +
+				"crownArea" + "\t" +
+				"crownWidth" + "\t" +
+				"crownDepth" + "\t" +
+				"crownWidthRelative" + "\t" +
+				"crownDepthRelative" + "\t" +
+				"heightFirstBranching");
+					
+		[
+			t:SRoot ::> {
+					Report.write(t.treeId + "\t"); //treeID 
+					Report.write(t.speciesId + "\t"); //speciesID
+					Report.write(df.format(t.length) + "\t"); //height
+					Report.write(df.format(t.diameter) + "\t"); //diameter
+					Report.write(df.format(Math.PI*(t.diameter/2.0f)*(t.diameter/2.0f)) + "\t"); //basalArea
+					Report.write(df.format(t.translateX) + "\t"); //x position
+					Report.write(df.format(t.translateY) + "\t"); //y position
+					Report.write(t.age + "\t"); //age
+					Report.write(df.format(t.length-t.heightPrev) + "\t"); //heightDelta
+					Report.write(df.format((t.length-t.heightPrev)/t.heightPrev) + "\t"); //heightRGR
+					Report.write(df.format(t.diameter-t.diameterPrev) + "\t");  //diameterDelta
+					Report.write(df.format((t.diameter-t.diameterPrev)/t.heightPrev) + "\t"); //diameterRGR
+					Report.write(df.format((Math.PI*(t.diameter/2.0f)*(t.diameter/2.0f))-(Math.PI*(t.diameterPrev/2.0f)*(t.diameterPrev/2.0f))) + "\t"); //basalareaDelta
+					Report.write(df.format(((Math.PI*(t.diameter/2.0f)*(t.diameter/2.0f))-(Math.PI*(t.diameterPrev/2.0f)*(t.diameterPrev/2.0f)))/(Math.PI*(t.diameterPrev/2.0f)*(t.diameterPrev/2.0f))) + "\t"); //basalareaRGR
+					Report.write(df.format(t.trunkBiomass+t.branchBiomass1stOrder+t.branchBiomass2ndOrder) + "\t"); //woodyBiomass
+					Report.write(df.format(t.trunkBiomass) + "\t"); //trunkBiomass
+					Report.write(df.format(t.branchBiomass1stOrder) + "\t"); //branchBiomass1stOrder
+					Report.write(df.format(t.branchBiomass2ndOrder) + "\t"); //branchBiomass2ndOrder
+					Report.write(df.format(t.leafBiomass) + "\t"); //leafBiomass
+					Report.write(df.format(t.leafBiomass*speciesPool.getSpecies(t.speciesId).SLA) + "\t"); //leafArea
+					Report.write(df.format(t.trunkBiomassProduction) + "\t"); //trunkBiomassProduction
+					Report.write(df.format(t.branchBiomass1stOrderProduction) + "\t"); //branchBiomass1stOrderProduction
+					Report.write(df.format(t.branchBiomass2ndOrderProduction) + "\t"); //branchBiomass2ndOrderProduction
+					Report.write(df.format(t.leafBiomassProduction) + "\t"); //leafBiomassProduction
+					Report.write(df.format(t.branchBiomass1stOrderLoss) + "\t"); //branchBiomass1stOrderLoss
+					Report.write(df.format(t.branchBiomass2ndOrderLoss) + "\t"); //branchBiomass2ndOrderLoss
+					Report.write(df.format(t.leafBiomassLoss) + "\t"); //leafBiomassLoss
+					Report.write(df.format(vox[t.voxX][t.voxY][(int)(t.length/pg.get(PG.GridSize))].light) + "\t"); //apicalLight
+					Report.write(df.format(Math.PI*((t.xPositionBudMax-t.xPositionBudMin)/2)*((t.yPositionBudMax-t.yPositionBudMin)/2)) + "\t"); //crownArea
+					Report.write(df.format(((t.xPositionBudMax-t.xPositionBudMin)+(t.yPositionBudMax-t.yPositionBudMin))/2) + "\t"); //crownWidth
+					Report.write(df.format(t.length-t.heightFirstBranching) + "\t"); //crownDepth
+					Report.write(df.format((((t.xPositionBudMax-t.xPositionBudMin)+(t.yPositionBudMax-t.yPositionBudMin))/2)/t.length) + "\t"); //crownWidthRelative
+					Report.write(df.format((t.length-t.heightFirstBranching)/t.length) + "\t"); //crownDepthRelative
+					Report.write(df.format(t.heightFirstBranching) + "\n"); //heightFirstBranching
+			}
+		]
+		Report.endReport();
+	}
+	catch(Exception ex)
+	{
+		println("error" + ex.getMessage());
+	}
+}
+
+private float getLeafArea(SBranch b)
+{
+	float leafArea = 0;
+	for(int i=0; i<b.voxCount(); ++i)
+	{
+		int[] vid = (int[])(b.getVox(i));
+		leafArea += vox[vid[0]][vid[1]][vid[2]].getLeafAreaAxis(b.branchId);
+	}
+	return leafArea;
+}
+
+
+private float[] getLeafAreaAndPosition(SBranch b)
+{
+	float leafArea = 0;
+	float posXmin=1000;
+	float posXmax=0;
+	float posYmin=1000;
+	float posYmax=0;
+	
+	for(int i=0; i<b.voxCount(); ++i)
+	{
+		int[] vid = (int[])(b.getVox(i));
+		leafArea += vox[vid[0]][vid[1]][vid[2]].getLeafAreaAxis(b.branchId);
+		posXmin=Math.min(posXmin,vox[vid[0]][vid[1]][vid[2]].x);
+		posYmin=Math.min(posYmin,vox[vid[0]][vid[1]][vid[2]].y);
+		posXmax=Math.max(posXmax,vox[vid[0]][vid[1]][vid[2]].x);
+		posYmax=Math.max(posYmax,vox[vid[0]][vid[1]][vid[2]].y);
+	}
+	return new float[] {leafArea,posXmin,posXmax,posYmin,posYmax};
+}
+
+
+private void reportMortalityStart()
+{
+	if(currStep % pg.getInt(PG.ReportMortality) == 0)
+	{
+		try
+		{
+			Report.startReport(currPass,currStep,"mortality",folderReport,false,true);
+			Report.writeTime();
+			Report.writeGlobalParameters(pg);
+			Report.writeMortalityHeaders();
+		}
+		catch(Exception ex)
+		{
+			println("error" + ex.getMessage());
+		}
+	}
+}
+
+private void reportMortalityEnd()
+{
+	try
+	{
+		Report.endReport();
+	}
+	catch(Exception ex)
+	{
+		println("error" + ex.getMessage());
+	}
+}
+
+private void renderImages()
+{
+	int randomID = (int)(100*Math.random());
+	ViewConfig3D v = View3D.getDefaultViewConfig(workbench());
+	Raytracer r = new Raytracer(workbench(), v, 1000,1000);
+	r.setRandomSeed(randomID);
+	IMP.writeImage(r.computeImage(), new File(folderPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
+}
+
+private void snapshot()
+{
+	de.grogra.imp3d.View3D view = de.grogra.imp3d.View3D.getDefaultView(workbench());
+	view.getViewComponent().makeSnapshot
+	(
+	new ObjectConsumer() 
+	{
+		public void consume(Object image) 
+		{
+			de.grogra.imp.IMP.writeImage((java.awt.Image)image,
+			new java.io.File(folderPictures + namePictureFile + "_image_replicate_" + (int)currPass + "_time_step_" + ((int)currStep-1) + ".png"));
+		}
+	}
+	)
+;
+}
+
+private void visualization()
+{
+	int k=1;
+	
+	if(k==1)
+	{
+		de.grogra.imp3d.View3D view = de.grogra.imp3d.View3D.getDefaultView(workbench());
+		view.getViewComponent().makeSnapshot
+		(
+		new ObjectConsumer() 
+		{
+			public void consume(Object image) 
+			{
+				de.grogra.imp.IMP.writeImage((java.awt.Image)image,
+				new java.io.File(folderPictures + namePictureFile + "_image_replicate_" + (int)currPass + "_time_step_" + ((int)currStep-1) + ".png"));
+			}
+		}
+		);
+	}
+	
+	if(k==2)
+	{
+			int randomID = (int)(100*Math.random());
+		ViewConfig3D v = View3D.getDefaultViewConfig(workbench());
+		Raytracer r = new Raytracer(workbench(), v, 1000,1000);
+		r.setRandomSeed(randomID);
+		IMP.writeImage(r.computeImage(), new File(folderPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
+	}
+	
+	if(k==3)
+	{
+		
+				de.grogra.imp3d.View3D view = de.grogra.imp3d.View3D.getDefaultView(workbench());
+		view.getViewComponent().makeSnapshot
+		(
+		new ObjectConsumer() 
+		{
+			public void consume(Object image) 
+			{
+				de.grogra.imp.IMP.writeImage((java.awt.Image)image,
+				new java.io.File(folderPictures + namePictureFile + "_image_replicate_" + (int)currPass + "_time_step_" + ((int)currStep-1) + ".png"));
+			}
+		}
+		);
+		
+		
+		int randomID = (int)(100*Math.random());
+		ViewConfig3D v = View3D.getDefaultViewConfig(workbench());
+		Raytracer r = new Raytracer(workbench(), v, 1000,1000);
+		r.setRandomSeed(randomID);
+		IMP.writeImage(r.computeImage(), new File(folderPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
+	}
+	
+	if(k==4)
+	{
+		
+		int randomID = (int)(100*Math.random());
+		ViewConfig3D v = View3D.getDefaultViewConfig(workbench());
+		Raytracer r = new Raytracer(workbench(), v, 1000,1000);
+		r.setRandomSeed(randomID);
+		IMP.writeImage(r.computeImage(), new File(folderPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
+		
+		
+		de.grogra.imp3d.View3D view = de.grogra.imp3d.View3D.getDefaultView(workbench());
+		view.getViewComponent().makeSnapshot
+		(
+		new ObjectConsumer() 
+		{
+			public void consume(Object image) 
+			{
+				de.grogra.imp.IMP.writeImage((java.awt.Image)image,
+				new java.io.File(folderPictures + namePictureFile + "_image_replicate_" + (int)currPass + "_time_step_" + ((int)currStep-1) + ".png"));
+			}
+		}
+		);
+	}
+}
+
