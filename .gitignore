@@ -1,8 +1,8 @@
-# Ignore outputs
-#ForestModel/Results/*
-#ForestModel/Pictures/*
-#TreeModel/Results/*
-#TreeModel/Pictures/*
+# Don't version control outputs
+ForestModel/Results/*
+ForestModel/Pictures/*
+TreeModel/Results/*
+TreeModel/Pictures/*
 
 # Ignore currently opened project files
 *~
