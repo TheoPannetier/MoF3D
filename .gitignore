@@ -1,0 +1,5 @@
+# Ignore outputs
+ForestModel/Results/*
+ForestModel/Pictures/*
+TreeModel/Results/*
+TreeModel/Pictures/*
