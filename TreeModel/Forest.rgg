@@ -1591,9 +1591,9 @@ private void growthStruc()
 					if(!alreadyRelated)
 					{
 						ObjectList voxIndices = new ObjectList();
-						voxIndices.add(new Integer(voxX));
-						voxIndices.add(new Integer(voxY));
-						voxIndices.add(new Integer(voxZ));
+						voxIndices.add(Integer.valueOf(voxX));
+						voxIndices.add(Integer.valueOf(voxY));
+						voxIndices.add(Integer.valueOf(voxZ));
 						voxList.add(voxIndices);
 						branchNewVoxCount.remove(br.branchId);
 						branchNewVoxCount.put(br.branchId, voxList);
@@ -1619,7 +1619,7 @@ private void growthStruc()
 					newVoxCount++;
 			}
 			
-			branchNewVoxCount2.put(br.branchId, new Integer(newVoxCount));
+			branchNewVoxCount2.put(br.branchId, Integer.valueOf(newVoxCount));
 		}
 		
 		//relating new internodes to voxels (leaf compartments)
@@ -2011,7 +2011,7 @@ public void killTree(SRootBase r, int cause)
 	// 2: Disturbance based mortality
 	// 3: Mortality due to death of neighbouring tree
 	treesKilled.add(r);
-	treesKilledCause.add(new Integer(cause));
+	treesKilledCause.add(Integer.valueOf(cause));
 	
 	if(r.age == 0)
 		germinationDeath++;
@@ -2087,7 +2087,7 @@ private void report()
 	)
 	{
 		try{
-			Locale lol = new Locale(Locale.ENGLISH);
+			Locale lol = Locale.of(Locale.ENGLISH);
 			DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(lol);
 			otherSymbols.setDecimalSeparator('.');
 			otherSymbols.setGroupingSeparator(','); 
@@ -2181,7 +2181,7 @@ private void report()
 	)
 	{
 		reportMortalityStart();
-		Locale lol = new Locale(Locale.ENGLISH);
+		Locale lol = Locale.of(Locale.ENGLISH);
 		DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(lol);
 		otherSymbols.setDecimalSeparator('.');
 		otherSymbols.setGroupingSeparator(','); 
@@ -2211,7 +2211,7 @@ private void report()
 	//Save species pool in first timestep
 	if(currStep==1)
 		{
-			Locale lol = new Locale(Locale.ENGLISH);
+			Locale lol = Locale.of(Locale.ENGLISH);
 			DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(lol);
 			otherSymbols.setDecimalSeparator('.');
 			otherSymbols.setGroupingSeparator(','); 
@@ -2320,7 +2320,7 @@ private void reportForest()
 	//Annual mortality rate	Annual germination rate	Net primary production (NPP)	Leaf biomass gain	leaf biomass loss	branch biomass gain	brach biomass loss	Basal area growth rate	
 	try
 	{
-		Locale lol = new Locale(Locale.ENGLISH);
+		Locale lol = Locale.of(Locale.ENGLISH);
 		DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(lol);
 		otherSymbols.setDecimalSeparator('.');
 		otherSymbols.setGroupingSeparator(','); 
@@ -2391,7 +2391,7 @@ private void reportTimeConsumption()
 {
 	try
 	{
-		Locale lol = new Locale(Locale.ENGLISH);
+		Locale lol = Locale.of(Locale.ENGLISH);
 		DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(lol);
 		otherSymbols.setDecimalSeparator('.');
 		otherSymbols.setGroupingSeparator(','); 
@@ -2481,7 +2481,7 @@ private void reportTrees()
 {
 	try
 	{
-		Locale lol = new Locale(Locale.ENGLISH);
+		Locale lol = Locale.of(Locale.ENGLISH);
 		DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(lol);
 		otherSymbols.setDecimalSeparator('.');
 		otherSymbols.setGroupingSeparator(','); 

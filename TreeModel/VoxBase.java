@@ -128,7 +128,7 @@ public class VoxBase
 		if(!branches.contains(b))
 		{
 			branches.add(b);
-			leafAreaBranches.put(b.branchId, new Float(leafArea));
+			leafAreaBranches.put(b.branchId, Float.valueOf(leafArea));
 		}
 	}
 	
@@ -157,7 +157,7 @@ public class VoxBase
 	public void setLeafAreaAxis(int branchId, float leafArea)
 	{
 		leafAreaBranches.remove(branchId);
-		leafAreaBranches.put(branchId, new Float(leafArea));
+		leafAreaBranches.put(branchId, Float.valueOf(leafArea));
 	}
 	
 	public boolean isRelated(SBranch b)
@@ -171,7 +171,7 @@ public class VoxBase
 	public void setBProdTot(SBranch b, float BProdTot)
 	{
 		BProdTotnew.remove(b);
-		BProdTotnew.put(b, new Float(BProdTot));
+		BProdTotnew.put(b, Float.valueOf(BProdTot));
 	}
 	
 	public Object getBProdTot(SBranch b)
