@@ -233,7 +233,8 @@ protected void init ()
 	instTwigRoot = new TwigRoot();
 	instTwigRootNoLeaves = new TwigRoot();
 	
-	[==>> ^ [/> instTwigRoot TwigBud(0,true)]
+	[
+		==>> ^ [/> instTwigRoot TwigBud(0,true)]
 			[/> instTwigRootNoLeaves TwigBud(0,false)]
 	;]
 	
@@ -2665,77 +2666,26 @@ private void visualization()
 {
 	int k=1;
 	
-	if(k==1)
-	{
-		de.grogra.imp3d.View3D view = de.grogra.imp3d.View3D.getDefaultView(workbench());
-		view.getViewComponent().makeSnapshot
-		(
-		new ObjectConsumer() 
-		{
-			public void consume(Object image) 
-			{
-				de.grogra.imp.IMP.writeImage((java.awt.Image)image,
-				new java.io.File(folderPictures + namePictureFile + "_image_replicate_" + (int)currPass + "_time_step_" + ((int)currStep-1) + ".png"));
-			}
-		}
-		);
+	if(k==1) snapshot();
+	
+	if(k==2) viz_bmp();
+	
+	if(k==3) {
+		snapshot();
+		viz_bmp();
 	}
 	
-	if(k==2)
-	{
-			int randomID = (int)(100*Math.random());
-		ViewConfig3D v = View3D.getDefaultViewConfig(workbench());
-		Raytracer r = new Raytracer(workbench(), v, 1000,1000);
-		r.setRandomSeed(randomID);
-		IMP.writeImage(r.computeImage(), new File(folderPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
+	if(k==4) {
+		viz_bmp();
+		snapshot();
 	}
-	
-	if(k==3)
-	{
-		
-				de.grogra.imp3d.View3D view = de.grogra.imp3d.View3D.getDefaultView(workbench());
-		view.getViewComponent().makeSnapshot
-		(
-		new ObjectConsumer() 
-		{
-			public void consume(Object image) 
-			{
-				de.grogra.imp.IMP.writeImage((java.awt.Image)image,
-				new java.io.File(folderPictures + namePictureFile + "_image_replicate_" + (int)currPass + "_time_step_" + ((int)currStep-1) + ".png"));
-			}
-		}
-		);
-		
-		
+}
+
+private void viz_bmp() {
 		int randomID = (int)(100*Math.random());
 		ViewConfig3D v = View3D.getDefaultViewConfig(workbench());
 		Raytracer r = new Raytracer(workbench(), v, 1000,1000);
 		r.setRandomSeed(randomID);
 		IMP.writeImage(r.computeImage(), new File(folderPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
-	}
-	
-	if(k==4)
-	{
-		
-		int randomID = (int)(100*Math.random());
-		ViewConfig3D v = View3D.getDefaultViewConfig(workbench());
-		Raytracer r = new Raytracer(workbench(), v, 1000,1000);
-		r.setRandomSeed(randomID);
-		IMP.writeImage(r.computeImage(), new File(folderPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
-		
-		
-		de.grogra.imp3d.View3D view = de.grogra.imp3d.View3D.getDefaultView(workbench());
-		view.getViewComponent().makeSnapshot
-		(
-		new ObjectConsumer() 
-		{
-			public void consume(Object image) 
-			{
-				de.grogra.imp.IMP.writeImage((java.awt.Image)image,
-				new java.io.File(folderPictures + namePictureFile + "_image_replicate_" + (int)currPass + "_time_step_" + ((int)currStep-1) + ".png"));
-			}
-		}
-		);
-	}
 }
 

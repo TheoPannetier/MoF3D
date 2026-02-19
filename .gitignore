@@ -9,3 +9,9 @@ TreeModel/Pictures/*
 
 # Ignore GroIMP marks
 *.rgg.marks
+
+# Don't commit changes to project files
+TreeModel/graph.xml
+TreeModel/project.gs
+ForestModel/graph.xml
+ForestModel/project.gs
