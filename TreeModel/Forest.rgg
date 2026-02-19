@@ -267,6 +267,54 @@ protected void init ()
 	speciesPool.setPP(pp[currPass]);
 	speciesPool.generate();
 }
+
+protected void startup()
+{
+	super.startup();
+	instLeaf = new Leaf(); //create instance of leaf for reusing in all a twig instance
+	instTwigRoot = new TwigRoot();
+	instTwigRootNoLeaves = new TwigRoot();
+	
+	[==>> ^ [/> instTwigRoot TwigBud(0,true)]
+			[/> instTwigRootNoLeaves TwigBud(0,false)]
+	;]
+	
+	//put root of twig in graph with initial bud for generating twig branches
+	derive();
+	 
+	//generate twig branches 
+	for(apply(5)){generateTwig();}
+	
+	/*************************************************/
+
+	/* read parameters from files and initialize them */
+	if(currPass==0)
+	    initParameters();
+	
+	/* init counters  */
+	seedsGenerated = 0;
+	
+	/* init array of voxels and forest top height */
+	if(currPass==0)
+	    initVoxels();
+	
+	/* init model graph */
+	[
+		Axiom ==> 
+		;
+	]
+	
+	/* initialize species pool */
+	speciesPool.clear();
+	speciesPool.setPP(pp[currPass]);
+	speciesPool.generate();
+	
+	if (de.grogra.pf.boot.Main.getProperty("headless") != null)
+	{
+		runLater(null);
+	}
+}
+
 /**************************************************************************************************************************************************/
 
 
@@ -375,8 +423,8 @@ private void step()
 	timeColoring= (double) (System.nanoTime() - startTime) / 1000000000.0;
 	timeColoringTotal+=timeColoring;
 	
-	visualization();
-	snapshot();
+	//visualization();
+	//snapshot();
 
 	//clear cache of trees killed
 	treesKilled.clear();
@@ -416,6 +464,37 @@ public void run()
 		println("End of simulations");
 		stop();
 	}
+}
+
+protected void run(Object info)
+{
+	if(currPass<pg.getInt(PG.Replicates))
+	{
+		if(currStep<=pg.getInt(PG.Timesteps) && basalarea<pp[currPass].get(PP.StopCriterionBasalArea))
+		{
+			step();
+		}
+		else 
+		{
+			currStep=pg.getInt(PG.Timesteps)+1;
+		}
+			
+		if(currStep==pg.getInt(PG.Timesteps)+1)
+		{
+			currStep=1;
+			currPass++;
+			reset();
+			resetPass();
+			println("--------- Replicates " + currPass + " END ------------");
+		}
+	}
+	else
+	{
+		println("End of simulations");
+		//stop();
+		System.exit(0);
+	}
+	
 }
 
 /* Resets some variables before running next simulation pass */
