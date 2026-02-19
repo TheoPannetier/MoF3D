@@ -6,3 +6,6 @@ TreeModel/Pictures/*
 
 # Ignore currently opened project files
 *~
+
+# Ignore GroIMP marks
+*.rgg.marks

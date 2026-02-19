@@ -1,4 +1,4 @@
-Timesteps	2
+Timesteps	20
 Replicates	1
 MaxX	20
 MaxY	20
