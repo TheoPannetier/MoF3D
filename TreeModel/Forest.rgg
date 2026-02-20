@@ -269,7 +269,7 @@ protected void init ()
 	/* initialize species pool */
 	speciesPool.clear();	
 	speciesPool.setPP(pp[currPass]);
-	speciesPool.generate();
+	speciesPool.generate(rnd);
 }
 /**************************************************************************************************************************************************/
 
@@ -458,7 +458,7 @@ private void dispersal()
 	/* Forest version*/
 	if (pg.getInt(PG.SimulateForest)==1)
 	{
-		int seedCount = (int)(pp[currPass].getSeedlingsPerHa() * (pg.areaTotal/10000.0f));
+		int seedCount = (int)(pp[currPass].getSeedlingsPerHa(rnd) * (pg.areaTotal/10000.0f));
 		
 		//reset counters
 		seedsGenerated=0;
@@ -801,7 +801,7 @@ private void growth()
 		//random branch mortality
 		if(pp[currPass].get(PP.BranchMortMethod)==1)
 		{
-			if (probability(pp[currPass].get(PP.BranchMortRandomRate)))
+			if (rnd.nextFloat() < (pp[currPass].get(PP.BranchMortRandomRate)))
 			{
 				//for each voxel related to the branch
 				for(int i=0; i<b.voxCount(); ++i)
@@ -816,8 +816,8 @@ private void growth()
 		//branch mortality due to branch biomass (metabolic theory)
 		if(pp[currPass].get(PP.BranchMortMethod)==2)
 		{
-			float probSurviveBranch = MMor.mortalityBiomass(b.diameter, b.length,  pp[currPass].get(PP.BranchMortMassRate),s.rhoW,pp[currPass].get(PP.BranchMortMassScalingExponent));
-			if(probability(probSurviveBranch))
+			float probBranchDeath = MMor.mortalityBiomass(b.diameter, b.length,  pp[currPass].get(PP.BranchMortMassRate),s.rhoW,pp[currPass].get(PP.BranchMortMassScalingExponent));
+			if(rnd.nextFloat() < probBranchDeath)
 			{   
 				//for each voxel related to the branch
 				for(int i=0; i<b.voxCount(); ++i)
@@ -1921,7 +1921,7 @@ private void mortality()
 			Species s = speciesPool.getSpecies(t.speciesId);
 			float probSurvive = 1-MMor.mortalityBiomass(t.diameter, t.length,  pp[currPass].get(PP.MortalityRateSize),s.rhoW,pp[currPass].get(PP.MortalityRateScalingExponent));
 		}
-		if(probability(probSurvive))
+		if(rnd.nextFloat() < probSurvive)
 			( t )
 		else
 		({   
@@ -1976,7 +1976,7 @@ private void mortalityNeighbour(SRootBase t)
 			//loop through trees in affected voxel, some die based on estimated percent
 			for(int k=treeCount-1; k>=0; --k)
 			{
-				if(probability(deathPercent)) //if tree in affected voxel is killed
+				if(rnd.nextFloat() < deathPercent) //if tree in affected voxel is killed
 				{
 					SRootBase tn = voxAffected.getTree(k);
 					

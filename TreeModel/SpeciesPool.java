@@ -1,5 +1,6 @@
 import de.grogra.xl.util.ObjectList;
 import de.grogra.rgg.Library;
+import java.util.Random;
 
 public class SpeciesPool
 {
@@ -42,12 +43,12 @@ public class SpeciesPool
 		return this.speciesPool.size();
 	}
 	
-	public void generate()
+	public void generate(Random rnd)
 	{
 	
 		for(int x=0; x<pp.get(PP.SpeciesNum);x++)
 		{
-			float SLAtemp=pp.getSLA();
+			float SLAtemp=pp.getSLA(rnd);
 			float Nmasstemp=pp.getNmass(SLAtemp);
 			
 			//ConversionFactor for photosynthetic rate: from seconds to day
@@ -58,32 +59,32 @@ public class SpeciesPool
 			Species s = new Species(
 			x,
 			SLAtemp,
-			pp.getrhoW(),
+			pp.getrhoW(rnd),
 			pp.getLL(SLAtemp),
 			Nmasstemp,
 			pp.getRL(SLAtemp,BConv1),
 			pp.getGmax(SLAtemp,Nmasstemp,BConv),
 			pp.getk(SLAtemp),
-			pp.getFirstOrderPhyllotaxis(),
-			pp.getFirstOrderAngleSide(),
-			pp.getHigherOrderAngle(),
-			pp.getInternodeLengthTrunkMin(),
-			pp.getInternodeLengthTrunkMax(),
-			pp.getInternodeLengthBranchMin(),
-			pp.getInternodeLengthBranchMax(),
-			pp.getkInt(),
-			pp.getTropismStrength(),
-			pp.getLDRatioTrunk(),
-			pp.getApicalDev(),
-			pp.getIApical(),
-			pp.getShorteningFactor(),
-			pp.getStochasticityTwisting(),
-			pp.getStochasticityBranchingAngle(),
-			pp.getStochasticityTropism(),
-			pp.getStochasticityAnglePlane(),
-			pp.getStochasticityPhyllo(),
-			pp.getPipeReuseFactor(),
-			pp.getALProdMax()
+			pp.getFirstOrderPhyllotaxis(rnd),
+			pp.getFirstOrderAngleSide(rnd),
+			pp.getHigherOrderAngle(rnd),
+			pp.getInternodeLengthTrunkMin(rnd),
+			pp.getInternodeLengthTrunkMax(rnd),
+			pp.getInternodeLengthBranchMin(rnd),
+			pp.getInternodeLengthBranchMax(rnd),
+			pp.getkInt(rnd),
+			pp.getTropismStrength(rnd),
+			pp.getLDRatioTrunk(rnd),
+			pp.getApicalDev(rnd),
+			pp.getIApical(rnd),
+			pp.getShorteningFactor(rnd),
+			pp.getStochasticityTwisting(rnd),
+			pp.getStochasticityBranchingAngle(rnd),
+			pp.getStochasticityTropism(rnd),
+			pp.getStochasticityAnglePlane(rnd),
+			pp.getStochasticityPhyllo(rnd),
+			pp.getPipeReuseFactor(rnd),
+			pp.getALProdMax(rnd)
 			);
 		    this.addSpecies(s);
 		    

@@ -1,4 +1,5 @@
 import de.grogra.rgg.Library;
+import java.util.Random;
 /**
 * This class contains the mortality model
 */
@@ -16,10 +17,10 @@ public class MMor
     /**
     * Computes the proportion of trees to kill if a random disturbance occur.
     */
-    public static float disturbanceKill(float frequency, float effect)
+    public static float disturbanceKill(float frequency, float effect, Random rnd)
     {
 		float killProportion = 0;
-		double ran=Math.random();
+		double ran=rnd.nextDouble();
 		if(ran<frequency)
 		{
 			killProportion = effect;
@@ -31,15 +32,14 @@ public class MMor
     /**
     * Kills a random tree inside the specified voxel
     */
-    public static SRootBase killRandom(VoxBase v)
+    public static SRootBase killRandom(VoxBase v, Random rnd)
     {
 		int treeCount = v.getTreeCount();
 		if(treeCount==0)
 			return null;
 		else
 		{
-			double ran = Math.random();
-			int killedTreeIndex = (int)(ran*treeCount);
+			int killedTreeIndex = (int)(rnd.nextDouble() * treeCount);
 			SRootBase tree = v.getTree(killedTreeIndex);
 			return tree;
 		}
