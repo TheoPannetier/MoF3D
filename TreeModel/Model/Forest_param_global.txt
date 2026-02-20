@@ -1,5 +1,6 @@
 Timesteps	3
 Replicates	1
+RandomSeed	3
 MaxX	20
 MaxY	20
 MaxZ	60

@@ -12,11 +12,13 @@ import java.text.DecimalFormatSymbols;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Arrays;
+import java.util.Random;
 import de.grogra.xl.util.ObjectList;
 import de.grogra.imp3d.*;
 import de.grogra.imp3d.ray2.Raytracer;
 import de.grogra.imp.IMP;
 import java.io.File;
+
 /**************************************************************************************************************************************************/
 
 /**************************************************************************************************************************************************/
@@ -33,6 +35,8 @@ static String folderPictures = folderMain + "\\Pictures\\"; //folder in which im
 /* Parameter objects */
 public static PG pg;	//global parameters loaded from file
 public static PP pp[];	//pass parameters loaded from files
+
+Random rnd = new Random();
 
 /* Spatial division - 3d voxel array, 2d forest top height */
 static VoxBase vox[][][];
@@ -283,7 +287,10 @@ private void initParameters()
 	    pp = PP.getParameterPassArray(pg.getInt(PG.Replicates));
 	    //read pass parameters from file
 	    P.readPassParameters(pp, folderParam);
-				
+	    
+	    // set random seed
+	    rnd.setSeed(pg.getInt(PG.RandomSeed));
+	   
 		//pre-compute parameters in global
 		pg.precompute();
 		
@@ -294,6 +301,7 @@ private void initParameters()
 				pg.get(PG.GridSize)
 				);
 		}
+		
 	}
 	catch(Exception e)
 	{
@@ -463,11 +471,11 @@ private void dispersal()
 		for(int i=0; i<seedCount; ++i)
 		{
 			//generate random locations for seeds
-			float seedX = random(corridor, maxX+corridor);
-			float seedY = random(corridor, maxY+corridor);
+			float seedX = corridor + maxX * rnd.nextFloat();
+			float seedY = corridor + maxY * rnd.nextFloat();
 			
 			//get random species
-			int randomSpeciesIndex = (int)(random(0,pp[currPass].get(PP.SpeciesNum)-1));
+			int randomSpeciesIndex = rnd.nextInt((int)(pp[currPass].get(PP.SpeciesNum)));
 			
 			//calculate initial height of the choosen species based on initial diameter and species-specific parameters
 			Species sNew = speciesPool.getSpecies(randomSpeciesIndex);
@@ -526,8 +534,10 @@ private void dispersal()
 			float TreePosY = seedY + yPositionTrees[i];
 		
 			//get random species
-			int randomSpeciesIndex = (int)(random(0,pp[currPass].get(PP.SpeciesNum)-1));
-			
+			int nbSpecies = (int)(pp[currPass].get(PP.SpeciesNum));
+			int randomSpeciesIndex = rnd.nextInt(nbSpecies);
+			println("spID:" + randomSpeciesIndex);
+
 			//Calculate maximum height and initial height of the choosen species based on initial diameter and species-specific parameters
 			Species sNew = speciesPool.getSpecies(randomSpeciesIndex);
 			println("MaxHeight: " + sNew.maxPipeLength);
@@ -1073,9 +1083,9 @@ private void growthStrucStochastic()
 				[
 					M(tr.lengthPrev  - TrunkLengthLastInternode + (k * TrunkInternodeLength)) [</ b]
 					//first order phyllotaxy
-					RH(tr.phylloCurr+random(-s.StochasticityPhyllo,s.StochasticityPhyllo)) [</ b] 
+					RH(tr.phylloCurr + s.StochasticityPhyllo * (-1.0f + 2.0f * rnd.nextFloat())) [</ b] 
 					//first order branching angle
-					RU(random(s.FirstOrderAngleSide-s.StochasticityBranchingAngle,s.FirstOrderAngleSide+s.StochasticityBranchingAngle)) [</ b]
+					RU(s.FirstOrderAngleSide + s.StochasticityBranchingAngle * (-1.0f + 2.0f * rnd.nextFloat())) [</ b]
 					//adjusting to 'flatten' branching
 					RH(90)  [</ b]
 					
@@ -1090,24 +1100,24 @@ private void growthStrucStochastic()
 
 						}
 						//first order tropism
-						RV(random(s.TropismStrength-(s.TropismStrength*s.StochasticityTropism),s.TropismStrength+(s.TropismStrength*s.StochasticityTropism))) [</ b]
+						RV(s.TropismStrength + (s.TropismStrength*s.StochasticityTropism) * (-1.0f + 2.0f * rnd.nextFloat())) [</ b]
 						//new first order internode
 						createInternode(b.treeId,b.branchId,
 						LengthInternodeFirst+(Math.min(LengthInternodeFirst*j,LengthSegFirst)-(j*LengthInternodeFirst)),
 						DiameterSegFirst,1) [</ b]
 						//twisting
-						RL(random(0,s.StochasticityTwisting)) [</ b]
+						RL(s.StochasticityTwisting * rnd.nextFloat()) [</ b]
 				
 						//second order phyllotaxy (constant at 180 degrees)
 						if(j!=NSegFirst || j==1)
 						(
-							{BranchingAngleRandom=random(-s.StochasticityAnglePlane,s.StochasticityAnglePlane);}
+							{ BranchingAngleRandom = s.StochasticityAnglePlane * (-1.0f + 2.0f * rnd.nextFloat()); }
 							RH(180+BranchingAngleRandom) [</ b]
 							[
 								//second order branching angle
-								RU(random(s.HigherOrderAngle-s.StochasticityBranchingAngle,s.HigherOrderAngle+s.StochasticityBranchingAngle))  [</ brHigher [<+ b]]
+								RU(s.HigherOrderAngle + s.StochasticityBranchingAngle * (-1.0f + 2.0f * rnd.nextFloat()))  [</ brHigher [<+ b]]
 								//second order tropism
-								RV(random(s.TropismStrength-(s.TropismStrength*s.StochasticityTropism),s.TropismStrength+(s.TropismStrength*s.StochasticityTropism))) [</ brHigher]
+								RV(s.TropismStrength+(s.TropismStrength*s.StochasticityTropism*(-1.0f + 2.0f * rnd.nextFloat()))) [</ brHigher]
 								createInternode(r.treeId,brHigher.branchId,LengthSegSecond,DiameterSegSecond,2)[</ brHigher]
 								//new second order bud
 								SBud(r.treeId, brHigher.branchId, 2) [</ brHigher]
@@ -1187,15 +1197,15 @@ private void growthStrucStochastic()
 			(
 				if((br.length - br.lengthPrev)!=0)
 				(
-					RV(random(s.TropismStrength-(s.TropismStrength*s.StochasticityTropism),s.TropismStrength+(s.TropismStrength*s.StochasticityTropism))) [</ br]
+					RV(s.TropismStrength+(s.TropismStrength*s.StochasticityTropism*(-1.0f + 2.0f * rnd.nextFloat()))) [</ br]
 					
 					//If branch would grow into ground, development is stopped
 					if( ( (location(b).z)+(direction(b).z*(br.length - br.lengthPrev)) )>1)
 					(
 						createInternode(b.treeId,br.branchId,br.length - br.lengthPrev,DiameterSegSecond,br.order) [</ br]
 						//twisting
-						RL(random(-s.StochasticityTwisting,s.StochasticityTwisting)) [</ br]
-						RU(random(-s.StochasticityTwisting,s.StochasticityTwisting))[</ br]
+						RL(s.StochasticityTwisting * (-1.0f + 2.0f * rnd.nextFloat())) [</ br]
+						RU(s.StochasticityTwisting * (-1.0f + 2.0f * rnd.nextFloat()))[</ br]
 					)
 				)
 				SBud(b.treeId, b.branchId, b.order) [</ br]
@@ -1215,20 +1225,20 @@ private void growthStrucStochastic()
 					if( ( (location(b).z)+(direction(b).z*BranchLengthTotal) )>0.5)
 				    (
 						//first order tropism
-						RV(random(s.TropismStrength-(s.TropismStrength*s.StochasticityTropism),s.TropismStrength+(s.TropismStrength*s.StochasticityTropism))) [</ br]
+						RV(s.TropismStrength+(s.TropismStrength*s.StochasticityTropism*(-1.0f + 2.0f * rnd.nextFloat()))) [</ br]
 						
 						//new first order internode
 						createInternode(b.treeId,br.branchId,InternodeLengthVec[i],DiameterSegFirst,br.order) [</ br]
 						
 						//twisting
-						RL(random(-s.StochasticityTwisting,s.StochasticityTwisting)) [</ br]
-						RU(random(-s.StochasticityTwisting,s.StochasticityTwisting))[</ br]
+						RL(s.StochasticityTwisting* (-1.0f + 2.0f * rnd.nextFloat())) [</ br]
+						RU(s.StochasticityTwisting * (-1.0f + 2.0f * rnd.nextFloat()))[</ br]
 						
 						//establish 2nd order branches
 						if( (i!=NumberInternodesFirstOrder) ||	(NumberInternodesFirstOrder==1 && BranchLengthTotal>=BranchInternodeLengthFirstOrder) ) 
 						(
 							//second order phyllotaxy (constant at 180 degrees)
-							{BranchingAngleRandom=random(-s.StochasticityAnglePlane,s.StochasticityAnglePlane);}
+							{BranchingAngleRandom = s.StochasticityAnglePlane * (-1.0f + 2.0f * rnd.nextFloat());}
 							RH(180+BranchingAngleRandom) [</ br]
 							{
 								//new second order branch
@@ -1241,7 +1251,7 @@ private void growthStrucStochastic()
 							}
 							[
 								//second order branching angle
-								RU(random(s.HigherOrderAngle+s.StochasticityBranchingAngle,s.HigherOrderAngle-s.StochasticityBranchingAngle))  [</ brl [<+ br]] 
+								RU(s.HigherOrderAngle + s.StochasticityBranchingAngle * (-1.0f + 2.0f * rnd.nextFloat()))  [</ brl [<+ br]] 
 
 								//new second order internode
 								createInternode(r.treeId,brl.branchId,LengthSegSecond,DiameterSegSecond,br.order+1) [</ brl] 

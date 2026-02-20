@@ -10,6 +10,7 @@ public class PG extends P
 	//Parameters of  global file
 	public static final String Timesteps = "Timesteps";
 	public static final String Replicates = "Replicates";
+	public static final String RandomSeed = "RandomSeed";
 	public static final String MaxX = "MaxX";
 	public static final String MaxY = "MaxY";
 	public static final String MaxZ = "MaxZ";
