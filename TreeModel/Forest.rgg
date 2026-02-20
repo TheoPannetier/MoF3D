@@ -228,7 +228,6 @@ protected void init ()
 {	
 	/*************************************************/
 	/* Init Leaf and Branch textures for visualization */
-	
 	instLeaf = new Leaf(); //create instance of leaf for reusing in all a twig instance
 	instTwigRoot = new TwigRoot();
 	instTwigRootNoLeaves = new TwigRoot();
@@ -264,7 +263,7 @@ protected void init ()
 	]
 	
 	/* initialize species pool */
-	speciesPool.clear();
+	speciesPool.clear();	
 	speciesPool.setPP(pp[currPass]);
 	speciesPool.generate();
 }
@@ -392,31 +391,26 @@ private void step()
 ** See method step() for simulation procedures in each simulation step */
 public void run()
 {
-	if(currPass<pg.getInt(PG.Replicates))
-	{
 		if(currStep<=pg.getInt(PG.Timesteps) && basalarea<pp[currPass].get(PP.StopCriterionBasalArea))
 		{
 			step();
 		}
 		else 
 		{
-			currStep=pg.getInt(PG.Timesteps)+1;
-		}
-			
-		if(currStep==pg.getInt(PG.Timesteps)+1)
-		{
-			currStep=1;
 			currPass++;
-			reset();
-			resetPass();
 			println("--------- Replicates " + currPass + " END ------------");
+			if (currPass < pg.getInt(PG.Replicates))
+			{
+				// Not the final replicate, reset
+				currStep=1;
+				reset();
+				resetPass();
+			}
+			else {
+				println("End of simulations");
+				stop();
+			}
 		}
-	}
-	else
-	{
-		println("End of simulations");
-		stop();
-	}
 }
 
 /* Resets some variables before running next simulation pass */
