@@ -7,8 +7,8 @@ MaxZ	60
 WidthCorridor	10
 VoxelSize	1
 ReportForest	0
-ReportLight	1
-ReportMortality	1
+ReportLight	0
+ReportMortality	0
 ReportShoots	1
 ReportTrees	1
 ReportVoxel	1
