@@ -1,23 +1,23 @@
 import de.grogra.imp3d.shading.RGBAShader;
+import java.util.Random;
 
 public class Util
 {	
-	public static float random(float low, float high)
+	public static float getRandomUnif(Random rnd, float low, float high)
 	{
-		double stoc = Math.random() * (high-low);
-		return low+(float)stoc;
+		float stoc =  rnd.nextFloat() * (high - low);
+		return low + stoc;
 	}
 	
-	public static int randomInt(float low, float high)
+	public static int getRandomUnifInt(Random rnd, float low, float high)
 	{
-		double stoc = Math.random() * (high-low);
-		return (int)(low+stoc);
+		return (int)(getRandomUnifInt(rnd, low, high));
 	}
 	
-	public static int random(int low, int high)
+	public static int getRandomUnifInt(Random rnd, int low, int high)
 	{
-		double stoc = Math.random() * (double)(high-low);
-		return (int)(low+stoc);
+		int diff =  high - low;
+		return low + rnd.nextInt(diff);
 	}
 	
 	public static RGBAShader getColorBiomass(float biMin, float biRange, float bi)

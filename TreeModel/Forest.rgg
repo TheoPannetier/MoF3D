@@ -12,11 +12,13 @@ import java.text.DecimalFormatSymbols;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Arrays;
+import java.util.Random;
 import de.grogra.xl.util.ObjectList;
 import de.grogra.imp3d.*;
 import de.grogra.imp3d.ray2.Raytracer;
 import de.grogra.imp.IMP;
 import java.io.File;
+
 /**************************************************************************************************************************************************/
 
 /**************************************************************************************************************************************************/
@@ -33,6 +35,8 @@ static String folderPictures = folderMain + "\\Pictures\\"; //folder in which im
 /* Parameter objects */
 public static PG pg;	//global parameters loaded from file
 public static PP pp[];	//pass parameters loaded from files
+
+Random rnd = new Random();
 
 /* Spatial division - 3d voxel array, 2d forest top height */
 static VoxBase vox[][][];
@@ -228,12 +232,12 @@ protected void init ()
 {	
 	/*************************************************/
 	/* Init Leaf and Branch textures for visualization */
-	
 	instLeaf = new Leaf(); //create instance of leaf for reusing in all a twig instance
 	instTwigRoot = new TwigRoot();
 	instTwigRootNoLeaves = new TwigRoot();
 	
-	[==>> ^ [/> instTwigRoot TwigBud(0,true)]
+	[
+		==>> ^ [/> instTwigRoot TwigBud(0,true)]
 			[/> instTwigRootNoLeaves TwigBud(0,false)]
 	;]
 	
@@ -263,9 +267,9 @@ protected void init ()
 	]
 	
 	/* initialize species pool */
-	speciesPool.clear();
+	speciesPool.clear();	
 	speciesPool.setPP(pp[currPass]);
-	speciesPool.generate();
+	speciesPool.generate(rnd);
 }
 
 protected void startup()
@@ -331,7 +335,10 @@ private void initParameters()
 	    pp = PP.getParameterPassArray(pg.getInt(PG.Replicates));
 	    //read pass parameters from file
 	    P.readPassParameters(pp, folderParam);
-				
+	    
+	    // set random seed
+	    rnd.setSeed(pg.getInt(PG.RandomSeed));
+	   
 		//pre-compute parameters in global
 		pg.precompute();
 		
@@ -342,6 +349,7 @@ private void initParameters()
 				pg.get(PG.GridSize)
 				);
 		}
+		
 	}
 	catch(Exception e)
 	{
@@ -439,31 +447,26 @@ private void step()
 ** See method step() for simulation procedures in each simulation step */
 public void run()
 {
-	if(currPass<pg.getInt(PG.Replicates))
-	{
 		if(currStep<=pg.getInt(PG.Timesteps) && basalarea<pp[currPass].get(PP.StopCriterionBasalArea))
 		{
 			step();
 		}
 		else 
 		{
-			currStep=pg.getInt(PG.Timesteps)+1;
-		}
-			
-		if(currStep==pg.getInt(PG.Timesteps)+1)
-		{
-			currStep=1;
 			currPass++;
-			reset();
-			resetPass();
 			println("--------- Replicates " + currPass + " END ------------");
+			if (currPass < pg.getInt(PG.Replicates))
+			{
+				// Not the final replicate, reset
+				currStep=1;
+				reset();
+				resetPass();
+			}
+			else {
+				println("End of simulations");
+				stop();
+			}
 		}
-	}
-	else
-	{
-		println("End of simulations");
-		stop();
-	}
 }
 
 protected void run(Object info)
@@ -534,7 +537,7 @@ private void dispersal()
 	/* Forest version*/
 	if (pg.getInt(PG.SimulateForest)==1)
 	{
-		int seedCount = (int)(pp[currPass].getSeedlingsPerHa() * (pg.areaTotal/10000.0f));
+		int seedCount = (int)(pp[currPass].getSeedlingsPerHa(rnd) * (pg.areaTotal/10000.0f));
 		
 		//reset counters
 		seedsGenerated=0;
@@ -547,11 +550,11 @@ private void dispersal()
 		for(int i=0; i<seedCount; ++i)
 		{
 			//generate random locations for seeds
-			float seedX = random(corridor, maxX+corridor);
-			float seedY = random(corridor, maxY+corridor);
+			float seedX = corridor + maxX * rnd.nextFloat();
+			float seedY = corridor + maxY * rnd.nextFloat();
 			
 			//get random species
-			int randomSpeciesIndex = (int)(random(0,pp[currPass].get(PP.SpeciesNum)-1));
+			int randomSpeciesIndex = rnd.nextInt((int)(pp[currPass].get(PP.SpeciesNum)));
 			
 			//calculate initial height of the choosen species based on initial diameter and species-specific parameters
 			Species sNew = speciesPool.getSpecies(randomSpeciesIndex);
@@ -610,8 +613,10 @@ private void dispersal()
 			float TreePosY = seedY + yPositionTrees[i];
 		
 			//get random species
-			int randomSpeciesIndex = (int)(random(0,pp[currPass].get(PP.SpeciesNum)-1));
-			
+			int nbSpecies = (int)(pp[currPass].get(PP.SpeciesNum));
+			int randomSpeciesIndex = rnd.nextInt(nbSpecies);
+			println("spID:" + randomSpeciesIndex);
+
 			//Calculate maximum height and initial height of the choosen species based on initial diameter and species-specific parameters
 			Species sNew = speciesPool.getSpecies(randomSpeciesIndex);
 			println("MaxHeight: " + sNew.maxPipeLength);
@@ -856,7 +861,12 @@ private void growth()
 	}
 	
 	/*increment tree age*/
-	r:SRootBase ::> {r.age++;}
+	{
+	for (SRootBase r : SRootBase) {
+		r.age++;
+	}
+	}
+	//r:SRootBase ::> {r.age++;}
 	
 	//branch mortality
 	b:SBranch  ::> 
@@ -875,7 +885,7 @@ private void growth()
 		//random branch mortality
 		if(pp[currPass].get(PP.BranchMortMethod)==1)
 		{
-			if (probability(pp[currPass].get(PP.BranchMortRandomRate)))
+			if (rnd.nextFloat() < (pp[currPass].get(PP.BranchMortRandomRate)))
 			{
 				//for each voxel related to the branch
 				for(int i=0; i<b.voxCount(); ++i)
@@ -890,8 +900,8 @@ private void growth()
 		//branch mortality due to branch biomass (metabolic theory)
 		if(pp[currPass].get(PP.BranchMortMethod)==2)
 		{
-			float probSurviveBranch = MMor.mortalityBiomass(b.diameter, b.length,  pp[currPass].get(PP.BranchMortMassRate),s.rhoW,pp[currPass].get(PP.BranchMortMassScalingExponent));
-			if(probability(probSurviveBranch))
+			float probBranchDeath = MMor.mortalityBiomass(b.diameter, b.length,  pp[currPass].get(PP.BranchMortMassRate),s.rhoW,pp[currPass].get(PP.BranchMortMassScalingExponent));
+			if(rnd.nextFloat() < probBranchDeath)
 			{   
 				//for each voxel related to the branch
 				for(int i=0; i<b.voxCount(); ++i)
@@ -1157,9 +1167,9 @@ private void growthStrucStochastic()
 				[
 					M(tr.lengthPrev  - TrunkLengthLastInternode + (k * TrunkInternodeLength)) [</ b]
 					//first order phyllotaxy
-					RH(tr.phylloCurr+random(-s.StochasticityPhyllo,s.StochasticityPhyllo)) [</ b] 
+					RH(tr.phylloCurr + s.StochasticityPhyllo * (-1.0f + 2.0f * rnd.nextFloat())) [</ b] 
 					//first order branching angle
-					RU(random(s.FirstOrderAngleSide-s.StochasticityBranchingAngle,s.FirstOrderAngleSide+s.StochasticityBranchingAngle)) [</ b]
+					RU(s.FirstOrderAngleSide + s.StochasticityBranchingAngle * (-1.0f + 2.0f * rnd.nextFloat())) [</ b]
 					//adjusting to 'flatten' branching
 					RH(90)  [</ b]
 					
@@ -1174,24 +1184,24 @@ private void growthStrucStochastic()
 
 						}
 						//first order tropism
-						RV(random(s.TropismStrength-(s.TropismStrength*s.StochasticityTropism),s.TropismStrength+(s.TropismStrength*s.StochasticityTropism))) [</ b]
+						RV(s.TropismStrength + (s.TropismStrength*s.StochasticityTropism) * (-1.0f + 2.0f * rnd.nextFloat())) [</ b]
 						//new first order internode
 						createInternode(b.treeId,b.branchId,
 						LengthInternodeFirst+(Math.min(LengthInternodeFirst*j,LengthSegFirst)-(j*LengthInternodeFirst)),
 						DiameterSegFirst,1) [</ b]
 						//twisting
-						RL(random(0,s.StochasticityTwisting)) [</ b]
+						RL(s.StochasticityTwisting * rnd.nextFloat()) [</ b]
 				
 						//second order phyllotaxy (constant at 180 degrees)
 						if(j!=NSegFirst || j==1)
 						(
-							{BranchingAngleRandom=random(-s.StochasticityAnglePlane,s.StochasticityAnglePlane);}
+							{ BranchingAngleRandom = s.StochasticityAnglePlane * (-1.0f + 2.0f * rnd.nextFloat()); }
 							RH(180+BranchingAngleRandom) [</ b]
 							[
 								//second order branching angle
-								RU(random(s.HigherOrderAngle-s.StochasticityBranchingAngle,s.HigherOrderAngle+s.StochasticityBranchingAngle))  [</ brHigher [<+ b]]
+								RU(s.HigherOrderAngle + s.StochasticityBranchingAngle * (-1.0f + 2.0f * rnd.nextFloat()))  [</ brHigher [<+ b]]
 								//second order tropism
-								RV(random(s.TropismStrength-(s.TropismStrength*s.StochasticityTropism),s.TropismStrength+(s.TropismStrength*s.StochasticityTropism))) [</ brHigher]
+								RV(s.TropismStrength+(s.TropismStrength*s.StochasticityTropism*(-1.0f + 2.0f * rnd.nextFloat()))) [</ brHigher]
 								createInternode(r.treeId,brHigher.branchId,LengthSegSecond,DiameterSegSecond,2)[</ brHigher]
 								//new second order bud
 								SBud(r.treeId, brHigher.branchId, 2) [</ brHigher]
@@ -1271,15 +1281,15 @@ private void growthStrucStochastic()
 			(
 				if((br.length - br.lengthPrev)!=0)
 				(
-					RV(random(s.TropismStrength-(s.TropismStrength*s.StochasticityTropism),s.TropismStrength+(s.TropismStrength*s.StochasticityTropism))) [</ br]
+					RV(s.TropismStrength+(s.TropismStrength*s.StochasticityTropism*(-1.0f + 2.0f * rnd.nextFloat()))) [</ br]
 					
 					//If branch would grow into ground, development is stopped
 					if( ( (location(b).z)+(direction(b).z*(br.length - br.lengthPrev)) )>1)
 					(
 						createInternode(b.treeId,br.branchId,br.length - br.lengthPrev,DiameterSegSecond,br.order) [</ br]
 						//twisting
-						RL(random(-s.StochasticityTwisting,s.StochasticityTwisting)) [</ br]
-						RU(random(-s.StochasticityTwisting,s.StochasticityTwisting))[</ br]
+						RL(s.StochasticityTwisting * (-1.0f + 2.0f * rnd.nextFloat())) [</ br]
+						RU(s.StochasticityTwisting * (-1.0f + 2.0f * rnd.nextFloat()))[</ br]
 					)
 				)
 				SBud(b.treeId, b.branchId, b.order) [</ br]
@@ -1299,20 +1309,20 @@ private void growthStrucStochastic()
 					if( ( (location(b).z)+(direction(b).z*BranchLengthTotal) )>0.5)
 				    (
 						//first order tropism
-						RV(random(s.TropismStrength-(s.TropismStrength*s.StochasticityTropism),s.TropismStrength+(s.TropismStrength*s.StochasticityTropism))) [</ br]
+						RV(s.TropismStrength+(s.TropismStrength*s.StochasticityTropism*(-1.0f + 2.0f * rnd.nextFloat()))) [</ br]
 						
 						//new first order internode
 						createInternode(b.treeId,br.branchId,InternodeLengthVec[i],DiameterSegFirst,br.order) [</ br]
 						
 						//twisting
-						RL(random(-s.StochasticityTwisting,s.StochasticityTwisting)) [</ br]
-						RU(random(-s.StochasticityTwisting,s.StochasticityTwisting))[</ br]
+						RL(s.StochasticityTwisting* (-1.0f + 2.0f * rnd.nextFloat())) [</ br]
+						RU(s.StochasticityTwisting * (-1.0f + 2.0f * rnd.nextFloat()))[</ br]
 						
 						//establish 2nd order branches
 						if( (i!=NumberInternodesFirstOrder) ||	(NumberInternodesFirstOrder==1 && BranchLengthTotal>=BranchInternodeLengthFirstOrder) ) 
 						(
 							//second order phyllotaxy (constant at 180 degrees)
-							{BranchingAngleRandom=random(-s.StochasticityAnglePlane,s.StochasticityAnglePlane);}
+							{BranchingAngleRandom = s.StochasticityAnglePlane * (-1.0f + 2.0f * rnd.nextFloat());}
 							RH(180+BranchingAngleRandom) [</ br]
 							{
 								//new second order branch
@@ -1325,7 +1335,7 @@ private void growthStrucStochastic()
 							}
 							[
 								//second order branching angle
-								RU(random(s.HigherOrderAngle+s.StochasticityBranchingAngle,s.HigherOrderAngle-s.StochasticityBranchingAngle))  [</ brl [<+ br]] 
+								RU(s.HigherOrderAngle + s.StochasticityBranchingAngle * (-1.0f + 2.0f * rnd.nextFloat()))  [</ brl [<+ br]] 
 
 								//new second order internode
 								createInternode(r.treeId,brl.branchId,LengthSegSecond,DiameterSegSecond,br.order+1) [</ brl] 
@@ -1995,7 +2005,7 @@ private void mortality()
 			Species s = speciesPool.getSpecies(t.speciesId);
 			float probSurvive = 1-MMor.mortalityBiomass(t.diameter, t.length,  pp[currPass].get(PP.MortalityRateSize),s.rhoW,pp[currPass].get(PP.MortalityRateScalingExponent));
 		}
-		if(probability(probSurvive))
+		if(rnd.nextFloat() < probSurvive)
 			( t )
 		else
 		({   
@@ -2050,7 +2060,7 @@ private void mortalityNeighbour(SRootBase t)
 			//loop through trees in affected voxel, some die based on estimated percent
 			for(int k=treeCount-1; k>=0; --k)
 			{
-				if(probability(deathPercent)) //if tree in affected voxel is killed
+				if(rnd.nextFloat() < deathPercent) //if tree in affected voxel is killed
 				{
 					SRootBase tn = voxAffected.getTree(k);
 					
@@ -2744,77 +2754,26 @@ private void visualization()
 {
 	int k=1;
 	
-	if(k==1)
-	{
-		de.grogra.imp3d.View3D view = de.grogra.imp3d.View3D.getDefaultView(workbench());
-		view.getViewComponent().makeSnapshot
-		(
-		new ObjectConsumer() 
-		{
-			public void consume(Object image) 
-			{
-				de.grogra.imp.IMP.writeImage((java.awt.Image)image,
-				new java.io.File(folderPictures + namePictureFile + "_image_replicate_" + (int)currPass + "_time_step_" + ((int)currStep-1) + ".png"));
-			}
-		}
-		);
+	if(k==1) snapshot();
+	
+	if(k==2) viz_bmp();
+	
+	if(k==3) {
+		snapshot();
+		viz_bmp();
 	}
 	
-	if(k==2)
-	{
-			int randomID = (int)(100*Math.random());
-		ViewConfig3D v = View3D.getDefaultViewConfig(workbench());
-		Raytracer r = new Raytracer(workbench(), v, 1000,1000);
-		r.setRandomSeed(randomID);
-		IMP.writeImage(r.computeImage(), new File(folderPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
+	if(k==4) {
+		viz_bmp();
+		snapshot();
 	}
-	
-	if(k==3)
-	{
-		
-				de.grogra.imp3d.View3D view = de.grogra.imp3d.View3D.getDefaultView(workbench());
-		view.getViewComponent().makeSnapshot
-		(
-		new ObjectConsumer() 
-		{
-			public void consume(Object image) 
-			{
-				de.grogra.imp.IMP.writeImage((java.awt.Image)image,
-				new java.io.File(folderPictures + namePictureFile + "_image_replicate_" + (int)currPass + "_time_step_" + ((int)currStep-1) + ".png"));
-			}
-		}
-		);
-		
-		
+}
+
+private void viz_bmp() {
 		int randomID = (int)(100*Math.random());
 		ViewConfig3D v = View3D.getDefaultViewConfig(workbench());
 		Raytracer r = new Raytracer(workbench(), v, 1000,1000);
 		r.setRandomSeed(randomID);
 		IMP.writeImage(r.computeImage(), new File(folderPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
-	}
-	
-	if(k==4)
-	{
-		
-		int randomID = (int)(100*Math.random());
-		ViewConfig3D v = View3D.getDefaultViewConfig(workbench());
-		Raytracer r = new Raytracer(workbench(), v, 1000,1000);
-		r.setRandomSeed(randomID);
-		IMP.writeImage(r.computeImage(), new File(folderPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
-		
-		
-		de.grogra.imp3d.View3D view = de.grogra.imp3d.View3D.getDefaultView(workbench());
-		view.getViewComponent().makeSnapshot
-		(
-		new ObjectConsumer() 
-		{
-			public void consume(Object image) 
-			{
-				de.grogra.imp.IMP.writeImage((java.awt.Image)image,
-				new java.io.File(folderPictures + namePictureFile + "_image_replicate_" + (int)currPass + "_time_step_" + ((int)currStep-1) + ".png"));
-			}
-		}
-		);
-	}
 }
 

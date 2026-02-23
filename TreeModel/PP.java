@@ -1,4 +1,5 @@
 import de.grogra.rgg.Library;
+import java.util.Random;
 
 /**
  * This class contains parameters that vary with each pass of the simulation.
@@ -179,97 +180,97 @@ public class PP extends P
 	
      //Parameter ranges of new pass file
      
-       public float getApicalDev()
+       public float getApicalDev(Random rnd)
     {
-		return Util.random(get(ApicalDev_Min),get(ApicalDev_Max));
+		return Util.getRandomUnif(rnd, get(ApicalDev_Min),get(ApicalDev_Max));
     }
     
-       public float getIApical()
+       public float getIApical(Random rnd)
     {
-		return Util.random(get(IApical_Min),get(IApical_Max));
+		return Util.getRandomUnif(rnd, get(IApical_Min),get(IApical_Max));
     }
     
-       public float getFirstOrderAngleSide()
+       public float getFirstOrderAngleSide(Random rnd)
     {
-		return Util.random(get(FirstOrderAngleSide_Min),get(FirstOrderAngleSide_Max));
+		return Util.getRandomUnif(rnd, get(FirstOrderAngleSide_Min),get(FirstOrderAngleSide_Max));
     }
     
-       public int getFirstOrderPhyllotaxis()
+       public int getFirstOrderPhyllotaxis(Random rnd)
     {
-		return(int)Util.random(get(FirstOrderPhyllotaxis_Min),get(FirstOrderPhyllotaxis_Max)+1);
+		return(int)Util.getRandomUnif(rnd, get(FirstOrderPhyllotaxis_Min),get(FirstOrderPhyllotaxis_Max)+1);
     }
     
     
-       public float getHigherOrderAngle()
+       public float getHigherOrderAngle(Random rnd)
     {
-		return Util.random(get(HigherOrderAngle_Min),get(HigherOrderAngle_Max));
+		return Util.getRandomUnif(rnd, get(HigherOrderAngle_Min),get(HigherOrderAngle_Max));
     }
     
    
-    public float getInternodeLengthTrunkMin()
+    public float getInternodeLengthTrunkMin(Random rnd)
     {
-		return Util.random(get(InternodeLengthTrunkMin_Min),get(InternodeLengthTrunkMin_Max));
+		return Util.getRandomUnif(rnd, get(InternodeLengthTrunkMin_Min),get(InternodeLengthTrunkMin_Max));
     }
     
-        public float getInternodeLengthTrunkMax()
+        public float getInternodeLengthTrunkMax(Random rnd)
     {
-		return Util.random(get(InternodeLengthTrunkMax_Min),get(InternodeLengthTrunkMax_Max));
+		return Util.getRandomUnif(rnd, get(InternodeLengthTrunkMax_Min),get(InternodeLengthTrunkMax_Max));
     }
     
     
-    public float getInternodeLengthBranchMin()
+    public float getInternodeLengthBranchMin(Random rnd)
     {
-		return Util.random(get(InternodeLengthBranchMin_Min),get(InternodeLengthBranchMin_Max));
+		return Util.getRandomUnif(rnd, get(InternodeLengthBranchMin_Min),get(InternodeLengthBranchMin_Max));
     }
     
-    public float getInternodeLengthBranchMax()
+    public float getInternodeLengthBranchMax(Random rnd)
      {
-		return Util.random(get(InternodeLengthBranchMax_Min),get(InternodeLengthBranchMax_Max));
+		return Util.getRandomUnif(rnd, get(InternodeLengthBranchMax_Min),get(InternodeLengthBranchMax_Max));
     }
     
-    public float getkInt()
+    public float getkInt(Random rnd)
     {
-		return Util.random(get(kInt_Min),get(kInt_Max));
+		return Util.getRandomUnif(rnd, get(kInt_Min),get(kInt_Max));
     }
     
-       public float getSeedlingsPerHa()
+       public float getSeedlingsPerHa(Random rnd)
     {
-		return Util.random(get(SeedlingsPerHa_Min),get(SeedlingsPerHa_Max));
+		return Util.getRandomUnif(rnd, get(SeedlingsPerHa_Min),get(SeedlingsPerHa_Max));
     }
 
-       public float getTropismStrength()
+       public float getTropismStrength(Random rnd)
     {
-		return Util.random(get(TropismStrength_Min),get(TropismStrength_Max));
+		return Util.getRandomUnif(rnd, get(TropismStrength_Min),get(TropismStrength_Max));
     }
     
-    	public float getSLA()
+    	public float getSLA(Random rnd)
     {
-		return Util.random(get(SLA_Min),get(SLA_Max));
+		return Util.getRandomUnif(rnd, get(SLA_Min),get(SLA_Max));
     }
     
-       public float getrhoW()
+       public float getrhoW(Random rnd)
     {
-	  	return Util.random(get(rhoW_Min),get(rhoW_Max));
+	  	return Util.getRandomUnif(rnd, get(rhoW_Min),get(rhoW_Max));
     }
     
-           public float getLDRatioTrunk()
+           public float getLDRatioTrunk(Random rnd)
     {
-		return Util.random(get(ApicalDominance_Min),get(ApicalDominance_Max))+get(PP.LDratioBranch);
+		return Util.getRandomUnif(rnd, get(ApicalDominance_Min),get(ApicalDominance_Max))+get(PP.LDratioBranch);
     }
     
-     public float getShorteningFactor()
+     public float getShorteningFactor(Random rnd)
     {
-		return Util.random(get(ShorteningFactor_Min),get(ShorteningFactor_Max));
+		return Util.getRandomUnif(rnd, get(ShorteningFactor_Min),get(ShorteningFactor_Max));
     }
     
-     public float getPipeReuseFactor()
+     public float getPipeReuseFactor(Random rnd)
     {
-	    	return Util.random(get(PipeReuseFactor_Min),get(PipeReuseFactor_Max));
+	    	return Util.getRandomUnif(rnd, get(PipeReuseFactor_Min),get(PipeReuseFactor_Max));
     }
 
-    public float getALProdMax()
+    public float getALProdMax(Random rnd)
     {
-		return Util.random(get(ALProdMax_Min),get(ALProdMax_Max));
+		return Util.getRandomUnif(rnd, get(ALProdMax_Min),get(ALProdMax_Max));
     }
     
      
@@ -299,29 +300,29 @@ public class PP extends P
 		return (float) (Math.pow(10.0,(1.61 + 0.32 * Math.log10(10000.0/SLA))));
     }
     
-    public float getStochasticityTwisting()
+    public float getStochasticityTwisting(Random rnd)
     {
-	    return Util.random(get(StochasticityTwisting_Min),get(StochasticityTwisting_Max));
+	    return Util.getRandomUnif(rnd, get(StochasticityTwisting_Min),get(StochasticityTwisting_Max));
     }
     
-    public float getStochasticityBranchingAngle()
+    public float getStochasticityBranchingAngle(Random rnd)
     {
-	    return Util.random(get(StochasticityBranchingAngle_Min),get(StochasticityBranchingAngle_Max));
+	    return Util.getRandomUnif(rnd, get(StochasticityBranchingAngle_Min),get(StochasticityBranchingAngle_Max));
     }
     
-    public float getStochasticityTropism()
+    public float getStochasticityTropism(Random rnd)
     {
-	    return Util.random(get(StochasticityTropism_Min),get(StochasticityTropism_Max));
+	    return Util.getRandomUnif(rnd, get(StochasticityTropism_Min),get(StochasticityTropism_Max));
     }
     
-    public float getStochasticityAnglePlane()
+    public float getStochasticityAnglePlane(Random rnd)
     {
-	    return Util.random(get(StochasticityAnglePlane_Min),get(StochasticityAnglePlane_Max));
+	    return Util.getRandomUnif(rnd, get(StochasticityAnglePlane_Min),get(StochasticityAnglePlane_Max));
     }
   
-     public float getStochasticityPhyllo()
+     public float getStochasticityPhyllo(Random rnd)
     {
-	    return Util.random(get(StochasticityPhyllo_Min),get(StochasticityPhyllo_Max));
+	    return Util.getRandomUnif(rnd, get(StochasticityPhyllo_Min),get(StochasticityPhyllo_Max));
     }
   
 }
