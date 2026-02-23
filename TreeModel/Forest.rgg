@@ -168,6 +168,10 @@ static float timeReportVoxelTotal=0;
 static float timeColoring=0;
 static float timeColoringTotal=0;
 static float ALMaxVoxel=0;
+
+// Switch to exit simulation in endless mode 
+static boolean headless_must_stop = false;
+
 /**************************************************************************************************************************************************/
 
 /**************************************************************************************************************************************************/
@@ -230,6 +234,7 @@ private void generateTwig()
 ** This method is also called each time the script is saved.*/
 protected void init ()
 {	
+	println("init has been called");
 	/*************************************************/
 	/* Init Leaf and Branch textures for visualization */
 	instLeaf = new Leaf(); //create instance of leaf for reusing in all a twig instance
@@ -243,6 +248,7 @@ protected void init ()
 	
 	//put root of twig in graph with initial bud for generating twig branches
 	derive();
+	println("made it up to derive");
 	 
 	//generate twig branches 
 	for(apply(5)){generateTwig();}
@@ -265,6 +271,8 @@ protected void init ()
 		Axiom ==> 
 		;
 	]
+	
+	println("axiom generated");
 	
 	/* initialize species pool */
 	speciesPool.clear();	
@@ -272,46 +280,11 @@ protected void init ()
 	speciesPool.generate(rnd);
 }
 
+// Initial function in headless mode (i.e. no GUI)
 protected void startup()
 {
 	super.startup();
-	instLeaf = new Leaf(); //create instance of leaf for reusing in all a twig instance
-	instTwigRoot = new TwigRoot();
-	instTwigRootNoLeaves = new TwigRoot();
-	
-	[==>> ^ [/> instTwigRoot TwigBud(0,true)]
-			[/> instTwigRootNoLeaves TwigBud(0,false)]
-	;]
-	
-	//put root of twig in graph with initial bud for generating twig branches
-	derive();
-	 
-	//generate twig branches 
-	for(apply(5)){generateTwig();}
-	
-	/*************************************************/
-
-	/* read parameters from files and initialize them */
-	if(currPass==0)
-	    initParameters();
-	
-	/* init counters  */
-	seedsGenerated = 0;
-	
-	/* init array of voxels and forest top height */
-	if(currPass==0)
-	    initVoxels();
-	
-	/* init model graph */
-	[
-		Axiom ==> 
-		;
-	]
-	
-	/* initialize species pool */
-	speciesPool.clear();
-	speciesPool.setPP(pp[currPass]);
-	speciesPool.generate();
+	init();
 	
 	if (de.grogra.pf.boot.Main.getProperty("headless") != null)
 	{
@@ -447,6 +420,7 @@ private void step()
 ** See method step() for simulation procedures in each simulation step */
 public void run()
 {
+		println("run OK");
 		if(currStep<=pg.getInt(PG.Timesteps) && basalarea<pp[currPass].get(PP.StopCriterionBasalArea))
 		{
 			step();
@@ -465,39 +439,19 @@ public void run()
 			else {
 				println("End of simulations");
 				stop();
+				// Headless mode - stop() is ignored, so we use a bool instead.
+				headless_must_stop = true;
 			}
 		}
 }
 
+// Run the simulation in headless mode
 protected void run(Object info)
 {
-	if(currPass<pg.getInt(PG.Replicates))
-	{
-		if(currStep<=pg.getInt(PG.Timesteps) && basalarea<pp[currPass].get(PP.StopCriterionBasalArea))
-		{
-			step();
-		}
-		else 
-		{
-			currStep=pg.getInt(PG.Timesteps)+1;
-		}
-			
-		if(currStep==pg.getInt(PG.Timesteps)+1)
-		{
-			currStep=1;
-			currPass++;
-			reset();
-			resetPass();
-			println("--------- Replicates " + currPass + " END ------------");
-		}
+	while (!headless_must_stop) {
+		run();
 	}
-	else
-	{
-		println("End of simulations");
-		//stop();
-		System.exit(0);
-	}
-	
+	System.exit(0);
 }
 
 /* Resets some variables before running next simulation pass */
@@ -861,12 +815,7 @@ private void growth()
 	}
 	
 	/*increment tree age*/
-	{
-	for (SRootBase r : SRootBase) {
-		r.age++;
-	}
-	}
-	//r:SRootBase ::> {r.age++;}
+	r:SRootBase ::> {r.age++;}
 	
 	//branch mortality
 	b:SBranch  ::> 
