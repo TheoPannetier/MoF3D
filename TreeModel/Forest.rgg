@@ -23,15 +23,14 @@ import java.io.File;
 
 /**************************************************************************************************************************************************/
 /**Set model folder*/
-static String defaultProjectFolder = "C:\\Users\\theo\\github\\MoF3D\\TreeModel";
-String projectFolder = null;
+static String projectFolder = "C:\\Users\\theo\\github\\MoF3D\\TreeModel";
 static String namePictureFile = "TreeModel"; //name of model
 static String folderParam = "\\Model"; //folder in which the main model script and the pass/global files are located
 static String folderReport = "\\Results"; //folder in which the model results are saved
 static String folderPictures = "\\Pictures\\"; //folder in which images are saved
-String pathToParam;
-String pathToReport;
-String pathToPictures;
+static String pathToParam = projectFolder + folderParam;
+static String pathToReport = projectFolder + folderReport;
+static String pathToPictures = projectFolder + folderPictures;
 	
 /**************************************************************************************************************************************************/
 
@@ -239,14 +238,6 @@ private void generateTwig()
 ** This method is also called each time the script is saved.*/
 protected void init ()
 {	
-	// Set paths in case project path was passed as argument
-	if (projectFolder == null) {
-		projectFolder = defaultProjectFolder;
-	}
-	pathToParam = projectFolder + folderParam;
-	pathToReport = projectFolder + folderReport;
-	pathToPictures = projectFolder + folderPictures;
-	
 	/*************************************************/
 	/* Init Leaf and Branch textures for visualization */
 	instLeaf = new Leaf(); //create instance of leaf for reusing in all a twig instance
@@ -293,12 +284,16 @@ protected void init ()
 protected void startup()
 {
 	super.startup();
-	init();
 	
 	String argPath = de.grogra.pf.boot.Main.getProperty("path");
 	if (argPath != null) {
 		projectFolder = argPath;
+		pathToParam = projectFolder + folderParam;
+		pathToReport = projectFolder + folderReport;
+		pathToPictures = projectFolder + folderPictures;
 	}
+	
+	init();
 	
 	if (de.grogra.pf.boot.Main.getProperty("headless") != null)
 	{
