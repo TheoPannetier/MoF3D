@@ -23,11 +23,16 @@ import java.io.File;
 
 /**************************************************************************************************************************************************/
 /**Set model folder*/
-static String folderMain = "C:\\Users\\theo\\github\\MoF3D\\TreeModel";
+static String defaultProjectFolder = "C:\\Users\\theo\\github\\MoF3D\\TreeModel";
+String projectFolder = null;
 static String namePictureFile = "TreeModel"; //name of model
-static String folderParam = folderMain + "\\Model"; //folder in which the main model script and the pass/global files are located
-static String folderReport = folderMain + "\\Results"; //folder in which the model results are saved
-static String folderPictures = folderMain + "\\Pictures\\"; //folder in which images are saved
+static String folderParam = "\\Model"; //folder in which the main model script and the pass/global files are located
+static String folderReport = "\\Results"; //folder in which the model results are saved
+static String folderPictures = "\\Pictures\\"; //folder in which images are saved
+String pathToParam;
+String pathToReport;
+String pathToPictures;
+	
 /**************************************************************************************************************************************************/
 
 /**************************************************************************************************************************************************/
@@ -234,6 +239,14 @@ private void generateTwig()
 ** This method is also called each time the script is saved.*/
 protected void init ()
 {	
+	// Set paths in case project path was passed as argument
+	if (projectFolder == null) {
+		projectFolder = defaultProjectFolder;
+	}
+	pathToParam = projectFolder + folderParam;
+	pathToReport = projectFolder + folderReport;
+	pathToPictures = projectFolder + folderPictures;
+	
 	/*************************************************/
 	/* Init Leaf and Branch textures for visualization */
 	instLeaf = new Leaf(); //create instance of leaf for reusing in all a twig instance
@@ -282,6 +295,11 @@ protected void startup()
 	super.startup();
 	init();
 	
+	String argPath = de.grogra.pf.boot.Main.getProperty("path");
+	if (argPath != null) {
+		projectFolder = argPath;
+	}
+	
 	if (de.grogra.pf.boot.Main.getProperty("headless") != null)
 	{
 		runLater(null);
@@ -298,12 +316,12 @@ private void initParameters()
 	    //create parameter global object
 	    pg = new PG();
 	    //read global parameters from file
-	    P.readGlobalParameters(pg, folderParam);
+	    P.readGlobalParameters(pg, pathToParam);
 	
 	    //create parameter pass objects
 	    pp = PP.getParameterPassArray(pg.getInt(PG.Replicates));
 	    //read pass parameters from file
-	    P.readPassParameters(pp, folderParam);
+	    P.readPassParameters(pp, pathToParam);
 	    
 	    // set random seed
 	    rnd.setSeed(pg.getInt(PG.RandomSeed));
@@ -442,7 +460,7 @@ public void run()
 
 // Run the simulation in headless mode
 protected void run(Object info)
-{
+{	
 	while (!headless_must_stop) {
 		run();
 	}
@@ -2107,7 +2125,7 @@ private void report()
 	)
 	{
 		//report light conditions at forest floor
-		Report.reportLight(currPass, currStep, folderReport, vox, pg);
+		Report.reportLight(currPass, currStep, pathToReport, vox, pg);
 	}
 	
 	timeReportLight = (double) (System.nanoTime() - startTimeReportLight) / 1000000000.0;
@@ -2125,7 +2143,7 @@ private void report()
 			otherSymbols.setDecimalSeparator('.');
 			otherSymbols.setGroupingSeparator(','); 
 			DecimalFormat df = new DecimalFormat("0.0000000", otherSymbols);
-			Report.startReport(currPass,currStep,"shoots",folderReport,false,true);
+			Report.startReport(currPass,currStep,"shoots",pathToReport,false,true);
 			Report.writeTime();
 			Report.writeLine("shootID" + "\t" + "branchID" + "\t"+ "treeID" + "\t"+ "speciesID" + "\t" 
 				+ "length" + "\t" 
@@ -2201,7 +2219,7 @@ private void report()
 	)
 	{
 		//report light conditions at each voxel, as well as leaf area
-		Report.reportVoxel(currPass, currStep, folderReport, vox, pg);
+		Report.reportVoxel(currPass, currStep, pathToReport, vox, pg);
 	}
 	timeReportVoxel = (double) (System.nanoTime() - startTimeReportVoxel) / 1000000000.0;
 	timeReportVoxelTotal+=timeReportVoxel;
@@ -2250,7 +2268,7 @@ private void report()
 			otherSymbols.setGroupingSeparator(','); 
 			DecimalFormat df = new DecimalFormat("0.000000", otherSymbols);
 			
-			Report.startReport(currPass,currStep,"Species",folderReport,false,false);
+			Report.startReport(currPass,currStep,"Species",pathToReport,false,false);
 			Report.writeLine(
 					"SpeciesID" + "\t" +
 					"SLA" + "\t" +
@@ -2359,7 +2377,7 @@ private void reportForest()
 		otherSymbols.setGroupingSeparator(','); 
 		DecimalFormat df = new DecimalFormat("0.0000000", otherSymbols);
 		
-		Report.startReport(currPass,currStep,"forestvariables",folderReport,true,false);
+		Report.startReport(currPass,currStep,"forestvariables",pathToReport,true,false);
 		if(currStep==1){
 			Report.writeTime();
 			Report.writeGlobalParameters(pg);
@@ -2430,7 +2448,7 @@ private void reportTimeConsumption()
 		otherSymbols.setGroupingSeparator(','); 
 		DecimalFormat df = new DecimalFormat("0.00", otherSymbols);
 		
-		Report.startReport(currPass,currStep,"timeconsumption",folderReport,true,false);
+		Report.startReport(currPass,currStep,"timeconsumption",pathToReport,true,false);
 		if(currStep==1){
 			Report.writeTime();
 			Report.writeGlobalParameters(pg);
@@ -2520,7 +2538,7 @@ private void reportTrees()
 		otherSymbols.setGroupingSeparator(','); 
 		DecimalFormat df = new DecimalFormat("0.0000000", otherSymbols);
 		
-		Report.startReport(currPass,currStep,"trees",folderReport,false,true);
+		Report.startReport(currPass,currStep,"trees",pathToReport,false,true);
 		Report.writeTime();
 		Report.writeGlobalParameters(pg);
 		Report.writeLine(
@@ -2644,7 +2662,7 @@ private void reportMortalityStart()
 	{
 		try
 		{
-			Report.startReport(currPass,currStep,"mortality",folderReport,false,true);
+			Report.startReport(currPass,currStep,"mortality",pathToReport,false,true);
 			Report.writeTime();
 			Report.writeGlobalParameters(pg);
 			Report.writeMortalityHeaders();
@@ -2674,7 +2692,7 @@ private void renderImages()
 	ViewConfig3D v = View3D.getDefaultViewConfig(workbench());
 	Raytracer r = new Raytracer(workbench(), v, 1000,1000);
 	r.setRandomSeed(randomID);
-	IMP.writeImage(r.computeImage(), new File(folderPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
+	IMP.writeImage(r.computeImage(), new File(pathToPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
 }
 
 private void snapshot()
@@ -2687,7 +2705,7 @@ private void snapshot()
 		public void consume(Object image) 
 		{
 			de.grogra.imp.IMP.writeImage((java.awt.Image)image,
-			new java.io.File(folderPictures + namePictureFile + "_image_replicate_" + (int)currPass + "_time_step_" + ((int)currStep-1) + ".png"));
+			new java.io.File(pathToPictures + namePictureFile + "_image_replicate_" + (int)currPass + "_time_step_" + ((int)currStep-1) + ".png"));
 		}
 	}
 	)
@@ -2718,6 +2736,6 @@ private void viz_bmp() {
 		ViewConfig3D v = View3D.getDefaultViewConfig(workbench());
 		Raytracer r = new Raytracer(workbench(), v, 1000,1000);
 		r.setRandomSeed(randomID);
-		IMP.writeImage(r.computeImage(), new File(folderPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
+		IMP.writeImage(r.computeImage(), new File(pathToPictures + namePictureFile + "_image_time_step_" + (int)currStep + ".bmp"));
 }
 
