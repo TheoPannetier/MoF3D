@@ -14,11 +14,11 @@ Content-Type: text/x-java; charset=Cp1252
 Name: MMor.java
 Content-Type: text/x-java; charset=Cp1252
 
-Name: images/Leaf2_small.png
-Content-Type: image/png
-
 Name: MGer.java
 Content-Type: text/x-java; charset=Cp1252
+
+Name: images/Leaf2_small.png
+Content-Type: image/png
 
 Name: MLightComputer.java
 Content-Type: text/x-java; charset=Cp1252
@@ -41,14 +41,14 @@ Content-Type: text/x-java; charset=Cp1252
 Name: MLightNotifier.java
 Content-Type: text/x-java; charset=Cp1252
 
-Name: images/Leaf1_small.png
-Content-Type: image/png
-
 Name: VoxBase.java
 Content-Type: text/x-java; charset=Cp1252
 
 Name: Util.java
 Content-Type: text/x-java; charset=Cp1252
+
+Name: images/Leaf1_small.png
+Content-Type: image/png
 
 Name: STrunkBase.java
 Content-Type: text/x-java; charset=windows-1252
@@ -71,11 +71,11 @@ Content-Type: image/jpeg
 Name: PG.java
 Content-Type: text/x-java; charset=Cp1252
 
-Name: images/Leaf3_small.png
-Content-Type: image/png
-
 Name: SRootNode.java
 Content-Type: text/x-java; charset=windows-1252
+
+Name: images/Leaf3_small.png
+Content-Type: image/png
 
 Name: Forest.rgg
 Content-Type: text/x-grogra-rgg; charset=windows-1252

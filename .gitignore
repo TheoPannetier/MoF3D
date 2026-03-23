@@ -15,3 +15,6 @@ TreeModel/graph.xml
 TreeModel/project.gs
 ForestModel/graph.xml
 ForestModel/project.gs
+
+# Don't track compiled projects
+*.gsz

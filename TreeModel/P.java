@@ -44,7 +44,6 @@ public class P
 	if(paramObj == null)
 		return;
 	
-	//open file with buffered reader 
         BufferedReader br = new BufferedReader(new FileReader(absFileURL));
         try {
             String line = br.readLine(); //read first line in file

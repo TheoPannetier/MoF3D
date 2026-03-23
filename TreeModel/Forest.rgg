@@ -22,12 +22,12 @@ import java.io.File;
 /**************************************************************************************************************************************************/
 
 /**************************************************************************************************************************************************/
-/**Set model folder*/
+/**Set model folder*/              
 static String projectFolder = "C:\\Users\\theo\\github\\MoF3D\\TreeModel";
 static String namePictureFile = "TreeModel"; //name of model
-static String folderParam = "\\Model"; //folder in which the main model script and the pass/global files are located
-static String folderReport = "\\Results"; //folder in which the model results are saved
-static String folderPictures = "\\Pictures\\"; //folder in which images are saved
+static String folderParam = "/Model"; //folder in which the main model script and the pass/global files are located
+static String folderReport = "/Results"; //folder in which the model results are saved
+static String folderPictures = "/Pictures"; //folder in which images are saved
 static String pathToParam = projectFolder + folderParam;
 static String pathToReport = projectFolder + folderReport;
 static String pathToPictures = projectFolder + folderPictures;
@@ -288,7 +288,7 @@ protected void startup()
 	String argPath = de.grogra.pf.boot.Main.getProperty("path");
 	if (argPath != null) {
 		projectFolder = argPath;
-		pathToParam = projectFolder + folderParam;
+		pathToParam = projectFolder  + folderParam; 
 		pathToReport = projectFolder + folderReport;
 		pathToPictures = projectFolder + folderPictures;
 	}
@@ -310,6 +310,7 @@ private void initParameters()
 	try{
 	    //create parameter global object
 	    pg = new PG();
+	    
 	    //read global parameters from file
 	    P.readGlobalParameters(pg, pathToParam);
 	
@@ -357,7 +358,7 @@ private void initVoxels()
 /*******************************************************************************************************************************************/
 /* Simulation main method (single step) */
 private void step()
-{
+{ 
 	println("Timestep: "+currStep);
 		
 	//reset report aggregate values

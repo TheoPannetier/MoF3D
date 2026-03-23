@@ -1,4 +1,4 @@
-Timesteps	3
+Timesteps	5
 Replicates	1
 RandomSeed	3
 MaxX	20
