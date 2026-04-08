@@ -547,13 +547,33 @@ private void dispersal()
 	{
 
 		int numberOfTrees = 1+(int)pp[currPass].get(PP.TreeCompetionNum); 
-		float xPositionOfTreeTwo = 2; 
 		
+		// Set up lattice of trees around focal tree
 		float DistanceCompetingTrees=pp[currPass].get(PP.TreeCompetionDist);
-		float[] xPositionTrees={0,DistanceCompetingTrees,-DistanceCompetingTrees,0,0,DistanceCompetingTrees/Math.sqrt(2),
-								DistanceCompetingTrees/Math.sqrt(2),-DistanceCompetingTrees/Math.sqrt(2),-DistanceCompetingTrees/Math.sqrt(2)};
-		float[] yPositionTrees={0,0,0,DistanceCompetingTrees,-DistanceCompetingTrees,DistanceCompetingTrees/Math.sqrt(2),
-								-DistanceCompetingTrees/Math.sqrt(2),DistanceCompetingTrees/Math.sqrt(2),-DistanceCompetingTrees/Math.sqrt(2)};
+		float[] xPositionTrees={
+			// All four directions
+			0,
+			DistanceCompetingTrees,
+			-DistanceCompetingTrees,
+			0,
+			0,
+			// Diagonals but still at the same distance
+			DistanceCompetingTrees/Math.sqrt(2),
+		DistanceCompetingTrees/Math.sqrt(2),
+		-DistanceCompetingTrees/Math.sqrt(2),
+		-DistanceCompetingTrees/Math.sqrt(2)
+		};
+		float[] yPositionTrees={
+			0,
+			0,
+			0,
+			DistanceCompetingTrees,
+			-DistanceCompetingTrees,
+			DistanceCompetingTrees/Math.sqrt(2),
+		-DistanceCompetingTrees/Math.sqrt(2),
+		DistanceCompetingTrees/Math.sqrt(2),
+		-DistanceCompetingTrees/Math.sqrt(2)
+		};
 		
 		int seedCount = (currStep==1) ?numberOfTrees : 0;
 		
