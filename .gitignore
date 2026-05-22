@@ -1,14 +1,12 @@
 # Don't version control outputs
-ForestModel/Results/*
-ForestModel/Pictures/*
-TreeModel/Results/*
-TreeModel/Pictures/*
+outputs/*.txt
 
 # Ignore currently opened project files
 *~
 
 # Ignore GroIMP marks
 *.rgg.marks
+*.MF
 
 # Don't commit changes to project files
 TreeModel/graph.xml

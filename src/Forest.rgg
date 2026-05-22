@@ -23,11 +23,11 @@ import java.io.File;
 
 /**************************************************************************************************************************************************/
 /**Set model folder*/              
-static String projectFolder = "C:\\Users\\theo\\github\\MoF3D\\TreeModel";
+static String projectFolder = "C:\\Users\\theo\\github\\MoF3D";
 static String namePictureFile = "TreeModel"; //name of model
-static String folderParam = "/Model"; //folder in which the main model script and the pass/global files are located
-static String folderReport = "/Results"; //folder in which the model results are saved
-static String folderPictures = "/Pictures"; //folder in which images are saved
+static String folderParam = "/inputs"; //folder in which the main model script and the pass/global files are located
+static String folderReport = "/outputs"; //folder in which the model results are saved
+static String folderPictures = "/outputs/pictures"; //folder in which images are saved
 static String pathToParam = projectFolder + folderParam;
 static String pathToReport = projectFolder + folderReport;
 static String pathToPictures = projectFolder + folderPictures;

@@ -4,12 +4,13 @@
 public class PG extends P
 {
 	//Name of global file
-	public static final String fileName = "Forest_param_global";
+	public static final String fileName = "params_global";
 	public static final String fileExt = ".txt";
 	
 	//Parameters of  global file
 	public static final String Timesteps = "Timesteps";
 	public static final String Replicates = "Replicates";
+	public static final String RandomSeed = "RandomSeed";
 	public static final String MaxX = "MaxX";
 	public static final String MaxY = "MaxY";
 	public static final String MaxZ = "MaxZ";

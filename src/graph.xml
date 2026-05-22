@@ -1,0 +1,2211 @@
+<?xml version="1.0" encoding="UTF-8"?><graph xmlns="http://grogra.de/xmlpersistence" xmlns:gx="http://grogra.de/xmlpersistence">
+ <node root="MetaGraph" id="1" type="de.grogra.graph.impl.Node">
+  <data gx:name="extentIndex" gx:value="7"/>
+  <node id="853" type="Forest" edges="+">
+   <data gx:name="extentIndex" gx:value="7"/>
+   <object gx:name="initialTurtleState" color="14" length="100.0" diameter="0.1" tropism="0.0" parameter="0.0" carbon="0.0" heartwood="0.0" internodeCount="0"/>
+   <serialized gx:name="rnd" gx:value="rO0ABXNyABBqYXZhLnV0aWwuUmFuZG9tNjKWNEvwClMDAANaABRoYXZlTmV4dE5leHRHYXVzc2lhbkQAEG5leHROZXh0R2F1c3NpYW5KAARzZWVkeHAAAAAAAAAAAAAAALY/rEgk7Hg="/>
+   <array gx:name="treesKilled"/>
+   <array gx:name="treesKilledCause"/>
+   <serialized gx:name="treeTable" gx:value="rO0ABXNyABNqYXZhLnV0aWwuSGFzaHRhYmxlE7sPJSFK5LgDAAJGAApsb2FkRmFjdG9ySQAJdGhyZXNob2xkeHA/QAAAAAAACHcIAAAACwAAAAB4"/>
+   <array gx:name="internodesNew"/>
+   <serialized gx:name="branchNewVoxCount" gx:value="rO0ABXNyABNqYXZhLnV0aWwuSGFzaHRhYmxlE7sPJSFK5LgDAAJGAApsb2FkRmFjdG9ySQAJdGhyZXNob2xkeHA/QAAAAAAACHcIAAAACwAAAAB4"/>
+   <serialized gx:name="branchNewVoxCount2" gx:value="rO0ABXNyABNqYXZhLnV0aWwuSGFzaHRhYmxlE7sPJSFK5LgDAAJGAApsb2FkRmFjdG9ySQAJdGhyZXNob2xkeHA/QAAAAAAACHcIAAAACwAAAAB4"/>
+   <array gx:name="branchNew"/>
+   <array gx:name="branchesToDrop"/>
+   <object gx:name="colorDefault" gx:type="de.grogra.imp3d.shading.RGBAShader" gx:value="false 0.0 0.0 0.0 1.0"/>
+   <object gx:name="colorDefaultBud" gx:type="de.grogra.imp3d.shading.RGBAShader" gx:value="false 0.0 1.0 0.0 1.0"/>
+  </node>
+ </node>
+ <node root="MainGraph" id="0" type="de.grogra.graph.impl.Node">
+  <data gx:name="extentIndex" gx:value="7"/>
+  <node id="3" type="Forest$TwigRoot" edges="/">
+   <node id="7" type="Forest$Twig" edges="-">
+    <data gx:name="length" gx:value="0.2"/>
+    <data gx:name="diameter" gx:value="0.01"/>
+    <node id="8" type="de.grogra.turtle.RH" edges="-">
+     <data gx:name="angle" gx:value="137.0"/>
+     <node id="9" type="de.grogra.turtle.RU" edges="+">
+      <data gx:name="angle" gx:value="50.0"/>
+      <node id="10" type="Forest$LeafNode" edges="-"/>
+     </node>
+     <node id="11" type="de.grogra.turtle.RU" edges="+">
+      <data gx:name="angle" gx:value="40.0"/>
+      <node id="19" type="Forest$Twig" edges="-">
+       <data gx:name="length" gx:value="0.2"/>
+       <data gx:name="diameter" gx:value="0.01"/>
+       <node id="20" type="de.grogra.turtle.RH" edges="-">
+        <data gx:name="angle" gx:value="137.0"/>
+        <node id="21" type="de.grogra.turtle.RU" edges="+">
+         <data gx:name="angle" gx:value="50.0"/>
+         <node id="22" type="Forest$LeafNode" edges="-"/>
+        </node>
+        <node id="23" type="de.grogra.turtle.RU" edges="+">
+         <data gx:name="angle" gx:value="40.0"/>
+         <node id="24" type="Forest$TwigBud" edges="-">
+          <data gx:name="order" gx:value="2"/>
+          <data gx:name="hasLeaves" gx:value="true"/>
+         </node>
+        </node>
+        <node id="43" type="Forest$Twig" edges="-">
+         <data gx:name="length" gx:value="0.2"/>
+         <data gx:name="diameter" gx:value="0.01"/>
+         <node id="44" type="de.grogra.turtle.RH" edges="-">
+          <data gx:name="angle" gx:value="137.0"/>
+          <node id="45" type="de.grogra.turtle.RU" edges="+">
+           <data gx:name="angle" gx:value="50.0"/>
+           <node id="46" type="Forest$LeafNode" edges="-"/>
+          </node>
+          <node id="47" type="de.grogra.turtle.RU" edges="+">
+           <data gx:name="angle" gx:value="40.0"/>
+           <node id="48" type="Forest$TwigBud" edges="-">
+            <data gx:name="order" gx:value="2"/>
+            <data gx:name="hasLeaves" gx:value="true"/>
+           </node>
+          </node>
+          <node id="79" type="Forest$Twig" edges="-">
+           <data gx:name="length" gx:value="0.2"/>
+           <data gx:name="diameter" gx:value="0.01"/>
+           <node id="80" type="de.grogra.turtle.RH" edges="-">
+            <data gx:name="angle" gx:value="137.0"/>
+            <node id="81" type="de.grogra.turtle.RU" edges="+">
+             <data gx:name="angle" gx:value="50.0"/>
+             <node id="82" type="Forest$LeafNode" edges="-"/>
+            </node>
+            <node id="83" type="de.grogra.turtle.RU" edges="+">
+             <data gx:name="angle" gx:value="40.0"/>
+             <node id="84" type="Forest$TwigBud" edges="-">
+              <data gx:name="order" gx:value="2"/>
+              <data gx:name="hasLeaves" gx:value="true"/>
+             </node>
+            </node>
+            <node id="127" type="Forest$Twig" edges="-">
+             <data gx:name="length" gx:value="0.2"/>
+             <data gx:name="diameter" gx:value="0.01"/>
+             <node id="128" type="de.grogra.turtle.RH" edges="-">
+              <data gx:name="angle" gx:value="137.0"/>
+              <node id="129" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="50.0"/>
+               <node id="130" type="Forest$LeafNode" edges="-"/>
+              </node>
+              <node id="131" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="40.0"/>
+               <node id="132" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="2"/>
+                <data gx:name="hasLeaves" gx:value="true"/>
+               </node>
+              </node>
+              <node id="205" type="Forest$Twig" edges="-">
+               <data gx:name="length" gx:value="0.2"/>
+               <data gx:name="diameter" gx:value="0.01"/>
+               <node id="206" type="de.grogra.turtle.RH" edges="-">
+                <data gx:name="angle" gx:value="137.0"/>
+                <node id="207" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="50.0"/>
+                 <node id="208" type="Forest$LeafNode" edges="-"/>
+                </node>
+                <node id="209" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="40.0"/>
+                 <node id="210" type="Forest$TwigBud" edges="-">
+                  <data gx:name="order" gx:value="2"/>
+                  <data gx:name="hasLeaves" gx:value="true"/>
+                 </node>
+                </node>
+                <node id="301" type="Forest$Twig" edges="-">
+                 <data gx:name="length" gx:value="0.2"/>
+                 <data gx:name="diameter" gx:value="0.01"/>
+                 <node id="302" type="de.grogra.turtle.RH" edges="-">
+                  <data gx:name="angle" gx:value="137.0"/>
+                  <node id="303" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="50.0"/>
+                   <node id="304" type="Forest$LeafNode" edges="-"/>
+                  </node>
+                  <node id="305" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="40.0"/>
+                   <node id="306" type="Forest$TwigBud" edges="-">
+                    <data gx:name="order" gx:value="2"/>
+                    <data gx:name="hasLeaves" gx:value="true"/>
+                   </node>
+                  </node>
+                  <node id="421" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="422" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="423" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="50.0"/>
+                     <node id="424" type="Forest$LeafNode" edges="-"/>
+                    </node>
+                    <node id="425" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="426" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                      <data gx:name="hasLeaves" gx:value="true"/>
+                     </node>
+                    </node>
+                    <node id="565" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="566" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="567" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="50.0"/>
+                       <node id="568" type="Forest$LeafNode" edges="-"/>
+                      </node>
+                      <node id="569" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="570" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                        <data gx:name="hasLeaves" gx:value="true"/>
+                       </node>
+                      </node>
+                      <node id="733" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="734" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="735" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="50.0"/>
+                         <node id="736" type="Forest$LeafNode" edges="-"/>
+                        </node>
+                        <node id="737" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="738" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                          <data gx:name="hasLeaves" gx:value="true"/>
+                         </node>
+                        </node>
+                        <node id="739" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                         <data gx:name="hasLeaves" gx:value="true"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+        </node>
+       </node>
+      </node>
+     </node>
+     <node id="26" type="Forest$Twig" edges="-">
+      <data gx:name="length" gx:value="0.2"/>
+      <data gx:name="diameter" gx:value="0.01"/>
+      <node id="27" type="de.grogra.turtle.RH" edges="-">
+       <data gx:name="angle" gx:value="137.0"/>
+       <node id="28" type="de.grogra.turtle.RU" edges="+">
+        <data gx:name="angle" gx:value="50.0"/>
+        <node id="29" type="Forest$LeafNode" edges="-"/>
+       </node>
+       <node id="30" type="de.grogra.turtle.RU" edges="+">
+        <data gx:name="angle" gx:value="40.0"/>
+        <node id="50" type="Forest$Twig" edges="-">
+         <data gx:name="length" gx:value="0.2"/>
+         <data gx:name="diameter" gx:value="0.01"/>
+         <node id="51" type="de.grogra.turtle.RH" edges="-">
+          <data gx:name="angle" gx:value="137.0"/>
+          <node id="52" type="de.grogra.turtle.RU" edges="+">
+           <data gx:name="angle" gx:value="50.0"/>
+           <node id="53" type="Forest$LeafNode" edges="-"/>
+          </node>
+          <node id="54" type="de.grogra.turtle.RU" edges="+">
+           <data gx:name="angle" gx:value="40.0"/>
+           <node id="55" type="Forest$TwigBud" edges="-">
+            <data gx:name="order" gx:value="2"/>
+            <data gx:name="hasLeaves" gx:value="true"/>
+           </node>
+          </node>
+          <node id="86" type="Forest$Twig" edges="-">
+           <data gx:name="length" gx:value="0.2"/>
+           <data gx:name="diameter" gx:value="0.01"/>
+           <node id="87" type="de.grogra.turtle.RH" edges="-">
+            <data gx:name="angle" gx:value="137.0"/>
+            <node id="88" type="de.grogra.turtle.RU" edges="+">
+             <data gx:name="angle" gx:value="50.0"/>
+             <node id="89" type="Forest$LeafNode" edges="-"/>
+            </node>
+            <node id="90" type="de.grogra.turtle.RU" edges="+">
+             <data gx:name="angle" gx:value="40.0"/>
+             <node id="91" type="Forest$TwigBud" edges="-">
+              <data gx:name="order" gx:value="2"/>
+              <data gx:name="hasLeaves" gx:value="true"/>
+             </node>
+            </node>
+            <node id="134" type="Forest$Twig" edges="-">
+             <data gx:name="length" gx:value="0.2"/>
+             <data gx:name="diameter" gx:value="0.01"/>
+             <node id="135" type="de.grogra.turtle.RH" edges="-">
+              <data gx:name="angle" gx:value="137.0"/>
+              <node id="136" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="50.0"/>
+               <node id="137" type="Forest$LeafNode" edges="-"/>
+              </node>
+              <node id="138" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="40.0"/>
+               <node id="139" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="2"/>
+                <data gx:name="hasLeaves" gx:value="true"/>
+               </node>
+              </node>
+              <node id="212" type="Forest$Twig" edges="-">
+               <data gx:name="length" gx:value="0.2"/>
+               <data gx:name="diameter" gx:value="0.01"/>
+               <node id="213" type="de.grogra.turtle.RH" edges="-">
+                <data gx:name="angle" gx:value="137.0"/>
+                <node id="214" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="50.0"/>
+                 <node id="215" type="Forest$LeafNode" edges="-"/>
+                </node>
+                <node id="216" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="40.0"/>
+                 <node id="217" type="Forest$TwigBud" edges="-">
+                  <data gx:name="order" gx:value="2"/>
+                  <data gx:name="hasLeaves" gx:value="true"/>
+                 </node>
+                </node>
+                <node id="308" type="Forest$Twig" edges="-">
+                 <data gx:name="length" gx:value="0.2"/>
+                 <data gx:name="diameter" gx:value="0.01"/>
+                 <node id="309" type="de.grogra.turtle.RH" edges="-">
+                  <data gx:name="angle" gx:value="137.0"/>
+                  <node id="310" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="50.0"/>
+                   <node id="311" type="Forest$LeafNode" edges="-"/>
+                  </node>
+                  <node id="312" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="40.0"/>
+                   <node id="313" type="Forest$TwigBud" edges="-">
+                    <data gx:name="order" gx:value="2"/>
+                    <data gx:name="hasLeaves" gx:value="true"/>
+                   </node>
+                  </node>
+                  <node id="428" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="429" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="430" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="50.0"/>
+                     <node id="431" type="Forest$LeafNode" edges="-"/>
+                    </node>
+                    <node id="432" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="433" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                      <data gx:name="hasLeaves" gx:value="true"/>
+                     </node>
+                    </node>
+                    <node id="572" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="573" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="574" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="50.0"/>
+                       <node id="575" type="Forest$LeafNode" edges="-"/>
+                      </node>
+                      <node id="576" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="577" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                        <data gx:name="hasLeaves" gx:value="true"/>
+                       </node>
+                      </node>
+                      <node id="740" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="741" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="742" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="50.0"/>
+                         <node id="743" type="Forest$LeafNode" edges="-"/>
+                        </node>
+                        <node id="744" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="745" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                          <data gx:name="hasLeaves" gx:value="true"/>
+                         </node>
+                        </node>
+                        <node id="746" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                         <data gx:name="hasLeaves" gx:value="true"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+        </node>
+       </node>
+       <node id="57" type="Forest$Twig" edges="-">
+        <data gx:name="length" gx:value="0.2"/>
+        <data gx:name="diameter" gx:value="0.01"/>
+        <node id="58" type="de.grogra.turtle.RH" edges="-">
+         <data gx:name="angle" gx:value="137.0"/>
+         <node id="59" type="de.grogra.turtle.RU" edges="+">
+          <data gx:name="angle" gx:value="50.0"/>
+          <node id="60" type="Forest$LeafNode" edges="-"/>
+         </node>
+         <node id="61" type="de.grogra.turtle.RU" edges="+">
+          <data gx:name="angle" gx:value="40.0"/>
+          <node id="93" type="Forest$Twig" edges="-">
+           <data gx:name="length" gx:value="0.2"/>
+           <data gx:name="diameter" gx:value="0.01"/>
+           <node id="94" type="de.grogra.turtle.RH" edges="-">
+            <data gx:name="angle" gx:value="137.0"/>
+            <node id="95" type="de.grogra.turtle.RU" edges="+">
+             <data gx:name="angle" gx:value="50.0"/>
+             <node id="96" type="Forest$LeafNode" edges="-"/>
+            </node>
+            <node id="97" type="de.grogra.turtle.RU" edges="+">
+             <data gx:name="angle" gx:value="40.0"/>
+             <node id="98" type="Forest$TwigBud" edges="-">
+              <data gx:name="order" gx:value="2"/>
+              <data gx:name="hasLeaves" gx:value="true"/>
+             </node>
+            </node>
+            <node id="141" type="Forest$Twig" edges="-">
+             <data gx:name="length" gx:value="0.2"/>
+             <data gx:name="diameter" gx:value="0.01"/>
+             <node id="142" type="de.grogra.turtle.RH" edges="-">
+              <data gx:name="angle" gx:value="137.0"/>
+              <node id="143" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="50.0"/>
+               <node id="144" type="Forest$LeafNode" edges="-"/>
+              </node>
+              <node id="145" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="40.0"/>
+               <node id="146" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="2"/>
+                <data gx:name="hasLeaves" gx:value="true"/>
+               </node>
+              </node>
+              <node id="219" type="Forest$Twig" edges="-">
+               <data gx:name="length" gx:value="0.2"/>
+               <data gx:name="diameter" gx:value="0.01"/>
+               <node id="220" type="de.grogra.turtle.RH" edges="-">
+                <data gx:name="angle" gx:value="137.0"/>
+                <node id="221" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="50.0"/>
+                 <node id="222" type="Forest$LeafNode" edges="-"/>
+                </node>
+                <node id="223" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="40.0"/>
+                 <node id="224" type="Forest$TwigBud" edges="-">
+                  <data gx:name="order" gx:value="2"/>
+                  <data gx:name="hasLeaves" gx:value="true"/>
+                 </node>
+                </node>
+                <node id="315" type="Forest$Twig" edges="-">
+                 <data gx:name="length" gx:value="0.2"/>
+                 <data gx:name="diameter" gx:value="0.01"/>
+                 <node id="316" type="de.grogra.turtle.RH" edges="-">
+                  <data gx:name="angle" gx:value="137.0"/>
+                  <node id="317" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="50.0"/>
+                   <node id="318" type="Forest$LeafNode" edges="-"/>
+                  </node>
+                  <node id="319" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="40.0"/>
+                   <node id="320" type="Forest$TwigBud" edges="-">
+                    <data gx:name="order" gx:value="2"/>
+                    <data gx:name="hasLeaves" gx:value="true"/>
+                   </node>
+                  </node>
+                  <node id="435" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="436" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="437" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="50.0"/>
+                     <node id="438" type="Forest$LeafNode" edges="-"/>
+                    </node>
+                    <node id="439" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="440" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                      <data gx:name="hasLeaves" gx:value="true"/>
+                     </node>
+                    </node>
+                    <node id="579" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="580" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="581" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="50.0"/>
+                       <node id="582" type="Forest$LeafNode" edges="-"/>
+                      </node>
+                      <node id="583" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="584" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                        <data gx:name="hasLeaves" gx:value="true"/>
+                       </node>
+                      </node>
+                      <node id="747" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="748" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="749" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="50.0"/>
+                         <node id="750" type="Forest$LeafNode" edges="-"/>
+                        </node>
+                        <node id="751" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="752" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                          <data gx:name="hasLeaves" gx:value="true"/>
+                         </node>
+                        </node>
+                        <node id="753" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                         <data gx:name="hasLeaves" gx:value="true"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+         <node id="100" type="Forest$Twig" edges="-">
+          <data gx:name="length" gx:value="0.2"/>
+          <data gx:name="diameter" gx:value="0.01"/>
+          <node id="101" type="de.grogra.turtle.RH" edges="-">
+           <data gx:name="angle" gx:value="137.0"/>
+           <node id="102" type="de.grogra.turtle.RU" edges="+">
+            <data gx:name="angle" gx:value="50.0"/>
+            <node id="103" type="Forest$LeafNode" edges="-"/>
+           </node>
+           <node id="104" type="de.grogra.turtle.RU" edges="+">
+            <data gx:name="angle" gx:value="40.0"/>
+            <node id="148" type="Forest$Twig" edges="-">
+             <data gx:name="length" gx:value="0.2"/>
+             <data gx:name="diameter" gx:value="0.01"/>
+             <node id="149" type="de.grogra.turtle.RH" edges="-">
+              <data gx:name="angle" gx:value="137.0"/>
+              <node id="150" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="50.0"/>
+               <node id="151" type="Forest$LeafNode" edges="-"/>
+              </node>
+              <node id="152" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="40.0"/>
+               <node id="153" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="2"/>
+                <data gx:name="hasLeaves" gx:value="true"/>
+               </node>
+              </node>
+              <node id="226" type="Forest$Twig" edges="-">
+               <data gx:name="length" gx:value="0.2"/>
+               <data gx:name="diameter" gx:value="0.01"/>
+               <node id="227" type="de.grogra.turtle.RH" edges="-">
+                <data gx:name="angle" gx:value="137.0"/>
+                <node id="228" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="50.0"/>
+                 <node id="229" type="Forest$LeafNode" edges="-"/>
+                </node>
+                <node id="230" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="40.0"/>
+                 <node id="231" type="Forest$TwigBud" edges="-">
+                  <data gx:name="order" gx:value="2"/>
+                  <data gx:name="hasLeaves" gx:value="true"/>
+                 </node>
+                </node>
+                <node id="322" type="Forest$Twig" edges="-">
+                 <data gx:name="length" gx:value="0.2"/>
+                 <data gx:name="diameter" gx:value="0.01"/>
+                 <node id="323" type="de.grogra.turtle.RH" edges="-">
+                  <data gx:name="angle" gx:value="137.0"/>
+                  <node id="324" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="50.0"/>
+                   <node id="325" type="Forest$LeafNode" edges="-"/>
+                  </node>
+                  <node id="326" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="40.0"/>
+                   <node id="327" type="Forest$TwigBud" edges="-">
+                    <data gx:name="order" gx:value="2"/>
+                    <data gx:name="hasLeaves" gx:value="true"/>
+                   </node>
+                  </node>
+                  <node id="442" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="443" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="444" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="50.0"/>
+                     <node id="445" type="Forest$LeafNode" edges="-"/>
+                    </node>
+                    <node id="446" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="447" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                      <data gx:name="hasLeaves" gx:value="true"/>
+                     </node>
+                    </node>
+                    <node id="586" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="587" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="588" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="50.0"/>
+                       <node id="589" type="Forest$LeafNode" edges="-"/>
+                      </node>
+                      <node id="590" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="591" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                        <data gx:name="hasLeaves" gx:value="true"/>
+                       </node>
+                      </node>
+                      <node id="754" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="755" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="756" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="50.0"/>
+                         <node id="757" type="Forest$LeafNode" edges="-"/>
+                        </node>
+                        <node id="758" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="759" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                          <data gx:name="hasLeaves" gx:value="true"/>
+                         </node>
+                        </node>
+                        <node id="760" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                         <data gx:name="hasLeaves" gx:value="true"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+           <node id="155" type="Forest$Twig" edges="-">
+            <data gx:name="length" gx:value="0.2"/>
+            <data gx:name="diameter" gx:value="0.01"/>
+            <node id="156" type="de.grogra.turtle.RH" edges="-">
+             <data gx:name="angle" gx:value="137.0"/>
+             <node id="157" type="de.grogra.turtle.RU" edges="+">
+              <data gx:name="angle" gx:value="50.0"/>
+              <node id="158" type="Forest$LeafNode" edges="-"/>
+             </node>
+             <node id="159" type="de.grogra.turtle.RU" edges="+">
+              <data gx:name="angle" gx:value="40.0"/>
+              <node id="233" type="Forest$Twig" edges="-">
+               <data gx:name="length" gx:value="0.2"/>
+               <data gx:name="diameter" gx:value="0.01"/>
+               <node id="234" type="de.grogra.turtle.RH" edges="-">
+                <data gx:name="angle" gx:value="137.0"/>
+                <node id="235" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="50.0"/>
+                 <node id="236" type="Forest$LeafNode" edges="-"/>
+                </node>
+                <node id="237" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="40.0"/>
+                 <node id="238" type="Forest$TwigBud" edges="-">
+                  <data gx:name="order" gx:value="2"/>
+                  <data gx:name="hasLeaves" gx:value="true"/>
+                 </node>
+                </node>
+                <node id="329" type="Forest$Twig" edges="-">
+                 <data gx:name="length" gx:value="0.2"/>
+                 <data gx:name="diameter" gx:value="0.01"/>
+                 <node id="330" type="de.grogra.turtle.RH" edges="-">
+                  <data gx:name="angle" gx:value="137.0"/>
+                  <node id="331" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="50.0"/>
+                   <node id="332" type="Forest$LeafNode" edges="-"/>
+                  </node>
+                  <node id="333" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="40.0"/>
+                   <node id="334" type="Forest$TwigBud" edges="-">
+                    <data gx:name="order" gx:value="2"/>
+                    <data gx:name="hasLeaves" gx:value="true"/>
+                   </node>
+                  </node>
+                  <node id="449" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="450" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="451" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="50.0"/>
+                     <node id="452" type="Forest$LeafNode" edges="-"/>
+                    </node>
+                    <node id="453" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="454" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                      <data gx:name="hasLeaves" gx:value="true"/>
+                     </node>
+                    </node>
+                    <node id="593" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="594" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="595" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="50.0"/>
+                       <node id="596" type="Forest$LeafNode" edges="-"/>
+                      </node>
+                      <node id="597" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="598" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                        <data gx:name="hasLeaves" gx:value="true"/>
+                       </node>
+                      </node>
+                      <node id="761" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="762" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="763" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="50.0"/>
+                         <node id="764" type="Forest$LeafNode" edges="-"/>
+                        </node>
+                        <node id="765" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="766" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                          <data gx:name="hasLeaves" gx:value="true"/>
+                         </node>
+                        </node>
+                        <node id="767" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                         <data gx:name="hasLeaves" gx:value="true"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+              </node>
+             </node>
+             <node id="240" type="Forest$Twig" edges="-">
+              <data gx:name="length" gx:value="0.2"/>
+              <data gx:name="diameter" gx:value="0.01"/>
+              <node id="241" type="de.grogra.turtle.RH" edges="-">
+               <data gx:name="angle" gx:value="137.0"/>
+               <node id="242" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="50.0"/>
+                <node id="243" type="Forest$LeafNode" edges="-"/>
+               </node>
+               <node id="244" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="40.0"/>
+                <node id="336" type="Forest$Twig" edges="-">
+                 <data gx:name="length" gx:value="0.2"/>
+                 <data gx:name="diameter" gx:value="0.01"/>
+                 <node id="337" type="de.grogra.turtle.RH" edges="-">
+                  <data gx:name="angle" gx:value="137.0"/>
+                  <node id="338" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="50.0"/>
+                   <node id="339" type="Forest$LeafNode" edges="-"/>
+                  </node>
+                  <node id="340" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="40.0"/>
+                   <node id="341" type="Forest$TwigBud" edges="-">
+                    <data gx:name="order" gx:value="2"/>
+                    <data gx:name="hasLeaves" gx:value="true"/>
+                   </node>
+                  </node>
+                  <node id="456" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="457" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="458" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="50.0"/>
+                     <node id="459" type="Forest$LeafNode" edges="-"/>
+                    </node>
+                    <node id="460" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="461" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                      <data gx:name="hasLeaves" gx:value="true"/>
+                     </node>
+                    </node>
+                    <node id="600" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="601" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="602" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="50.0"/>
+                       <node id="603" type="Forest$LeafNode" edges="-"/>
+                      </node>
+                      <node id="604" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="605" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                        <data gx:name="hasLeaves" gx:value="true"/>
+                       </node>
+                      </node>
+                      <node id="768" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="769" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="770" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="50.0"/>
+                         <node id="771" type="Forest$LeafNode" edges="-"/>
+                        </node>
+                        <node id="772" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="773" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                          <data gx:name="hasLeaves" gx:value="true"/>
+                         </node>
+                        </node>
+                        <node id="774" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                         <data gx:name="hasLeaves" gx:value="true"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+               <node id="343" type="Forest$Twig" edges="-">
+                <data gx:name="length" gx:value="0.2"/>
+                <data gx:name="diameter" gx:value="0.01"/>
+                <node id="344" type="de.grogra.turtle.RH" edges="-">
+                 <data gx:name="angle" gx:value="137.0"/>
+                 <node id="345" type="de.grogra.turtle.RU" edges="+">
+                  <data gx:name="angle" gx:value="50.0"/>
+                  <node id="346" type="Forest$LeafNode" edges="-"/>
+                 </node>
+                 <node id="347" type="de.grogra.turtle.RU" edges="+">
+                  <data gx:name="angle" gx:value="40.0"/>
+                  <node id="463" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="464" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="465" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="50.0"/>
+                     <node id="466" type="Forest$LeafNode" edges="-"/>
+                    </node>
+                    <node id="467" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="468" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                      <data gx:name="hasLeaves" gx:value="true"/>
+                     </node>
+                    </node>
+                    <node id="607" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="608" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="609" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="50.0"/>
+                       <node id="610" type="Forest$LeafNode" edges="-"/>
+                      </node>
+                      <node id="611" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="612" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                        <data gx:name="hasLeaves" gx:value="true"/>
+                       </node>
+                      </node>
+                      <node id="775" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="776" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="777" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="50.0"/>
+                         <node id="778" type="Forest$LeafNode" edges="-"/>
+                        </node>
+                        <node id="779" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="780" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                          <data gx:name="hasLeaves" gx:value="true"/>
+                         </node>
+                        </node>
+                        <node id="781" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                         <data gx:name="hasLeaves" gx:value="true"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                 <node id="470" type="Forest$Twig" edges="-">
+                  <data gx:name="length" gx:value="0.2"/>
+                  <data gx:name="diameter" gx:value="0.01"/>
+                  <node id="471" type="de.grogra.turtle.RH" edges="-">
+                   <data gx:name="angle" gx:value="137.0"/>
+                   <node id="472" type="de.grogra.turtle.RU" edges="+">
+                    <data gx:name="angle" gx:value="50.0"/>
+                    <node id="473" type="Forest$LeafNode" edges="-"/>
+                   </node>
+                   <node id="474" type="de.grogra.turtle.RU" edges="+">
+                    <data gx:name="angle" gx:value="40.0"/>
+                    <node id="614" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="615" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="616" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="50.0"/>
+                       <node id="617" type="Forest$LeafNode" edges="-"/>
+                      </node>
+                      <node id="618" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="619" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                        <data gx:name="hasLeaves" gx:value="true"/>
+                       </node>
+                      </node>
+                      <node id="782" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="783" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="784" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="50.0"/>
+                         <node id="785" type="Forest$LeafNode" edges="-"/>
+                        </node>
+                        <node id="786" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="787" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                          <data gx:name="hasLeaves" gx:value="true"/>
+                         </node>
+                        </node>
+                        <node id="788" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                         <data gx:name="hasLeaves" gx:value="true"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                   <node id="621" type="Forest$Twig" edges="-">
+                    <data gx:name="length" gx:value="0.2"/>
+                    <data gx:name="diameter" gx:value="0.01"/>
+                    <node id="622" type="de.grogra.turtle.RH" edges="-">
+                     <data gx:name="angle" gx:value="137.0"/>
+                     <node id="623" type="de.grogra.turtle.RU" edges="+">
+                      <data gx:name="angle" gx:value="50.0"/>
+                      <node id="624" type="Forest$LeafNode" edges="-"/>
+                     </node>
+                     <node id="625" type="de.grogra.turtle.RU" edges="+">
+                      <data gx:name="angle" gx:value="40.0"/>
+                      <node id="789" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="790" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="791" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="50.0"/>
+                         <node id="792" type="Forest$LeafNode" edges="-"/>
+                        </node>
+                        <node id="793" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="794" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                          <data gx:name="hasLeaves" gx:value="true"/>
+                         </node>
+                        </node>
+                        <node id="795" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                         <data gx:name="hasLeaves" gx:value="true"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                     <node id="796" type="Forest$Twig" edges="-">
+                      <data gx:name="length" gx:value="0.2"/>
+                      <data gx:name="diameter" gx:value="0.01"/>
+                      <node id="797" type="de.grogra.turtle.RH" edges="-">
+                       <data gx:name="angle" gx:value="137.0"/>
+                       <node id="798" type="de.grogra.turtle.RU" edges="+">
+                        <data gx:name="angle" gx:value="50.0"/>
+                        <node id="799" type="Forest$LeafNode" edges="-"/>
+                       </node>
+                       <node id="800" type="de.grogra.turtle.RU" edges="+">
+                        <data gx:name="angle" gx:value="40.0"/>
+                        <node id="801" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                         <data gx:name="hasLeaves" gx:value="true"/>
+                        </node>
+                       </node>
+                       <node id="802" type="Forest$TwigBud" edges="-">
+                        <data gx:name="hasLeaves" gx:value="true"/>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+        </node>
+       </node>
+      </node>
+     </node>
+    </node>
+   </node>
+  </node>
+  <node id="5" type="Forest$TwigRoot" edges="/">
+   <node id="14" type="Forest$Twig" edges="-">
+    <data gx:name="length" gx:value="0.2"/>
+    <data gx:name="diameter" gx:value="0.01"/>
+    <node id="15" type="de.grogra.turtle.RH" edges="-">
+     <data gx:name="angle" gx:value="137.0"/>
+     <node id="16" type="de.grogra.turtle.RU" edges="+">
+      <data gx:name="angle" gx:value="40.0"/>
+      <node id="33" type="Forest$Twig" edges="-">
+       <data gx:name="length" gx:value="0.2"/>
+       <data gx:name="diameter" gx:value="0.01"/>
+       <node id="34" type="de.grogra.turtle.RH" edges="-">
+        <data gx:name="angle" gx:value="137.0"/>
+        <node id="35" type="de.grogra.turtle.RU" edges="+">
+         <data gx:name="angle" gx:value="40.0"/>
+         <node id="36" type="Forest$TwigBud" edges="-">
+          <data gx:name="order" gx:value="2"/>
+         </node>
+        </node>
+        <node id="64" type="Forest$Twig" edges="-">
+         <data gx:name="length" gx:value="0.2"/>
+         <data gx:name="diameter" gx:value="0.01"/>
+         <node id="65" type="de.grogra.turtle.RH" edges="-">
+          <data gx:name="angle" gx:value="137.0"/>
+          <node id="66" type="de.grogra.turtle.RU" edges="+">
+           <data gx:name="angle" gx:value="40.0"/>
+           <node id="67" type="Forest$TwigBud" edges="-">
+            <data gx:name="order" gx:value="2"/>
+           </node>
+          </node>
+          <node id="107" type="Forest$Twig" edges="-">
+           <data gx:name="length" gx:value="0.2"/>
+           <data gx:name="diameter" gx:value="0.01"/>
+           <node id="108" type="de.grogra.turtle.RH" edges="-">
+            <data gx:name="angle" gx:value="137.0"/>
+            <node id="109" type="de.grogra.turtle.RU" edges="+">
+             <data gx:name="angle" gx:value="40.0"/>
+             <node id="110" type="Forest$TwigBud" edges="-">
+              <data gx:name="order" gx:value="2"/>
+             </node>
+            </node>
+            <node id="162" type="Forest$Twig" edges="-">
+             <data gx:name="length" gx:value="0.2"/>
+             <data gx:name="diameter" gx:value="0.01"/>
+             <node id="163" type="de.grogra.turtle.RH" edges="-">
+              <data gx:name="angle" gx:value="137.0"/>
+              <node id="164" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="40.0"/>
+               <node id="165" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="2"/>
+               </node>
+              </node>
+              <node id="247" type="Forest$Twig" edges="-">
+               <data gx:name="length" gx:value="0.2"/>
+               <data gx:name="diameter" gx:value="0.01"/>
+               <node id="248" type="de.grogra.turtle.RH" edges="-">
+                <data gx:name="angle" gx:value="137.0"/>
+                <node id="249" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="40.0"/>
+                 <node id="250" type="Forest$TwigBud" edges="-">
+                  <data gx:name="order" gx:value="2"/>
+                 </node>
+                </node>
+                <node id="350" type="Forest$Twig" edges="-">
+                 <data gx:name="length" gx:value="0.2"/>
+                 <data gx:name="diameter" gx:value="0.01"/>
+                 <node id="351" type="de.grogra.turtle.RH" edges="-">
+                  <data gx:name="angle" gx:value="137.0"/>
+                  <node id="352" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="40.0"/>
+                   <node id="353" type="Forest$TwigBud" edges="-">
+                    <data gx:name="order" gx:value="2"/>
+                   </node>
+                  </node>
+                  <node id="477" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="478" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="479" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="480" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                     </node>
+                    </node>
+                    <node id="628" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="629" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="630" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="631" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                       </node>
+                      </node>
+                      <node id="803" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="804" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="805" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="806" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                         </node>
+                        </node>
+                        <node id="807" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+        </node>
+       </node>
+      </node>
+     </node>
+     <node id="38" type="Forest$Twig" edges="-">
+      <data gx:name="length" gx:value="0.2"/>
+      <data gx:name="diameter" gx:value="0.01"/>
+      <node id="39" type="de.grogra.turtle.RH" edges="-">
+       <data gx:name="angle" gx:value="137.0"/>
+       <node id="40" type="de.grogra.turtle.RU" edges="+">
+        <data gx:name="angle" gx:value="40.0"/>
+        <node id="69" type="Forest$Twig" edges="-">
+         <data gx:name="length" gx:value="0.2"/>
+         <data gx:name="diameter" gx:value="0.01"/>
+         <node id="70" type="de.grogra.turtle.RH" edges="-">
+          <data gx:name="angle" gx:value="137.0"/>
+          <node id="71" type="de.grogra.turtle.RU" edges="+">
+           <data gx:name="angle" gx:value="40.0"/>
+           <node id="72" type="Forest$TwigBud" edges="-">
+            <data gx:name="order" gx:value="2"/>
+           </node>
+          </node>
+          <node id="112" type="Forest$Twig" edges="-">
+           <data gx:name="length" gx:value="0.2"/>
+           <data gx:name="diameter" gx:value="0.01"/>
+           <node id="113" type="de.grogra.turtle.RH" edges="-">
+            <data gx:name="angle" gx:value="137.0"/>
+            <node id="114" type="de.grogra.turtle.RU" edges="+">
+             <data gx:name="angle" gx:value="40.0"/>
+             <node id="115" type="Forest$TwigBud" edges="-">
+              <data gx:name="order" gx:value="2"/>
+             </node>
+            </node>
+            <node id="167" type="Forest$Twig" edges="-">
+             <data gx:name="length" gx:value="0.2"/>
+             <data gx:name="diameter" gx:value="0.01"/>
+             <node id="168" type="de.grogra.turtle.RH" edges="-">
+              <data gx:name="angle" gx:value="137.0"/>
+              <node id="169" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="40.0"/>
+               <node id="170" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="2"/>
+               </node>
+              </node>
+              <node id="252" type="Forest$Twig" edges="-">
+               <data gx:name="length" gx:value="0.2"/>
+               <data gx:name="diameter" gx:value="0.01"/>
+               <node id="253" type="de.grogra.turtle.RH" edges="-">
+                <data gx:name="angle" gx:value="137.0"/>
+                <node id="254" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="40.0"/>
+                 <node id="255" type="Forest$TwigBud" edges="-">
+                  <data gx:name="order" gx:value="2"/>
+                 </node>
+                </node>
+                <node id="355" type="Forest$Twig" edges="-">
+                 <data gx:name="length" gx:value="0.2"/>
+                 <data gx:name="diameter" gx:value="0.01"/>
+                 <node id="356" type="de.grogra.turtle.RH" edges="-">
+                  <data gx:name="angle" gx:value="137.0"/>
+                  <node id="357" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="40.0"/>
+                   <node id="358" type="Forest$TwigBud" edges="-">
+                    <data gx:name="order" gx:value="2"/>
+                   </node>
+                  </node>
+                  <node id="482" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="483" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="484" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="485" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                     </node>
+                    </node>
+                    <node id="633" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="634" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="635" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="636" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                       </node>
+                      </node>
+                      <node id="808" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="809" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="810" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="811" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                         </node>
+                        </node>
+                        <node id="812" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+        </node>
+       </node>
+       <node id="74" type="Forest$Twig" edges="-">
+        <data gx:name="length" gx:value="0.2"/>
+        <data gx:name="diameter" gx:value="0.01"/>
+        <node id="75" type="de.grogra.turtle.RH" edges="-">
+         <data gx:name="angle" gx:value="137.0"/>
+         <node id="76" type="de.grogra.turtle.RU" edges="+">
+          <data gx:name="angle" gx:value="40.0"/>
+          <node id="117" type="Forest$Twig" edges="-">
+           <data gx:name="length" gx:value="0.2"/>
+           <data gx:name="diameter" gx:value="0.01"/>
+           <node id="118" type="de.grogra.turtle.RH" edges="-">
+            <data gx:name="angle" gx:value="137.0"/>
+            <node id="119" type="de.grogra.turtle.RU" edges="+">
+             <data gx:name="angle" gx:value="40.0"/>
+             <node id="120" type="Forest$TwigBud" edges="-">
+              <data gx:name="order" gx:value="2"/>
+             </node>
+            </node>
+            <node id="172" type="Forest$Twig" edges="-">
+             <data gx:name="length" gx:value="0.2"/>
+             <data gx:name="diameter" gx:value="0.01"/>
+             <node id="173" type="de.grogra.turtle.RH" edges="-">
+              <data gx:name="angle" gx:value="137.0"/>
+              <node id="174" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="40.0"/>
+               <node id="175" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="2"/>
+               </node>
+              </node>
+              <node id="257" type="Forest$Twig" edges="-">
+               <data gx:name="length" gx:value="0.2"/>
+               <data gx:name="diameter" gx:value="0.01"/>
+               <node id="258" type="de.grogra.turtle.RH" edges="-">
+                <data gx:name="angle" gx:value="137.0"/>
+                <node id="259" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="40.0"/>
+                 <node id="260" type="Forest$TwigBud" edges="-">
+                  <data gx:name="order" gx:value="2"/>
+                 </node>
+                </node>
+                <node id="360" type="Forest$Twig" edges="-">
+                 <data gx:name="length" gx:value="0.2"/>
+                 <data gx:name="diameter" gx:value="0.01"/>
+                 <node id="361" type="de.grogra.turtle.RH" edges="-">
+                  <data gx:name="angle" gx:value="137.0"/>
+                  <node id="362" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="40.0"/>
+                   <node id="363" type="Forest$TwigBud" edges="-">
+                    <data gx:name="order" gx:value="2"/>
+                   </node>
+                  </node>
+                  <node id="487" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="488" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="489" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="490" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                     </node>
+                    </node>
+                    <node id="638" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="639" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="640" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="641" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                       </node>
+                      </node>
+                      <node id="813" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="814" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="815" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="816" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                         </node>
+                        </node>
+                        <node id="817" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+         <node id="122" type="Forest$Twig" edges="-">
+          <data gx:name="length" gx:value="0.2"/>
+          <data gx:name="diameter" gx:value="0.01"/>
+          <node id="123" type="de.grogra.turtle.RH" edges="-">
+           <data gx:name="angle" gx:value="137.0"/>
+           <node id="124" type="de.grogra.turtle.RU" edges="+">
+            <data gx:name="angle" gx:value="40.0"/>
+            <node id="177" type="Forest$Twig" edges="-">
+             <data gx:name="length" gx:value="0.2"/>
+             <data gx:name="diameter" gx:value="0.01"/>
+             <node id="178" type="de.grogra.turtle.RH" edges="-">
+              <data gx:name="angle" gx:value="137.0"/>
+              <node id="179" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="40.0"/>
+               <node id="180" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="2"/>
+               </node>
+              </node>
+              <node id="262" type="Forest$Twig" edges="-">
+               <data gx:name="length" gx:value="0.2"/>
+               <data gx:name="diameter" gx:value="0.01"/>
+               <node id="263" type="de.grogra.turtle.RH" edges="-">
+                <data gx:name="angle" gx:value="137.0"/>
+                <node id="264" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="40.0"/>
+                 <node id="265" type="Forest$TwigBud" edges="-">
+                  <data gx:name="order" gx:value="2"/>
+                 </node>
+                </node>
+                <node id="365" type="Forest$Twig" edges="-">
+                 <data gx:name="length" gx:value="0.2"/>
+                 <data gx:name="diameter" gx:value="0.01"/>
+                 <node id="366" type="de.grogra.turtle.RH" edges="-">
+                  <data gx:name="angle" gx:value="137.0"/>
+                  <node id="367" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="40.0"/>
+                   <node id="368" type="Forest$TwigBud" edges="-">
+                    <data gx:name="order" gx:value="2"/>
+                   </node>
+                  </node>
+                  <node id="492" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="493" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="494" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="495" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                     </node>
+                    </node>
+                    <node id="643" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="644" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="645" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="646" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                       </node>
+                      </node>
+                      <node id="818" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="819" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="820" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="821" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                         </node>
+                        </node>
+                        <node id="822" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+           <node id="182" type="Forest$Twig" edges="-">
+            <data gx:name="length" gx:value="0.2"/>
+            <data gx:name="diameter" gx:value="0.01"/>
+            <node id="183" type="de.grogra.turtle.RH" edges="-">
+             <data gx:name="angle" gx:value="137.0"/>
+             <node id="184" type="de.grogra.turtle.RU" edges="+">
+              <data gx:name="angle" gx:value="40.0"/>
+              <node id="267" type="Forest$Twig" edges="-">
+               <data gx:name="length" gx:value="0.2"/>
+               <data gx:name="diameter" gx:value="0.01"/>
+               <node id="268" type="de.grogra.turtle.RH" edges="-">
+                <data gx:name="angle" gx:value="137.0"/>
+                <node id="269" type="de.grogra.turtle.RU" edges="+">
+                 <data gx:name="angle" gx:value="40.0"/>
+                 <node id="270" type="Forest$TwigBud" edges="-">
+                  <data gx:name="order" gx:value="2"/>
+                 </node>
+                </node>
+                <node id="370" type="Forest$Twig" edges="-">
+                 <data gx:name="length" gx:value="0.2"/>
+                 <data gx:name="diameter" gx:value="0.01"/>
+                 <node id="371" type="de.grogra.turtle.RH" edges="-">
+                  <data gx:name="angle" gx:value="137.0"/>
+                  <node id="372" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="40.0"/>
+                   <node id="373" type="Forest$TwigBud" edges="-">
+                    <data gx:name="order" gx:value="2"/>
+                   </node>
+                  </node>
+                  <node id="497" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="498" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="499" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="500" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                     </node>
+                    </node>
+                    <node id="648" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="649" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="650" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="651" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                       </node>
+                      </node>
+                      <node id="823" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="824" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="825" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="826" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                         </node>
+                        </node>
+                        <node id="827" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+              </node>
+             </node>
+             <node id="272" type="Forest$Twig" edges="-">
+              <data gx:name="length" gx:value="0.2"/>
+              <data gx:name="diameter" gx:value="0.01"/>
+              <node id="273" type="de.grogra.turtle.RH" edges="-">
+               <data gx:name="angle" gx:value="137.0"/>
+               <node id="274" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="40.0"/>
+                <node id="375" type="Forest$Twig" edges="-">
+                 <data gx:name="length" gx:value="0.2"/>
+                 <data gx:name="diameter" gx:value="0.01"/>
+                 <node id="376" type="de.grogra.turtle.RH" edges="-">
+                  <data gx:name="angle" gx:value="137.0"/>
+                  <node id="377" type="de.grogra.turtle.RU" edges="+">
+                   <data gx:name="angle" gx:value="40.0"/>
+                   <node id="378" type="Forest$TwigBud" edges="-">
+                    <data gx:name="order" gx:value="2"/>
+                   </node>
+                  </node>
+                  <node id="502" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="503" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="504" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="505" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                     </node>
+                    </node>
+                    <node id="653" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="654" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="655" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="656" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                       </node>
+                      </node>
+                      <node id="828" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="829" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="830" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="831" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                         </node>
+                        </node>
+                        <node id="832" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+               <node id="380" type="Forest$Twig" edges="-">
+                <data gx:name="length" gx:value="0.2"/>
+                <data gx:name="diameter" gx:value="0.01"/>
+                <node id="381" type="de.grogra.turtle.RH" edges="-">
+                 <data gx:name="angle" gx:value="137.0"/>
+                 <node id="382" type="de.grogra.turtle.RU" edges="+">
+                  <data gx:name="angle" gx:value="40.0"/>
+                  <node id="507" type="Forest$Twig" edges="-">
+                   <data gx:name="length" gx:value="0.2"/>
+                   <data gx:name="diameter" gx:value="0.01"/>
+                   <node id="508" type="de.grogra.turtle.RH" edges="-">
+                    <data gx:name="angle" gx:value="137.0"/>
+                    <node id="509" type="de.grogra.turtle.RU" edges="+">
+                     <data gx:name="angle" gx:value="40.0"/>
+                     <node id="510" type="Forest$TwigBud" edges="-">
+                      <data gx:name="order" gx:value="2"/>
+                     </node>
+                    </node>
+                    <node id="658" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="659" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="660" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="661" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                       </node>
+                      </node>
+                      <node id="833" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="834" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="835" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="836" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                         </node>
+                        </node>
+                        <node id="837" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                 <node id="512" type="Forest$Twig" edges="-">
+                  <data gx:name="length" gx:value="0.2"/>
+                  <data gx:name="diameter" gx:value="0.01"/>
+                  <node id="513" type="de.grogra.turtle.RH" edges="-">
+                   <data gx:name="angle" gx:value="137.0"/>
+                   <node id="514" type="de.grogra.turtle.RU" edges="+">
+                    <data gx:name="angle" gx:value="40.0"/>
+                    <node id="663" type="Forest$Twig" edges="-">
+                     <data gx:name="length" gx:value="0.2"/>
+                     <data gx:name="diameter" gx:value="0.01"/>
+                     <node id="664" type="de.grogra.turtle.RH" edges="-">
+                      <data gx:name="angle" gx:value="137.0"/>
+                      <node id="665" type="de.grogra.turtle.RU" edges="+">
+                       <data gx:name="angle" gx:value="40.0"/>
+                       <node id="666" type="Forest$TwigBud" edges="-">
+                        <data gx:name="order" gx:value="2"/>
+                       </node>
+                      </node>
+                      <node id="838" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="839" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="840" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="841" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                         </node>
+                        </node>
+                        <node id="842" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                   <node id="668" type="Forest$Twig" edges="-">
+                    <data gx:name="length" gx:value="0.2"/>
+                    <data gx:name="diameter" gx:value="0.01"/>
+                    <node id="669" type="de.grogra.turtle.RH" edges="-">
+                     <data gx:name="angle" gx:value="137.0"/>
+                     <node id="670" type="de.grogra.turtle.RU" edges="+">
+                      <data gx:name="angle" gx:value="40.0"/>
+                      <node id="843" type="Forest$Twig" edges="-">
+                       <data gx:name="length" gx:value="0.2"/>
+                       <data gx:name="diameter" gx:value="0.01"/>
+                       <node id="844" type="de.grogra.turtle.RH" edges="-">
+                        <data gx:name="angle" gx:value="137.0"/>
+                        <node id="845" type="de.grogra.turtle.RU" edges="+">
+                         <data gx:name="angle" gx:value="40.0"/>
+                         <node id="846" type="Forest$TwigBud" edges="-">
+                          <data gx:name="order" gx:value="2"/>
+                         </node>
+                        </node>
+                        <node id="847" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                        </node>
+                       </node>
+                      </node>
+                     </node>
+                     <node id="848" type="Forest$Twig" edges="-">
+                      <data gx:name="length" gx:value="0.2"/>
+                      <data gx:name="diameter" gx:value="0.01"/>
+                      <node id="849" type="de.grogra.turtle.RH" edges="-">
+                       <data gx:name="angle" gx:value="137.0"/>
+                       <node id="850" type="de.grogra.turtle.RU" edges="+">
+                        <data gx:name="angle" gx:value="40.0"/>
+                        <node id="851" type="Forest$TwigBud" edges="-">
+                         <data gx:name="order" gx:value="1"/>
+                        </node>
+                       </node>
+                       <node id="852" type="Forest$TwigBud" edges="-"/>
+                      </node>
+                     </node>
+                    </node>
+                   </node>
+                  </node>
+                 </node>
+                </node>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+        </node>
+       </node>
+      </node>
+     </node>
+    </node>
+   </node>
+  </node>
+  <node id="1038" type="de.grogra.rgg.RGGRoot" edges="+">
+   <node id="1040" type="Forest$TwigRoot" edges="/">
+    <node id="1044" type="Forest$Twig" edges="-">
+     <data gx:name="length" gx:value="0.2"/>
+     <data gx:name="diameter" gx:value="0.01"/>
+     <node id="1045" type="de.grogra.turtle.RH" edges="-">
+      <data gx:name="angle" gx:value="137.0"/>
+      <node id="1046" type="de.grogra.turtle.RU" edges="+">
+       <data gx:name="angle" gx:value="50.0"/>
+       <node id="1047" type="Forest$LeafNode" edges="-"/>
+      </node>
+      <node id="1048" type="de.grogra.turtle.RU" edges="+">
+       <data gx:name="angle" gx:value="40.0"/>
+       <node id="1056" type="Forest$Twig" edges="-">
+        <data gx:name="length" gx:value="0.2"/>
+        <data gx:name="diameter" gx:value="0.01"/>
+        <node id="1057" type="de.grogra.turtle.RH" edges="-">
+         <data gx:name="angle" gx:value="137.0"/>
+         <node id="1058" type="de.grogra.turtle.RU" edges="+">
+          <data gx:name="angle" gx:value="50.0"/>
+          <node id="1059" type="Forest$LeafNode" edges="-"/>
+         </node>
+         <node id="1060" type="de.grogra.turtle.RU" edges="+">
+          <data gx:name="angle" gx:value="40.0"/>
+          <node id="1061" type="Forest$TwigBud" edges="-">
+           <data gx:name="order" gx:value="2"/>
+           <data gx:name="hasLeaves" gx:value="true"/>
+          </node>
+         </node>
+         <node id="1080" type="Forest$Twig" edges="-">
+          <data gx:name="length" gx:value="0.2"/>
+          <data gx:name="diameter" gx:value="0.01"/>
+          <node id="1081" type="de.grogra.turtle.RH" edges="-">
+           <data gx:name="angle" gx:value="137.0"/>
+           <node id="1082" type="de.grogra.turtle.RU" edges="+">
+            <data gx:name="angle" gx:value="50.0"/>
+            <node id="1083" type="Forest$LeafNode" edges="-"/>
+           </node>
+           <node id="1084" type="de.grogra.turtle.RU" edges="+">
+            <data gx:name="angle" gx:value="40.0"/>
+            <node id="1085" type="Forest$TwigBud" edges="-">
+             <data gx:name="order" gx:value="2"/>
+             <data gx:name="hasLeaves" gx:value="true"/>
+            </node>
+           </node>
+           <node id="1116" type="Forest$Twig" edges="-">
+            <data gx:name="length" gx:value="0.2"/>
+            <data gx:name="diameter" gx:value="0.01"/>
+            <node id="1117" type="de.grogra.turtle.RH" edges="-">
+             <data gx:name="angle" gx:value="137.0"/>
+             <node id="1118" type="de.grogra.turtle.RU" edges="+">
+              <data gx:name="angle" gx:value="50.0"/>
+              <node id="1119" type="Forest$LeafNode" edges="-"/>
+             </node>
+             <node id="1120" type="de.grogra.turtle.RU" edges="+">
+              <data gx:name="angle" gx:value="40.0"/>
+              <node id="1121" type="Forest$TwigBud" edges="-">
+               <data gx:name="order" gx:value="2"/>
+               <data gx:name="hasLeaves" gx:value="true"/>
+              </node>
+             </node>
+             <node id="1164" type="Forest$Twig" edges="-">
+              <data gx:name="length" gx:value="0.2"/>
+              <data gx:name="diameter" gx:value="0.01"/>
+              <node id="1165" type="de.grogra.turtle.RH" edges="-">
+               <data gx:name="angle" gx:value="137.0"/>
+               <node id="1166" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="50.0"/>
+                <node id="1167" type="Forest$LeafNode" edges="-"/>
+               </node>
+               <node id="1168" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="40.0"/>
+                <node id="1169" type="Forest$TwigBud" edges="-">
+                 <data gx:name="order" gx:value="2"/>
+                 <data gx:name="hasLeaves" gx:value="true"/>
+                </node>
+               </node>
+               <node id="1170" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="1"/>
+                <data gx:name="hasLeaves" gx:value="true"/>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+        </node>
+       </node>
+      </node>
+      <node id="1063" type="Forest$Twig" edges="-">
+       <data gx:name="length" gx:value="0.2"/>
+       <data gx:name="diameter" gx:value="0.01"/>
+       <node id="1064" type="de.grogra.turtle.RH" edges="-">
+        <data gx:name="angle" gx:value="137.0"/>
+        <node id="1065" type="de.grogra.turtle.RU" edges="+">
+         <data gx:name="angle" gx:value="50.0"/>
+         <node id="1066" type="Forest$LeafNode" edges="-"/>
+        </node>
+        <node id="1067" type="de.grogra.turtle.RU" edges="+">
+         <data gx:name="angle" gx:value="40.0"/>
+         <node id="1087" type="Forest$Twig" edges="-">
+          <data gx:name="length" gx:value="0.2"/>
+          <data gx:name="diameter" gx:value="0.01"/>
+          <node id="1088" type="de.grogra.turtle.RH" edges="-">
+           <data gx:name="angle" gx:value="137.0"/>
+           <node id="1089" type="de.grogra.turtle.RU" edges="+">
+            <data gx:name="angle" gx:value="50.0"/>
+            <node id="1090" type="Forest$LeafNode" edges="-"/>
+           </node>
+           <node id="1091" type="de.grogra.turtle.RU" edges="+">
+            <data gx:name="angle" gx:value="40.0"/>
+            <node id="1092" type="Forest$TwigBud" edges="-">
+             <data gx:name="order" gx:value="2"/>
+             <data gx:name="hasLeaves" gx:value="true"/>
+            </node>
+           </node>
+           <node id="1123" type="Forest$Twig" edges="-">
+            <data gx:name="length" gx:value="0.2"/>
+            <data gx:name="diameter" gx:value="0.01"/>
+            <node id="1124" type="de.grogra.turtle.RH" edges="-">
+             <data gx:name="angle" gx:value="137.0"/>
+             <node id="1125" type="de.grogra.turtle.RU" edges="+">
+              <data gx:name="angle" gx:value="50.0"/>
+              <node id="1126" type="Forest$LeafNode" edges="-"/>
+             </node>
+             <node id="1127" type="de.grogra.turtle.RU" edges="+">
+              <data gx:name="angle" gx:value="40.0"/>
+              <node id="1128" type="Forest$TwigBud" edges="-">
+               <data gx:name="order" gx:value="2"/>
+               <data gx:name="hasLeaves" gx:value="true"/>
+              </node>
+             </node>
+             <node id="1171" type="Forest$Twig" edges="-">
+              <data gx:name="length" gx:value="0.2"/>
+              <data gx:name="diameter" gx:value="0.01"/>
+              <node id="1172" type="de.grogra.turtle.RH" edges="-">
+               <data gx:name="angle" gx:value="137.0"/>
+               <node id="1173" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="50.0"/>
+                <node id="1174" type="Forest$LeafNode" edges="-"/>
+               </node>
+               <node id="1175" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="40.0"/>
+                <node id="1176" type="Forest$TwigBud" edges="-">
+                 <data gx:name="order" gx:value="2"/>
+                 <data gx:name="hasLeaves" gx:value="true"/>
+                </node>
+               </node>
+               <node id="1177" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="1"/>
+                <data gx:name="hasLeaves" gx:value="true"/>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+        </node>
+        <node id="1094" type="Forest$Twig" edges="-">
+         <data gx:name="length" gx:value="0.2"/>
+         <data gx:name="diameter" gx:value="0.01"/>
+         <node id="1095" type="de.grogra.turtle.RH" edges="-">
+          <data gx:name="angle" gx:value="137.0"/>
+          <node id="1096" type="de.grogra.turtle.RU" edges="+">
+           <data gx:name="angle" gx:value="50.0"/>
+           <node id="1097" type="Forest$LeafNode" edges="-"/>
+          </node>
+          <node id="1098" type="de.grogra.turtle.RU" edges="+">
+           <data gx:name="angle" gx:value="40.0"/>
+           <node id="1130" type="Forest$Twig" edges="-">
+            <data gx:name="length" gx:value="0.2"/>
+            <data gx:name="diameter" gx:value="0.01"/>
+            <node id="1131" type="de.grogra.turtle.RH" edges="-">
+             <data gx:name="angle" gx:value="137.0"/>
+             <node id="1132" type="de.grogra.turtle.RU" edges="+">
+              <data gx:name="angle" gx:value="50.0"/>
+              <node id="1133" type="Forest$LeafNode" edges="-"/>
+             </node>
+             <node id="1134" type="de.grogra.turtle.RU" edges="+">
+              <data gx:name="angle" gx:value="40.0"/>
+              <node id="1135" type="Forest$TwigBud" edges="-">
+               <data gx:name="order" gx:value="2"/>
+               <data gx:name="hasLeaves" gx:value="true"/>
+              </node>
+             </node>
+             <node id="1178" type="Forest$Twig" edges="-">
+              <data gx:name="length" gx:value="0.2"/>
+              <data gx:name="diameter" gx:value="0.01"/>
+              <node id="1179" type="de.grogra.turtle.RH" edges="-">
+               <data gx:name="angle" gx:value="137.0"/>
+               <node id="1180" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="50.0"/>
+                <node id="1181" type="Forest$LeafNode" edges="-"/>
+               </node>
+               <node id="1182" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="40.0"/>
+                <node id="1183" type="Forest$TwigBud" edges="-">
+                 <data gx:name="order" gx:value="2"/>
+                 <data gx:name="hasLeaves" gx:value="true"/>
+                </node>
+               </node>
+               <node id="1184" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="1"/>
+                <data gx:name="hasLeaves" gx:value="true"/>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+          <node id="1137" type="Forest$Twig" edges="-">
+           <data gx:name="length" gx:value="0.2"/>
+           <data gx:name="diameter" gx:value="0.01"/>
+           <node id="1138" type="de.grogra.turtle.RH" edges="-">
+            <data gx:name="angle" gx:value="137.0"/>
+            <node id="1139" type="de.grogra.turtle.RU" edges="+">
+             <data gx:name="angle" gx:value="50.0"/>
+             <node id="1140" type="Forest$LeafNode" edges="-"/>
+            </node>
+            <node id="1141" type="de.grogra.turtle.RU" edges="+">
+             <data gx:name="angle" gx:value="40.0"/>
+             <node id="1185" type="Forest$Twig" edges="-">
+              <data gx:name="length" gx:value="0.2"/>
+              <data gx:name="diameter" gx:value="0.01"/>
+              <node id="1186" type="de.grogra.turtle.RH" edges="-">
+               <data gx:name="angle" gx:value="137.0"/>
+               <node id="1187" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="50.0"/>
+                <node id="1188" type="Forest$LeafNode" edges="-"/>
+               </node>
+               <node id="1189" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="40.0"/>
+                <node id="1190" type="Forest$TwigBud" edges="-">
+                 <data gx:name="order" gx:value="2"/>
+                 <data gx:name="hasLeaves" gx:value="true"/>
+                </node>
+               </node>
+               <node id="1191" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="1"/>
+                <data gx:name="hasLeaves" gx:value="true"/>
+               </node>
+              </node>
+             </node>
+            </node>
+            <node id="1192" type="Forest$Twig" edges="-">
+             <data gx:name="length" gx:value="0.2"/>
+             <data gx:name="diameter" gx:value="0.01"/>
+             <node id="1193" type="de.grogra.turtle.RH" edges="-">
+              <data gx:name="angle" gx:value="137.0"/>
+              <node id="1194" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="50.0"/>
+               <node id="1195" type="Forest$LeafNode" edges="-"/>
+              </node>
+              <node id="1196" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="40.0"/>
+               <node id="1197" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="1"/>
+                <data gx:name="hasLeaves" gx:value="true"/>
+               </node>
+              </node>
+              <node id="1198" type="Forest$TwigBud" edges="-">
+               <data gx:name="hasLeaves" gx:value="true"/>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+        </node>
+       </node>
+      </node>
+     </node>
+    </node>
+   </node>
+   <node id="1042" type="Forest$TwigRoot" edges="/">
+    <node id="1051" type="Forest$Twig" edges="-">
+     <data gx:name="length" gx:value="0.2"/>
+     <data gx:name="diameter" gx:value="0.01"/>
+     <node id="1052" type="de.grogra.turtle.RH" edges="-">
+      <data gx:name="angle" gx:value="137.0"/>
+      <node id="1053" type="de.grogra.turtle.RU" edges="+">
+       <data gx:name="angle" gx:value="40.0"/>
+       <node id="1070" type="Forest$Twig" edges="-">
+        <data gx:name="length" gx:value="0.2"/>
+        <data gx:name="diameter" gx:value="0.01"/>
+        <node id="1071" type="de.grogra.turtle.RH" edges="-">
+         <data gx:name="angle" gx:value="137.0"/>
+         <node id="1072" type="de.grogra.turtle.RU" edges="+">
+          <data gx:name="angle" gx:value="40.0"/>
+          <node id="1073" type="Forest$TwigBud" edges="-">
+           <data gx:name="order" gx:value="2"/>
+          </node>
+         </node>
+         <node id="1101" type="Forest$Twig" edges="-">
+          <data gx:name="length" gx:value="0.2"/>
+          <data gx:name="diameter" gx:value="0.01"/>
+          <node id="1102" type="de.grogra.turtle.RH" edges="-">
+           <data gx:name="angle" gx:value="137.0"/>
+           <node id="1103" type="de.grogra.turtle.RU" edges="+">
+            <data gx:name="angle" gx:value="40.0"/>
+            <node id="1104" type="Forest$TwigBud" edges="-">
+             <data gx:name="order" gx:value="2"/>
+            </node>
+           </node>
+           <node id="1144" type="Forest$Twig" edges="-">
+            <data gx:name="length" gx:value="0.2"/>
+            <data gx:name="diameter" gx:value="0.01"/>
+            <node id="1145" type="de.grogra.turtle.RH" edges="-">
+             <data gx:name="angle" gx:value="137.0"/>
+             <node id="1146" type="de.grogra.turtle.RU" edges="+">
+              <data gx:name="angle" gx:value="40.0"/>
+              <node id="1147" type="Forest$TwigBud" edges="-">
+               <data gx:name="order" gx:value="2"/>
+              </node>
+             </node>
+             <node id="1199" type="Forest$Twig" edges="-">
+              <data gx:name="length" gx:value="0.2"/>
+              <data gx:name="diameter" gx:value="0.01"/>
+              <node id="1200" type="de.grogra.turtle.RH" edges="-">
+               <data gx:name="angle" gx:value="137.0"/>
+               <node id="1201" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="40.0"/>
+                <node id="1202" type="Forest$TwigBud" edges="-">
+                 <data gx:name="order" gx:value="2"/>
+                </node>
+               </node>
+               <node id="1203" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="1"/>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+        </node>
+       </node>
+      </node>
+      <node id="1075" type="Forest$Twig" edges="-">
+       <data gx:name="length" gx:value="0.2"/>
+       <data gx:name="diameter" gx:value="0.01"/>
+       <node id="1076" type="de.grogra.turtle.RH" edges="-">
+        <data gx:name="angle" gx:value="137.0"/>
+        <node id="1077" type="de.grogra.turtle.RU" edges="+">
+         <data gx:name="angle" gx:value="40.0"/>
+         <node id="1106" type="Forest$Twig" edges="-">
+          <data gx:name="length" gx:value="0.2"/>
+          <data gx:name="diameter" gx:value="0.01"/>
+          <node id="1107" type="de.grogra.turtle.RH" edges="-">
+           <data gx:name="angle" gx:value="137.0"/>
+           <node id="1108" type="de.grogra.turtle.RU" edges="+">
+            <data gx:name="angle" gx:value="40.0"/>
+            <node id="1109" type="Forest$TwigBud" edges="-">
+             <data gx:name="order" gx:value="2"/>
+            </node>
+           </node>
+           <node id="1149" type="Forest$Twig" edges="-">
+            <data gx:name="length" gx:value="0.2"/>
+            <data gx:name="diameter" gx:value="0.01"/>
+            <node id="1150" type="de.grogra.turtle.RH" edges="-">
+             <data gx:name="angle" gx:value="137.0"/>
+             <node id="1151" type="de.grogra.turtle.RU" edges="+">
+              <data gx:name="angle" gx:value="40.0"/>
+              <node id="1152" type="Forest$TwigBud" edges="-">
+               <data gx:name="order" gx:value="2"/>
+              </node>
+             </node>
+             <node id="1204" type="Forest$Twig" edges="-">
+              <data gx:name="length" gx:value="0.2"/>
+              <data gx:name="diameter" gx:value="0.01"/>
+              <node id="1205" type="de.grogra.turtle.RH" edges="-">
+               <data gx:name="angle" gx:value="137.0"/>
+               <node id="1206" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="40.0"/>
+                <node id="1207" type="Forest$TwigBud" edges="-">
+                 <data gx:name="order" gx:value="2"/>
+                </node>
+               </node>
+               <node id="1208" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="1"/>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+        </node>
+        <node id="1111" type="Forest$Twig" edges="-">
+         <data gx:name="length" gx:value="0.2"/>
+         <data gx:name="diameter" gx:value="0.01"/>
+         <node id="1112" type="de.grogra.turtle.RH" edges="-">
+          <data gx:name="angle" gx:value="137.0"/>
+          <node id="1113" type="de.grogra.turtle.RU" edges="+">
+           <data gx:name="angle" gx:value="40.0"/>
+           <node id="1154" type="Forest$Twig" edges="-">
+            <data gx:name="length" gx:value="0.2"/>
+            <data gx:name="diameter" gx:value="0.01"/>
+            <node id="1155" type="de.grogra.turtle.RH" edges="-">
+             <data gx:name="angle" gx:value="137.0"/>
+             <node id="1156" type="de.grogra.turtle.RU" edges="+">
+              <data gx:name="angle" gx:value="40.0"/>
+              <node id="1157" type="Forest$TwigBud" edges="-">
+               <data gx:name="order" gx:value="2"/>
+              </node>
+             </node>
+             <node id="1209" type="Forest$Twig" edges="-">
+              <data gx:name="length" gx:value="0.2"/>
+              <data gx:name="diameter" gx:value="0.01"/>
+              <node id="1210" type="de.grogra.turtle.RH" edges="-">
+               <data gx:name="angle" gx:value="137.0"/>
+               <node id="1211" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="40.0"/>
+                <node id="1212" type="Forest$TwigBud" edges="-">
+                 <data gx:name="order" gx:value="2"/>
+                </node>
+               </node>
+               <node id="1213" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="1"/>
+               </node>
+              </node>
+             </node>
+            </node>
+           </node>
+          </node>
+          <node id="1159" type="Forest$Twig" edges="-">
+           <data gx:name="length" gx:value="0.2"/>
+           <data gx:name="diameter" gx:value="0.01"/>
+           <node id="1160" type="de.grogra.turtle.RH" edges="-">
+            <data gx:name="angle" gx:value="137.0"/>
+            <node id="1161" type="de.grogra.turtle.RU" edges="+">
+             <data gx:name="angle" gx:value="40.0"/>
+             <node id="1214" type="Forest$Twig" edges="-">
+              <data gx:name="length" gx:value="0.2"/>
+              <data gx:name="diameter" gx:value="0.01"/>
+              <node id="1215" type="de.grogra.turtle.RH" edges="-">
+               <data gx:name="angle" gx:value="137.0"/>
+               <node id="1216" type="de.grogra.turtle.RU" edges="+">
+                <data gx:name="angle" gx:value="40.0"/>
+                <node id="1217" type="Forest$TwigBud" edges="-">
+                 <data gx:name="order" gx:value="2"/>
+                </node>
+               </node>
+               <node id="1218" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="1"/>
+               </node>
+              </node>
+             </node>
+            </node>
+            <node id="1219" type="Forest$Twig" edges="-">
+             <data gx:name="length" gx:value="0.2"/>
+             <data gx:name="diameter" gx:value="0.01"/>
+             <node id="1220" type="de.grogra.turtle.RH" edges="-">
+              <data gx:name="angle" gx:value="137.0"/>
+              <node id="1221" type="de.grogra.turtle.RU" edges="+">
+               <data gx:name="angle" gx:value="40.0"/>
+               <node id="1222" type="Forest$TwigBud" edges="-">
+                <data gx:name="order" gx:value="1"/>
+               </node>
+              </node>
+              <node id="1223" type="Forest$TwigBud" edges="-"/>
+             </node>
+            </node>
+           </node>
+          </node>
+         </node>
+        </node>
+       </node>
+      </node>
+     </node>
+    </node>
+   </node>
+  </node>
+ </node>
+</graph>

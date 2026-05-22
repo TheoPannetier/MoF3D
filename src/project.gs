@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://grogra.de/registry" graph="graph.xml">
- <import plugin="de.grogra.imp3d" version="2.2.1"/>
+ <import plugin="de.grogra.math" version="2.2.1"/>
+ <import plugin="de.grogra.pf" version="2.2.1"/>
  <import plugin="de.grogra.rgg" version="2.2.1"/>
  <import plugin="de.grogra.imp" version="2.2.1"/>
- <import plugin="de.grogra.pf" version="2.2.1"/>
- <import plugin="de.grogra.math" version="2.2.1"/>
+ <import plugin="de.grogra.imp3d" version="2.2.1"/>
  <registry>
   <ref name="project">
    <ref name="objects">
@@ -43,7 +43,7 @@
      <de.grogra.pf.ui.registry.FileObjectItem mimeType="image/jpeg" name="bark2" objDescribes="true" systemId="pfs:images/bark2.jpg" type="de.grogra.imp.objects.FixedImageAdapter"/>
     </ref>
     <ref name="meta">
-     <de.grogra.pf.registry.NodeReference name="Forest" ref="106517"/>
+     <de.grogra.pf.registry.NodeReference name="Forest" ref="853"/>
     </ref>
    </ref>
   </ref>
@@ -51,8 +51,8 @@
    <ref name="state">
     <de.grogra.pf.ui.registry.Layout name="layout">
      <de.grogra.pf.ui.registry.MainWindow>
-      <de.grogra.pf.ui.registry.Split location="0.2616382">
-       <de.grogra.pf.ui.registry.Split location="0.6251298" orientation="0">
+      <de.grogra.pf.ui.registry.Split location="0.35002947">
+       <de.grogra.pf.ui.registry.Split location="0.79812694" orientation="0">
         <de.grogra.pf.ui.registry.Split orientation="0">
          <de.grogra.pf.registry.Link source="/ui/panels/rgg/toolbar"/>
          <de.grogra.pf.ui.registry.PanelFactory source="/ui/panels/3d/defaultview">
@@ -69,13 +69,13 @@
          <de.grogra.pf.registry.Link source="/ui/panels/statusbar"/>
         </de.grogra.pf.ui.registry.Split>
        </de.grogra.pf.ui.registry.Split>
-       <de.grogra.pf.ui.registry.Split location="0.71028036" orientation="0">
+       <de.grogra.pf.ui.registry.Split location="0.73152965" orientation="0">
         <de.grogra.pf.ui.registry.Tab selectedIndex="0">
          <de.grogra.pf.ui.registry.PanelFactory source="/ui/panels/texteditor">
           <de.grogra.pf.registry.Option name="documents" type="java.lang.String" value="&quot;\&quot;pfs:Forest.rgg\&quot;,\&quot;pfs:P.java\&quot;,\&quot;pfs:PG.java\&quot;,\&quot;pfs:PP.java\&quot;&quot;"/>
           <de.grogra.pf.registry.Option name="panelId" type="java.lang.String" value="/ui/panels/texteditor"/>
-          <de.grogra.pf.registry.Option name="panelTitle" type="java.lang.String" value="jEdit - P.java"/>
-          <de.grogra.pf.registry.Option name="selected" type="java.lang.String" value="pfs:P.java"/>
+          <de.grogra.pf.registry.Option name="panelTitle" type="java.lang.String" value="jEdit - Forest.rgg"/>
+          <de.grogra.pf.registry.Option name="selected" type="java.lang.String" value="pfs:Forest.rgg"/>
          </de.grogra.pf.ui.registry.PanelFactory>
          <de.grogra.pf.registry.Link source="/ui/panels/attributeeditor"/>
         </de.grogra.pf.ui.registry.Tab>
